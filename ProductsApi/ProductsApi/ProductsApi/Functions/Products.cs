@@ -6,15 +6,24 @@ namespace ProductsApi
 	using Microsoft.Azure.WebJobs.Extensions.Http;
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.Extensions.Logging;
+	using ProductsApi.Contracts;
 
-	public static class Products
+	public class Products
 	{
+		private readonly IProductsService productsService;
+
+		public Products(IProductsService productsService)
+		{
+			this.productsService = productsService;
+		}
+
 		[FunctionName("GetProducts")]
-		public static async Task<IActionResult> GetProducts(
+		public async Task<IActionResult> GetProducts(
 			[HttpTrigger(AuthorizationLevel.Function, "get", Route = "products")] HttpRequest req,
 			ILogger log)
 		{
-			return new OkObjectResult(null);
+			var products = await this.productsService.ReadProducts();
+			return new OkObjectResult(products);
 		}
 	}
 }
