@@ -12,6 +12,7 @@ namespace ProductsApi
   {
     public override void Configure(IFunctionsHostBuilder builder)
     {
+      builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
       builder.Services.AddSingleton<IProductsService, ProductsService>();
     }
   }

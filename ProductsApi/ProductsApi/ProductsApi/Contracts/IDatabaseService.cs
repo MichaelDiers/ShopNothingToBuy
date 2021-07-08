@@ -3,8 +3,8 @@
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
-	public interface IProductsService
+	public interface IDatabaseService
 	{
-		Task<IEnumerable<IProductDTO>> ReadProducts();
+		Task<IEnumerable<IProduct>> Read();
 	}
 }

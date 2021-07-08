@@ -1,6 +1,7 @@
 ﻿namespace ProductsApi.Services
 {
 	using ProductsApi.Contracts;
+	using ProductsApi.Extensions;
 
 	using System.Collections.Generic;
 	using System.Linq;
@@ -8,9 +9,17 @@
 
 	public class ProductsService : IProductsService
 	{
-		public async Task<IEnumerable<IProduct>> ReadProducts()
+		private readonly IDatabaseService databaseService;
+
+		public ProductsService(IDatabaseService databaseService)
 		{
-			return Enumerable.Empty<IProduct>();
+			this.databaseService = databaseService;
+		}
+
+		public async Task<IEnumerable<IProductDTO>> ReadProducts()
+		{
+			var products = await this.databaseService.Read();
+			return products.Select(product => product.ToDTO());
 		}
 	}
 }
