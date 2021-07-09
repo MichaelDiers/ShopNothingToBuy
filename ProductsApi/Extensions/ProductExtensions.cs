@@ -1,9 +1,6 @@
 ﻿namespace ProductsApi.Extensions
 {
-	using ProductsApi.Contracts;
 	using ProductsApi.Models;
-
-	using System;
 
 	/// <summary>
 	/// Extensions for <see cref="Product"/> objects.
@@ -18,6 +15,6 @@
 		public static ProductDTO ToDTO(this Product product)
 		{
 			return new ProductDTO(product);
-		}		
+		}
 	}
 }

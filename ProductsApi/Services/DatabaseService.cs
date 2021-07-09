@@ -10,7 +10,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Net;
 	using System.Threading.Tasks;
 
 	/// <summary>
@@ -24,8 +23,8 @@
 
 		public DatabaseService(CosmosClient cosmosClient, ILoggerFactory loggerFactory)
 		{
-			this.cosmosClient = cosmosClient;			
-			this.database = cosmosClient.GetDatabase("ProductsApi");
+			this.cosmosClient = cosmosClient;
+			this.database = this.cosmosClient.GetDatabase("ProductsApi");
 			this.container = this.database.GetContainer("products");
 		}
 
@@ -41,7 +40,8 @@
 			{
 				var createdProduct = await container.CreateItemAsync(product);
 				return true;
-			} catch (CosmosException ex)
+			}
+			catch (CosmosException ex)
 			{
 				log.LogError(ex.ToString());
 				return false;
@@ -58,9 +58,10 @@
 		{
 			try
 			{
-				var _ = await this.container.DeleteItemAsync<Product>(id.ToString(), new PartitionKey(id.ToString()));
+				var _ = await container.DeleteItemAsync<Product>(id.ToString(), new PartitionKey(id.ToString()));
 				return true;
-			} catch (CosmosException ex)
+			}
+			catch (CosmosException ex)
 			{
 				log.LogError(ex.ToString());
 			}
@@ -78,15 +79,16 @@
 			var products = new List<Product>();
 			try
 			{
-				var iterator = this.container.GetItemLinqQueryable<Product>().ToFeedIterator();
+				var iterator = container.GetItemLinqQueryable<Product>().ToFeedIterator();
 				while (iterator.HasMoreResults)
 				{
-					var next = await iterator.ReadNextAsync();					
+					var next = await iterator.ReadNextAsync();
 					products.AddRange(next.ToArray());
-				}				
-			} catch (Exception ex)
+				}
+			}
+			catch (Exception ex)
 			{
-				log.LogError(ex.ToString());				
+				log.LogError(ex.ToString());
 			}
 
 			return products;
@@ -102,9 +104,10 @@
 		{
 			try
 			{
-				var product = await this.container.ReadItemAsync<Product>(id.ToString(), new PartitionKey(id.ToString()));
+				var product = await container.ReadItemAsync<Product>(id.ToString(), new PartitionKey(id.ToString()));
 				return product;
-			} catch (Exception ex)
+			}
+			catch (Exception ex)
 			{
 				log.LogInformation(ex.ToString());
 				return null;
@@ -121,15 +124,16 @@
 		{
 			try
 			{
-				var databaseProduct = await this.ReadById(product.Id, log);
+				var databaseProduct = await ReadById(product.Id, log);
 				if (databaseProduct != null && databaseProduct.Id == product.Id)
 				{
-					var _ = await this.container.ReplaceItemAsync<Product>(product, product.Id.ToString());
+					var _ = await container.ReplaceItemAsync<Product>(product, product.Id.ToString());
 					return true;
 				}
-			} catch (Exception ex)
+			}
+			catch (Exception ex)
 			{
-				log.LogError(ex.ToString());				
+				log.LogError(ex.ToString());
 			}
 
 			return false;

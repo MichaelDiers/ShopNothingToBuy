@@ -2,8 +2,6 @@
 {
 	using Newtonsoft.Json;
 
-	using ProductsApi.Contracts;
-
 	using System;
 
 	/// <summary>

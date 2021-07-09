@@ -1,6 +1,5 @@
 ﻿namespace ProductsApi.Extensions
 {
-	using ProductsApi.Contracts;
 	using ProductsApi.Models;
 
 	using System;
