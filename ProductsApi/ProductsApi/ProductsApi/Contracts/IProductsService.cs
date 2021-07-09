@@ -5,6 +5,6 @@
 
 	public interface IProductsService
 	{
-		Task<IEnumerable<IProductDTO>> ReadProducts();
+		Task<IEnumerable<IProductDTO>> ListProducts();
 	}
 }

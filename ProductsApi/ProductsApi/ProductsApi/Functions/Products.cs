@@ -23,7 +23,7 @@ namespace ProductsApi
 			[HttpTrigger(AuthorizationLevel.Function, "get", Route = "products")] HttpRequest req,
 			ILogger log)
 		{
-			var products = await this.productsService.ReadProducts();
+			var products = await this.productsService.ListProducts();
 
 			return new OkObjectResult(products.ToArray());
 		}

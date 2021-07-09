@@ -10,10 +10,9 @@
 
 	public class DatabaseService : IDatabaseService
 	{
-		public async Task<IEnumerable<IProduct>> Read()
+		public async Task<IEnumerable<IProduct>> List()
 		{
 			return new[] { new Product { Description = "foo", Id = Guid.NewGuid(), Name = "bar" } };
-			return Enumerable.Empty<IProduct>();
 		}
 	}
 }

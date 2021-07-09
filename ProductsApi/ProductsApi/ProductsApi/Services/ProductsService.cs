@@ -16,9 +16,9 @@
 			this.databaseService = databaseService;
 		}
 
-		public async Task<IEnumerable<IProductDTO>> ReadProducts()
+		public async Task<IEnumerable<IProductDTO>> ListProducts()
 		{
-			var products = await this.databaseService.Read();
+			var products = await this.databaseService.List();
 			return products.Select(product => product.ToDTO());
 		}
 	}

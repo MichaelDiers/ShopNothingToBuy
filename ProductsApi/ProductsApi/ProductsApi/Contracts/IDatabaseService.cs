@@ -5,6 +5,6 @@
 
 	public interface IDatabaseService
 	{
-		Task<IEnumerable<IProduct>> Read();
+		Task<IEnumerable<IProduct>> List();
 	}
 }
