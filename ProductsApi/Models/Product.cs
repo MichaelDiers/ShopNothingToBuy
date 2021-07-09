@@ -1,5 +1,7 @@
 ﻿namespace ProductsApi.Models
 {
+	using Newtonsoft.Json;
+
 	using ProductsApi.Contracts;
 
 	using System;
@@ -7,7 +9,7 @@
 	/// <summary>
 	/// Defines a product.
 	/// </summary>
-	public class Product : IProduct
+	public class Product
 	{
 		/// <summary>
 		/// Creates a new instance of <see cref="Product"/>.
@@ -33,7 +35,7 @@
 		/// Creates a new instance of <see cref="Product"/>.
 		/// </summary>
 		/// <param name="productDTO">Defines the new values of the product.</param>
-		public Product(IProductDTO productDTO)
+		public Product(ProductDTO productDTO)
 			: this(productDTO.Description, productDTO.Id, productDTO.Name)
 		{
 		}
@@ -41,16 +43,19 @@
 		/// <summary>
 		/// Gets or sets a value used as the description of a product.
 		/// </summary>
+		[JsonProperty(PropertyName = "description")]
 		public string Description { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value used as the id of a product.
 		/// </summary>
+		[JsonProperty(PropertyName = "id")]
 		public Guid Id { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value used as the name of a product.
 		/// </summary>
+		[JsonProperty(PropertyName = "name")]
 		public string Name { get; set; }
 	}
 }

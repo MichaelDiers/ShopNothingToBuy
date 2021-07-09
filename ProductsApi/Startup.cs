@@ -1,8 +1,12 @@
-﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using Microsoft.Azure.Cosmos.Fluent;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using ProductsApi.Contracts;
 using ProductsApi.Services;
+
+using System.Threading.Tasks;
 
 [assembly: FunctionsStartup(typeof(ProductsApi.Startup))]
 
@@ -23,6 +27,15 @@ namespace ProductsApi
 			// depency injections
 			builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
 			builder.Services.AddSingleton<IProductsService, ProductsService>();
-		}
+			
+			builder.Services.AddSingleton((s) =>
+			{
+				CosmosClientBuilder cosmosClientBuilder = new CosmosClientBuilder();
+				return cosmosClientBuilder.WithConnectionModeDirect()
+					.Build();
+			});
+
+			// builder.Services.AddLogging();
+		}		
 	}
 }

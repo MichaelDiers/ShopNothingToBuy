@@ -6,16 +6,16 @@
 	using System;
 
 	/// <summary>
-	/// Extensions for <see cref="IProduct"/> objects.
+	/// Extensions for <see cref="Product"/> objects.
 	/// </summary>
 	public static class ProductExtensions
 	{
 		/// <summary>
-		/// Create an <see cref="IProductDTO"/> from the given <see cref="IProduct"/>.
+		/// Create an <see cref="ProductDTO"/> from the given <see cref="Product"/>.
 		/// </summary>
 		/// <param name="product">The dto is created from this product.</param>
-		/// <returns>An instance of <see cref="IProductDTO"/>.</returns>
-		public static IProductDTO ToDTO(this IProduct product)
+		/// <returns>An instance of <see cref="ProductDTO"/>.</returns>
+		public static ProductDTO ToDTO(this Product product)
 		{
 			return new ProductDTO(product);
 		}		

@@ -32,7 +32,7 @@ namespace ProductsApi
 		{
 			string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 			var productDTO = JsonConvert.DeserializeObject<ProductDTO>(requestBody);
-			var createdProduct = await productsService.Create(productDTO);
+			var createdProduct = await productsService.Create(productDTO, log);
 			if (createdProduct != null)
 			{
 				return new CreatedResult(new Uri($"http://{req.Host.Value}/api/products/{createdProduct.Id}"), createdProduct);
@@ -47,7 +47,7 @@ namespace ProductsApi
 			ILogger log, string id)
 		{
 			var guid = new Guid(id);
-			var isDeleted = await productsService.Delete(guid);
+			var isDeleted = await productsService.Delete(guid, log);
 			if (isDeleted)
 			{
 				return new NoContentResult();
@@ -61,7 +61,7 @@ namespace ProductsApi
 			[HttpTrigger(AuthorizationLevel.Function, "get", Route = "products")] HttpRequest req,
 			ILogger log)
 		{
-			var products = await productsService.ListProducts();
+			var products = await productsService.ListProducts(log);
 
 			return new OkObjectResult(products.ToArray());
 		}
@@ -72,7 +72,7 @@ namespace ProductsApi
 			ILogger log, string id)
 		{
 			var guid = new Guid(id);
-			var product = await productsService.ReadById(guid);
+			var product = await productsService.ReadById(guid, log);
 			return new OkObjectResult(product);
 		}
 
@@ -83,7 +83,7 @@ namespace ProductsApi
 		{
 			string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 			var productDTO = JsonConvert.DeserializeObject<ProductDTO>(requestBody);
-			var isUpdated = await productsService.Update(productDTO);
+			var isUpdated = await productsService.Update(productDTO, log);
 			if (isUpdated)
 			{
 				return new OkResult();
