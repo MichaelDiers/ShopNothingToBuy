@@ -2,6 +2,7 @@
 {
 	using Microsoft.Azure.Cosmos;
 	using Microsoft.Azure.Cosmos.Linq;
+	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.Logging;
 
 	using ProductsApi.Contracts;
@@ -21,11 +22,16 @@
 		private readonly Database database;
 		private readonly Container container;
 
-		public DatabaseService(CosmosClient cosmosClient, ILoggerFactory loggerFactory)
+		public DatabaseService(CosmosClient cosmosClient, IConfiguration configuration)
 		{
-			this.cosmosClient = cosmosClient;
-			this.database = this.cosmosClient.GetDatabase("ProductsApi");
-			this.container = this.database.GetContainer("products");
+			if (configuration is null)
+			{
+				throw new ArgumentNullException(nameof(configuration));
+			}
+
+			this.cosmosClient = cosmosClient ?? throw new ArgumentNullException(nameof(cosmosClient));
+			this.database = this.cosmosClient.GetDatabase(configuration.GetValue<string>("DatabaseName"));
+			this.container = this.database.GetContainer(configuration.GetValue<string>("ContainerName"));
 		}
 
 		/// <summary>
