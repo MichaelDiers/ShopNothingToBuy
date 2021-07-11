@@ -9,3 +9,4 @@ API provides CRUD operations for products used in the NothingToBuy Shop.
 - Microsoft Azure Functions
 - Microsoft Azure CosmosDb
 - xUnit
+- Postman
