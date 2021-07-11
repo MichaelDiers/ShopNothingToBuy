@@ -30,8 +30,12 @@ namespace ProductsApi
 			[HttpTrigger(AuthorizationLevel.Function, "post", Route = "products")] HttpRequest req,
 			ILogger log)
 		{
-			string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-			var productDTO = JsonConvert.DeserializeObject<ProductDTO>(requestBody);
+			var productDTO = await DeserializeBody<ProductDTO>(req.Body, log);
+			if (productDTO is null || productDTO.Id != Guid.Empty)
+			{
+				return new BadRequestResult();
+			}
+			
 			var createdProduct = await productsService.Create(productDTO, log);
 			if (createdProduct != null)
 			{
@@ -44,16 +48,24 @@ namespace ProductsApi
 		[FunctionName("DeleteProducts")]
 		public async Task<IActionResult> DeleteProducts(
 			[HttpTrigger(AuthorizationLevel.Function, "delete", Route = "products/{id}")] HttpRequest req,
-			ILogger log, string id)
+			ILogger log,
+			string id)
 		{
-			var guid = new Guid(id);
+			var isValid = Guid.TryParse(id, out Guid guid);
+			if (!isValid || guid == Guid.Empty)
+			{
+				return new BadRequestResult();
+			}
+
 			var isDeleted = await productsService.Delete(guid, log);
 			if (isDeleted)
 			{
 				return new NoContentResult();
+			}			
+			else
+			{
+				return new NotFoundResult();
 			}
-
-			return new BadRequestResult();
 		}
 
 		[FunctionName("GetProducts")]
@@ -69,11 +81,20 @@ namespace ProductsApi
 		[FunctionName("GetProductsById")]
 		public async Task<IActionResult> GetProductsById(
 			[HttpTrigger(AuthorizationLevel.Function, "get", Route = "products/{id}")] HttpRequest req,
-			ILogger log, string id)
+			ILogger log,
+			string id)
 		{
-			var guid = new Guid(id);
-			var product = await productsService.ReadById(guid, log);
-			return new OkObjectResult(product);
+			var isValid = Guid.TryParse(id, out Guid guid);
+			if (isValid && guid != Guid.Empty)
+			{
+				var product = await productsService.ReadById(guid, log);
+				if (product != null)
+				{
+					return new OkObjectResult(product);
+				}
+			}
+			
+			return new NotFoundResult();
 		}
 
 		[FunctionName("PutProducts")]
@@ -81,8 +102,12 @@ namespace ProductsApi
 			[HttpTrigger(AuthorizationLevel.Function, "put", Route = "products")] HttpRequest req,
 			ILogger log)
 		{
-			string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-			var productDTO = JsonConvert.DeserializeObject<ProductDTO>(requestBody);
+			var productDTO = await DeserializeBody<ProductDTO>(req.Body, log);
+			if (productDTO is null || productDTO.Id == Guid.Empty)
+			{
+				return new BadRequestResult();
+			}
+			
 			var isUpdated = await productsService.Update(productDTO, log);
 			if (isUpdated)
 			{
@@ -90,8 +115,34 @@ namespace ProductsApi
 			}
 			else
 			{
-				return new BadRequestResult();
+				return new NotFoundResult();
 			}
+		}
+
+		private static async Task<T> DeserializeBody<T>(Stream body, ILogger log) where T : class
+		{
+			try
+			{
+				string requestBody = await new StreamReader(body).ReadToEndAsync();
+				if (string.IsNullOrWhiteSpace(requestBody))
+				{
+					return null;
+				}
+
+				var deserializeObject = JsonConvert.DeserializeObject<T>(requestBody);
+				return deserializeObject;
+			}
+			catch (JsonSerializationException)
+			{
+				// do not handle missing request data
+				// see json attributes on type T, for example see ProductDTO
+			}
+			catch (Exception ex)
+			{
+				log.LogError(ex.ToString());
+			}
+
+			return null;
 		}
 	}
 }

@@ -33,8 +33,12 @@
 		/// Retrieve a list of all products in the database.
 		/// </summary>
 		/// <param name="log">An <see cref="ILogger"/> instance.</param>
+		/// <param name="validProductsOnly">True specifies that only <see cref="Product"/> objects are 
+		///		loaded that satisfy the formal json definition of the <see cref="Product"/>, otherwise
+		///		all products are loaded - even if not json serializable.
+		/// </param>
 		/// <returns>A list of all products.</returns>
-		Task<IEnumerable<Product>> List(ILogger log);
+		Task<IEnumerable<Product>> List(ILogger log, bool validProductsOnly = true);
 
 		/// <summary>
 		/// Reads a product by the given <paramref name="id"/>.

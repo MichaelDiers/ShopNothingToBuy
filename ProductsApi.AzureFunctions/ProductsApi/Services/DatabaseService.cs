@@ -6,11 +6,13 @@
 	using Microsoft.Extensions.Logging;
 
 	using ProductsApi.Contracts;
+	using ProductsApi.Extensions;
 	using ProductsApi.Models;
 
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Net;
 	using System.Threading.Tasks;
 
 	/// <summary>
@@ -49,7 +51,7 @@
 			}
 			catch (CosmosException ex)
 			{
-				log.LogError(ex.ToString());
+				HandleCosmosException(ex, log);
 				return false;
 			}
 		}
@@ -69,7 +71,7 @@
 			}
 			catch (CosmosException ex)
 			{
-				log.LogError(ex.ToString());
+				HandleCosmosException(ex, log, HttpStatusCode.NotFound);
 			}
 
 			return false;
@@ -79,8 +81,12 @@
 		/// Retrieve a list of all products in the database.
 		/// </summary>
 		/// <param name="log">An <see cref="ILogger"/> instance.</param>
+		/// <param name="validProductsOnly">True specifies that only <see cref="Product"/> objects are 
+		///		loaded that satisfy the formal json definition of the <see cref="Product"/>, otherwise
+		///		all products are loaded - even if not json serializable.
+		/// </param>
 		/// <returns>A list of all products.</returns>
-		public async Task<IEnumerable<Product>> List(ILogger log)
+		public async Task<IEnumerable<Product>> List(ILogger log, bool validProductsOnly = true)
 		{
 			var products = new List<Product>();
 			try
@@ -89,12 +95,12 @@
 				while (iterator.HasMoreResults)
 				{
 					var next = await iterator.ReadNextAsync();
-					products.AddRange(next.ToArray());
+					products.AddRange(next.ToArray().Where((product) => product.IsValid(validProductsOnly)));
 				}
 			}
-			catch (Exception ex)
+			catch (CosmosException ex)
 			{
-				log.LogError(ex.ToString());
+				HandleCosmosException(ex, log);
 			}
 
 			return products;
@@ -113,9 +119,9 @@
 				var product = await container.ReadItemAsync<Product>(id.ToString(), new PartitionKey(id.ToString()));
 				return product;
 			}
-			catch (Exception ex)
+			catch (CosmosException ex)
 			{
-				log.LogInformation(ex.ToString());
+				HandleCosmosException(ex, log, HttpStatusCode.NotFound);
 				return null;
 			}
 		}
@@ -137,12 +143,30 @@
 					return true;
 				}
 			}
-			catch (Exception ex)
+			catch (CosmosException ex)
 			{
-				log.LogError(ex.ToString());
+				HandleCosmosException(ex, log, HttpStatusCode.NotFound);
 			}
 
 			return false;
+		}
+
+		/// <summary>
+		/// Log the given database error to the error log if the status code is not excluded.
+		/// </summary>
+		/// <param name="ex">The cosmos database exception.</param>
+		/// <param name="log">The logger used for writing the error log.</param>
+		/// <param name="codes">If the <see cref="CosmosException.StatusCode"/> is included in
+		///		<paramref name="codes"/> the exception will be ignored.
+		/// </param>
+		private static void HandleCosmosException(CosmosException ex, ILogger log, params HttpStatusCode[] codes)
+		{
+			if (ex != null 
+				&& log != null 
+				&& (codes is null || codes.Length == 0 || codes.All((code) => code != ex.StatusCode)))
+			{
+				log.LogError(ex.ToString());
+			}
 		}
 	}
 }

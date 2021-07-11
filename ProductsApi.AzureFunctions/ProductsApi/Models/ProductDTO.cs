@@ -7,11 +7,12 @@
 	/// <summary>
 	/// Defines a product used in data transfer context.
 	/// </summary>
+	[JsonObject(MemberSerialization.OptIn, ItemRequired = Required.Always)]
 	public class ProductDTO
 	{
 		/// <summary>
 		/// Creates a new instance of <see cref="ProductDTO"/>.
-		/// </summary>
+		/// </summary>		
 		public ProductDTO()
 		{
 		}
@@ -47,7 +48,7 @@
 		/// <summary>
 		/// Gets or sets a value used as the id of a product.
 		/// </summary>
-		[JsonProperty(PropertyName = "id")]
+		[JsonProperty(PropertyName = "id", Required = Required.Default)]
 		public Guid Id { get; set; }
 
 		/// <summary>

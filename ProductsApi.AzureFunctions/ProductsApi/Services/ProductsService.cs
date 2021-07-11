@@ -78,7 +78,7 @@
 		public async Task<ProductDTO> ReadById(Guid id, ILogger log)
 		{
 			var product = await databaseService.ReadById(id, log);
-			return product.ToDTO();
+			return product?.ToDTO();
 		}
 
 		/// <summary>
