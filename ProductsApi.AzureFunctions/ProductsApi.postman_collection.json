@@ -7,271 +7,1473 @@
 	"item": [
 		{
 			"name": "PostProducts",
-			"event": [
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"check response\", function () {\r",
-							"    // do not execute if next request at any error\r",
-							"    postman.setNextRequest(null);\r",
-							"\r",
-							"    // check the correct environment\r",
-							"    pm.expect(pm.environment.get(\"environment\")).to.equal(\"local\");\r",
-							"\r",
-							"    // actual tests\r",
-							"    pm.response.to.have.status(201);\r",
-							"    const responseJson = pm.response.json();\r",
-							"    pm.expect(responseJson.description).to.eql(pm.environment.get(\"PostProducts.Description\"));\r",
-							"    pm.expect(responseJson.name).to.eql(pm.environment.get(\"PostProducts.Name\"));\r",
-							"    pm.expect(responseJson).to.have.property(\"id\");\r",
-							"    pm.environment.set(\"PostProducts.Id\", responseJson.id);\r",
-							"\r",
-							"    const location = postman.getResponseHeader(\"Location\");\r",
-							"    pm.sendRequest(location, (error, response) => {\r",
-							"        pm.expect(error).to.be.null;\r",
-							"        pm.expect(response).to.have.status(200);\r",
-							"    });\r",
-							"\r",
-							"    // all tests passed, continue with next request\r",
-							"    postman.setNextRequest();\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript"
-					}
+					"name": "PostProducts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(201);\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.description).to.eql(pm.environment.get(\"PostProducts.Description\"));\r",
+									"    pm.expect(responseJson.name).to.eql(pm.environment.get(\"PostProducts.Name\"));\r",
+									"    pm.expect(responseJson).to.have.property(\"id\");\r",
+									"    pm.environment.set(\"PostProducts.Id\", responseJson.id);\r",
+									"\r",
+									"    const location = postman.getResponseHeader(\"Location\");\r",
+									"    pm.sendRequest(location, (error, response) => {\r",
+									"        pm.expect(error).to.be.null;\r",
+									"        pm.expect(response).to.have.status(200);\r",
+									"    });\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"ExpectedEnvironment\", \"local\");\r",
+									"\r",
+									"const generateRandomString = (prefix = \"\", length = 6, includeBlanks = false) => {\r",
+									"    var result = prefix;\r",
+									"    while (result.length < length) {\r",
+									"        var next = Math.random().toString(20);\r",
+									"        if (includeBlanks) {\r",
+									"            next = next + \" \";\r",
+									"        }\r",
+									"\r",
+									"        result += next;\r",
+									"    }\r",
+									"\r",
+									"    return result.substr(0, length);\r",
+									"}\r",
+									"\r",
+									"const description = generateRandomString(\"Description_\", 100, true);\r",
+									"pm.environment.set(\"PostProducts.Description\", description);\r",
+									"\r",
+									"const name = generateRandomString(\"Name_\", 30);\r",
+									"pm.environment.set(\"PostProducts.Name\", name);\r",
+									"\r",
+									"const body = { description, name };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
 				},
 				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							"const generateRandomString = (prefix = \"\", length = 6, includeBlanks = false) => {\r",
-							"    var result = prefix;\r",
-							"    while (result.length < length) {\r",
-							"        var next = Math.random().toString(20);\r",
-							"        if (includeBlanks) {\r",
-							"            next = next + \" \";\r",
-							"        }\r",
-							"\r",
-							"        result += next;\r",
-							"    }\r",
-							"\r",
-							"    return result.substr(0, length);\r",
-							"}\r",
-							"\r",
-							"pm.environment.set(\"PostProducts.Name\", generateRandomString(\"Name_\", 30));\r",
-							"pm.environment.set(\"PostProducts.Description\", generateRandomString(\"Description_\", 100, true));\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    Description: \"{{PostProducts.Description}}\",\r\n    Name: \"{{PostProducts.Name}}\"\r\n}"
+					"name": "PostProducts_WithEmptyBodyShouldFail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"    pm.expect(postman.getResponseHeader(\"Location\")).to.be.undefined;\r",
+									"\r",
+									"    // all tests passed, continue with next request    \r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const body = { };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{server}}",
-					"host": [
-						"{{server}}"
-					]
+				{
+					"name": "PostProducts_WithMissingNameShouldFail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"    pm.expect(postman.getResponseHeader(\"Location\")).to.be.undefined;\r",
+									"\r",
+									"    // all tests passed, continue with next request    \r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const generateRandomString = (prefix = \"\", length = 6, includeBlanks = false) => {\r",
+									"    var result = prefix;\r",
+									"    while (result.length < length) {\r",
+									"        var next = Math.random().toString(20);\r",
+									"        if (includeBlanks) {\r",
+									"            next = next + \" \";\r",
+									"        }\r",
+									"\r",
+									"        result += next;\r",
+									"    }\r",
+									"\r",
+									"    return result.substr(0, length);\r",
+									"}\r",
+									"\r",
+									"const description = generateRandomString(\"Description_\", 100, true);\r",
+									"\r",
+									"const body = { description };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostProducts_WithMissingDescriptionShouldFail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"    pm.expect(postman.getResponseHeader(\"Location\")).to.be.undefined;\r",
+									"\r",
+									"    // all tests passed, continue with next request    \r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const generateRandomString = (prefix = \"\", length = 6, includeBlanks = false) => {\r",
+									"    var result = prefix;\r",
+									"    while (result.length < length) {\r",
+									"        var next = Math.random().toString(20);\r",
+									"        if (includeBlanks) {\r",
+									"            next = next + \" \";\r",
+									"        }\r",
+									"\r",
+									"        result += next;\r",
+									"    }\r",
+									"\r",
+									"    return result.substr(0, length);\r",
+									"}\r",
+									"\r",
+									"const name = generateRandomString(\"Name_\", 30);\r",
+									"\r",
+									"const body = { name };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostProducts_WithEmptyIdShouldSucceed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(201);\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.description).to.eql(pm.environment.get(\"PostProducts.Description\"));\r",
+									"    pm.expect(responseJson.name).to.eql(pm.environment.get(\"PostProducts.Name\"));\r",
+									"    pm.expect(responseJson).to.have.property(\"id\");\r",
+									"    pm.expect(responseJson.id).to.not.eql(pm.environment.get(\"PostProducts.Id\"))\r",
+									"\r",
+									"    const location = postman.getResponseHeader(\"Location\");\r",
+									"    pm.sendRequest(location, (error, response) => {\r",
+									"        pm.expect(error).to.be.null;\r",
+									"        pm.expect(response).to.have.status(200);\r",
+									"    });\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"const description = pm.environment.get(\"PostProducts.Description\");\r",
+									"const name = pm.environment.get(\"PostProducts.Name\");\r",
+									"const id = \"00000000-0000-0000-0000-000000000000\";\r",
+									"\r",
+									"const body = { description, name, id };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostProducts_WithNonEmptyIdShouldFail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"    pm.expect(postman.getResponseHeader(\"Location\")).to.be.undefined;\r",
+									"\r",
+									"    // all tests passed, continue with next request    \r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const uuid = require('uuid');\r",
+									"\r",
+									"const generateRandomString = (prefix = \"\", length = 6, includeBlanks = false) => {\r",
+									"    var result = prefix;\r",
+									"    while (result.length < length) {\r",
+									"        var next = Math.random().toString(20);\r",
+									"        if (includeBlanks) {\r",
+									"            next = next + \" \";\r",
+									"        }\r",
+									"\r",
+									"        result += next;\r",
+									"    }\r",
+									"\r",
+									"    return result.substr(0, length);\r",
+									"}\r",
+									"\r",
+									"const description = generateRandomString(\"Description_\", 100, true);\r",
+									"const name = generateRandomString(\"Name_\", 30);\r",
+									"const id = uuid();\r",
+									"\r",
+									"const body = { description, name, id };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostProducts_WithInvalidIdShouldFail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"    pm.expect(postman.getResponseHeader(\"Location\")).to.be.undefined;\r",
+									"\r",
+									"    // all tests passed, continue with next request    \r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const generateRandomString = (prefix = \"\", length = 6, includeBlanks = false) => {\r",
+									"    var result = prefix;\r",
+									"    while (result.length < length) {\r",
+									"        var next = Math.random().toString(20);\r",
+									"        if (includeBlanks) {\r",
+									"            next = next + \" \";\r",
+									"        }\r",
+									"\r",
+									"        result += next;\r",
+									"    }\r",
+									"\r",
+									"    return result.substr(0, length);\r",
+									"}\r",
+									"\r",
+									"const description = generateRandomString(\"Description_\", 100, true);\r",
+									"const name = generateRandomString(\"Name_\", 30);\r",
+									"// guid too short\r",
+									"const id = \"610252c3-d51e-490b-b614-047693768f\";\r",
+									"\r",
+									"const body = { description, name, id };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
 			"name": "GetProducts",
-			"event": [
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"check response\", function () {\r",
-							"    // do not execute if next request at any error\r",
-							"    postman.setNextRequest(null);\r",
-							"\r",
-							"    // check the correct environment\r",
-							"    pm.expect(pm.environment.get(\"environment\")).to.equal(\"local\");\r",
-							"\r",
-							"    // actual tests\r",
-							"    pm.response.to.have.status(200);\r",
-							"    const responseJson = pm.response.json();\r",
-							"    pm.expect(responseJson).to.be.an('array');\r",
-							"    pm.expect(responseJson).to.have.lengthOf.above(0);\r",
-							"\r",
-							"    // all tests passed, continue with next request\r",
-							"    postman.setNextRequest();\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript"
-					}
+					"name": "GetProducts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(200);\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).to.be.an('array');\r",
+									"    pm.expect(responseJson).to.have.lengthOf.above(0);\r",
+									"\r",
+									"    let found = false;\r",
+									"    responseJson.forEach((product) => {\r",
+									"        if (product.id === pm.environment.get(\"PostProducts.Id\")) {\r",
+									"            found = true;\r",
+									"        }\r",
+									"    });\r",
+									"\r",
+									"    pm.expect(found).to.be.true;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
 				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{server}}",
-					"host": [
-						"{{server}}"
-					]
-				}
-			},
-			"response": []
+			]
 		},
 		{
 			"name": "GetProducts/id",
-			"event": [
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"check response\", function () {\r",
-							"    // do not execute if next request at any error\r",
-							"    postman.setNextRequest(null);\r",
-							"\r",
-							"    // check the correct environment\r",
-							"    pm.expect(pm.environment.get(\"environment\")).to.equal(\"local\");\r",
-							"\r",
-							"    // actual tests\r",
-							"    pm.response.to.have.status(200);\r",
-							"\r",
-							"    const responseJson = pm.response.json();\r",
-							"    pm.expect(responseJson.id).to.eql(pm.environment.get(\"PostProducts.Id\"));\r",
-							"    pm.expect(responseJson.name).to.eql(pm.environment.get(\"PostProducts.Name\"));\r",
-							"    pm.expect(responseJson.description).to.eql(pm.environment.get(\"PostProducts.Description\"));\r",
-							"\r",
-							"    // all tests passed, continue with next request\r",
-							"    postman.setNextRequest();\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{server}}/{{PostProducts.Id}}",
-					"host": [
-						"{{server}}"
+					"name": "GetProducts/id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(200);\r",
+									"\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.id).to.eql(pm.environment.get(\"PostProducts.Id\"));\r",
+									"    pm.expect(responseJson.name).to.eql(pm.environment.get(\"PostProducts.Name\"));\r",
+									"    pm.expect(responseJson.description).to.eql(pm.environment.get(\"PostProducts.Description\"));\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"id\", pm.environment.get(\"PostProducts.Id\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"path": [
-						"{{PostProducts.Id}}"
-					]
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProducts/id should fail with unknown id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const uuid = require('uuid');\r",
+									"\r",
+									"pm.variables.set(\"id\", uuid());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProducts/id should fail with empty id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"id\", \"00000000-0000-0000-0000-000000000000\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProducts/id should fail with invalid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// guid one character too short\r",
+									"pm.variables.set(\"id\", \"610252c3-d51e-490b-b614-047693768fc\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
 			"name": "PutProducts",
-			"event": [
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"check response\", function () {\r",
-							"    // do not execute if next request at any error\r",
-							"    postman.setNextRequest(null);\r",
-							"\r",
-							"    // check the correct environment\r",
-							"    pm.expect(pm.environment.get(\"environment\")).to.equal(\"local\");\r",
-							"\r",
-							"    // actual tests\r",
-							"    pm.response.to.have.status(200);\r",
-							"\r",
-							"    // all tests passed, continue with next request\r",
-							"    postman.setNextRequest();\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript"
-					}
+					"name": "PutProducts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const name = \"Update \" + pm.environment.get(\"PostProducts.Name\");\r",
+									"const description = \"Update \" + pm.environment.get(\"PostProducts.Description\");\r",
+									"const id = pm.environment.get(\"PostProducts.Id\")\r",
+									"\r",
+									"pm.environment.set(\"PostProducts.Name\", name);\r",
+									"pm.environment.set(\"PostProducts.Description\", description);\r",
+									"\r",
+									"const body = { name, description, id };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
 				},
 				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							"pm.environment.set(\"PostProducts.Name\", \"Update \" + pm.environment.get(\"PostProducts.Name\"));\r",
-							"pm.environment.set(\"PostProducts.Description\", \"Update \" + pm.environment.get(\"PostProducts.Description\"));\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    Description: \"{{PostProducts.Description}}\",\r\n    Name: \"{{PostProducts.Name}}\",\r\n    Id: \"{{PostProducts.Id}}\",\r\n}"
+					"name": "PutProducts should fail with empty body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const body = { };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{server}}",
-					"host": [
-						"{{server}}"
-					]
+				{
+					"name": "PutProducts should fail with missing name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const name = \"Update \" + pm.environment.get(\"PostProducts.Name\");\r",
+									"const description = \"Update \" + pm.environment.get(\"PostProducts.Description\");\r",
+									"const id = pm.environment.get(\"PostProducts.Id\")\r",
+									"\r",
+									"const body = { description, id };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutProducts should fail with missing description",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const name = \"Update \" + pm.environment.get(\"PostProducts.Name\");\r",
+									"const description = \"Update \" + pm.environment.get(\"PostProducts.Description\");\r",
+									"const id = pm.environment.get(\"PostProducts.Id\")\r",
+									"\r",
+									"const body = { name, id };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutProducts should fail with missing id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const name = \"Update \" + pm.environment.get(\"PostProducts.Name\");\r",
+									"const description = \"Update \" + pm.environment.get(\"PostProducts.Description\");\r",
+									"const id = pm.environment.get(\"PostProducts.Id\")\r",
+									"\r",
+									"const body = { name, description };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutProducts should fail with unknown id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const uuid = require(\"uuid\");\r",
+									"\r",
+									"const name = pm.environment.get(\"PostProducts.Name\");\r",
+									"const description = pm.environment.get(\"PostProducts.Description\");\r",
+									"const id = uuid();\r",
+									"\r",
+									"const body = { name, description, id };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutProducts should fail with invalid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const name = pm.environment.get(\"PostProducts.Name\");\r",
+									"const description = pm.environment.get(\"PostProducts.Description\");\r",
+									"// guid one character too short\r",
+									"const id = \"610252c3-d51e-490b-b614-047693768fc\";\r",
+									"\r",
+									"const body = { name, description, id };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
 			"name": "DeleteProducts/id",
-			"event": [
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"check response\", function () {\r",
-							"    // do not execute if next request at any error\r",
-							"    postman.setNextRequest(null);\r",
-							"\r",
-							"    // check the correct environment\r",
-							"    pm.expect(pm.environment.get(\"environment\")).to.equal(\"local\");\r",
-							"\r",
-							"    // actual tests\r",
-							"    pm.response.to.have.status(204);\r",
-							"\r",
-							"    // all tests passed, continue with next request\r",
-							"    postman.setNextRequest();\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript"
-					}
+					"name": "DeleteProducts/id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(204);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"id\", pm.environment.get(\"PostProducts.Id\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
 				},
 				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{server}}/{{PostProducts.Id}}",
-					"host": [
-						"{{server}}"
+					"name": "DeleteProducts/id should fail with missing id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    // 404 because the route is undefined\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"path": [
-						"{{PostProducts.Id}}"
-					]
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteProducts/id should fail with invalid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// guid one character too short\r",
+									"const id = \"610252c3-d51e-490b-b614-047693768fc\";\r",
+									"pm.variables.set(\"id\", id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteProducts/id should fail for unknown id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"id\", pm.environment.get(\"PostProducts.Id\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }
