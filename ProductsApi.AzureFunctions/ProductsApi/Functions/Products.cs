@@ -4,7 +4,7 @@ namespace ProductsApi
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.Azure.WebJobs;
 	using Microsoft.Azure.WebJobs.Extensions.Http;
-		using Microsoft.Extensions.Logging;
+	using Microsoft.Extensions.Logging;
 
 	using Newtonsoft.Json;
 
@@ -14,6 +14,7 @@ namespace ProductsApi
 	using System;
 	using System.IO;
 	using System.Linq;
+	using System.Net;
 	using System.Threading.Tasks;
 
 	public class Products
@@ -32,25 +33,34 @@ namespace ProductsApi
 			[HttpTrigger(AuthorizationLevel.Function, "post", Route = "products")] HttpRequest req,
 			ILogger log)			
 		{
-			// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
-			if (!this.apiKeyService.IsValid(req))
+			// remove try-catch as soon as FunctionExceptionFilterAttribute or alternativ is available
+			try
 			{
-				return new UnauthorizedResult();
-			}
+				// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
+				if (!this.apiKeyService.IsValid(req))
+				{
+					return new UnauthorizedResult();
+				}
 
-			var productDTO = await DeserializeBody<ProductDTO>(req.Body, log);
-			if (productDTO is null || productDTO.Id != Guid.Empty)
-			{
+				var productDTO = await DeserializeBody<ProductDTO>(req.Body, log);
+				if (productDTO is null || productDTO.Id != Guid.Empty)
+				{
+					return new BadRequestResult();
+				}
+
+				var createdProduct = await productsService.Create(productDTO, log);
+				if (createdProduct != null)
+				{
+					return new CreatedResult(new Uri($"http://{req.Host.Value}/api/products/{createdProduct.Id}"), createdProduct);
+				}
+
 				return new BadRequestResult();
 			}
-			
-			var createdProduct = await productsService.Create(productDTO, log);
-			if (createdProduct != null)
+			catch (Exception ex)
 			{
-				return new CreatedResult(new Uri($"http://{req.Host.Value}/api/products/{createdProduct.Id}"), createdProduct);
+				log.LogError(ex.ToString());
+				return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
 			}
-
-			return new BadRequestResult();
 		}
 
 		[FunctionName("DeleteProducts")]
@@ -59,26 +69,35 @@ namespace ProductsApi
 			ILogger log,
 			string id)
 		{
-			// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
-			if (!this.apiKeyService.IsValid(req))
+			// remove try-catch as soon as FunctionExceptionFilterAttribute or alternativ is available
+			try
 			{
-				return new UnauthorizedResult();
-			}
+				// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
+				if (!this.apiKeyService.IsValid(req))
+				{
+					return new UnauthorizedResult();
+				}
 
-			var isValid = Guid.TryParse(id, out Guid guid);
-			if (!isValid || guid == Guid.Empty)
-			{
-				return new BadRequestResult();
-			}
+				var isValid = Guid.TryParse(id, out Guid guid);
+				if (!isValid || guid == Guid.Empty)
+				{
+					return new BadRequestResult();
+				}
 
-			var isDeleted = await productsService.Delete(guid, log);
-			if (isDeleted)
+				var isDeleted = await productsService.Delete(guid, log);
+				if (isDeleted)
+				{
+					return new NoContentResult();
+				}
+				else
+				{
+					return new NotFoundResult();
+				}
+			}
+			catch (Exception ex)
 			{
-				return new NoContentResult();
-			}			
-			else
-			{
-				return new NotFoundResult();
+				log.LogError(ex.ToString());
+				return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
 			}
 		}
 
@@ -87,15 +106,24 @@ namespace ProductsApi
 			[HttpTrigger(AuthorizationLevel.Function, "get", Route = "products")] HttpRequest req,
 			ILogger log)
 		{
-			// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
-			if (!this.apiKeyService.IsValid(req))
+			// remove try-catch as soon as FunctionExceptionFilterAttribute or alternativ is available
+			try
 			{
-				return new UnauthorizedResult();
+				// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
+				if (!this.apiKeyService.IsValid(req))
+				{
+					return new UnauthorizedResult();
+				}
+
+				var products = await productsService.ListProducts(log);
+
+				return new OkObjectResult(products.ToArray());
 			}
-
-			var products = await productsService.ListProducts(log);
-
-			return new OkObjectResult(products.ToArray());
+			catch (Exception ex)
+			{
+				log.LogError(ex.ToString());
+				return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+			}
 		}
 
 		[FunctionName("GetProductsById")]
@@ -104,23 +132,32 @@ namespace ProductsApi
 			ILogger log,
 			string id)
 		{
-			// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
-			if (!this.apiKeyService.IsValid(req))
+			// remove try-catch as soon as FunctionExceptionFilterAttribute or alternativ is available
+			try
 			{
-				return new UnauthorizedResult();
-			}
-
-			var isValid = Guid.TryParse(id, out Guid guid);
-			if (isValid && guid != Guid.Empty)
-			{
-				var product = await productsService.ReadById(guid, log);
-				if (product != null)
+				// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
+				if (!this.apiKeyService.IsValid(req))
 				{
-					return new OkObjectResult(product);
+					return new UnauthorizedResult();
 				}
-			}
+
+				var isValid = Guid.TryParse(id, out Guid guid);
+				if (isValid && guid != Guid.Empty)
+				{
+					var product = await productsService.ReadById(guid, log);
+					if (product != null)
+					{
+						return new OkObjectResult(product);
+					}
+				}
 			
-			return new NotFoundResult();
+				return new NotFoundResult();
+			}
+			catch (Exception ex)
+			{
+				log.LogError(ex.ToString());
+				return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+			}
 		}
 
 		[FunctionName("PutProducts")]
@@ -128,26 +165,35 @@ namespace ProductsApi
 			[HttpTrigger(AuthorizationLevel.Function, "put", Route = "products")] HttpRequest req,
 			ILogger log)
 		{
-			// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
-			if (!this.apiKeyService.IsValid(req))
+			// remove try-catch as soon as FunctionExceptionFilterAttribute or alternativ is available
+			try
 			{
-				return new UnauthorizedResult();
-			}
+				// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
+				if (!this.apiKeyService.IsValid(req))
+				{
+					return new UnauthorizedResult();
+				}
 
-			var productDTO = await DeserializeBody<ProductDTO>(req.Body, log);
-			if (productDTO is null || productDTO.Id == Guid.Empty)
-			{
-				return new BadRequestResult();
+				var productDTO = await DeserializeBody<ProductDTO>(req.Body, log);
+				if (productDTO is null || productDTO.Id == Guid.Empty)
+				{
+					return new BadRequestResult();
+				}
+
+				var isUpdated = await productsService.Update(productDTO, log);
+				if (isUpdated)
+				{
+					return new OkResult();
+				}
+				else
+				{
+					return new NotFoundResult();
+				}
 			}
-			
-			var isUpdated = await productsService.Update(productDTO, log);
-			if (isUpdated)
+			catch (Exception ex)
 			{
-				return new OkResult();
-			}
-			else
-			{
-				return new NotFoundResult();
+				log.LogError(ex.ToString());
+				return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
 			}
 		}
 
