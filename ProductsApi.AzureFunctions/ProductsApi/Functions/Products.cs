@@ -4,6 +4,7 @@ namespace ProductsApi
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.Azure.WebJobs;
 	using Microsoft.Azure.WebJobs.Extensions.Http;
+	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.Logging;
 
 	using Newtonsoft.Json;
@@ -19,13 +20,16 @@ namespace ProductsApi
 
 	public class Products
 	{
+		private const string postProductsLocationFormatName = "postProductsLocationFormat";
 		private readonly IProductsService productsService;
 		private readonly IApiKeyService apiKeyService;
+		private readonly string postProductsLocationFormat;
 
-		public Products(IProductsService productsService, IApiKeyService apiKeyService)
+		public Products(IProductsService productsService, IApiKeyService apiKeyService, IConfiguration configuration)
 		{
 			this.productsService = productsService;
 			this.apiKeyService = apiKeyService;
+			this.postProductsLocationFormat = configuration.GetValue<string>(postProductsLocationFormatName);
 		}
 
 		[FunctionName("PostProducts")]
@@ -51,7 +55,9 @@ namespace ProductsApi
 				var createdProduct = await productsService.Create(productDTO, log);
 				if (createdProduct != null)
 				{
-					return new CreatedResult(new Uri($"http://{req.Host.Value}/api/products/{createdProduct.Id}"), createdProduct);
+					return new CreatedResult(
+						new Uri(string.Format(this.postProductsLocationFormat, req.Host.Value, createdProduct.Id)),
+						createdProduct);
 				}
 
 				return new BadRequestResult();
