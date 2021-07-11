@@ -31,10 +31,7 @@
 									"    pm.environment.set(\"PostProducts.Id\", responseJson.id);\r",
 									"\r",
 									"    const location = postman.getResponseHeader(\"Location\");\r",
-									"    pm.sendRequest(location, (error, response) => {\r",
-									"        pm.expect(error).to.be.null;\r",
-									"        pm.expect(response).to.have.status(200);\r",
-									"    });\r",
+									"    pm.environment.set(\"Location\", location);\r",
 									"\r",
 									"    // all tests passed, continue with next request\r",
 									"    postman.setNextRequest();\r",
@@ -95,6 +92,47 @@
 							"raw": "{{server}}",
 							"host": [
 								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get for specified location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"    \r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(200);\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.description).to.eql(pm.environment.get(\"PostProducts.Description\"));\r",
+									"    pm.expect(responseJson.name).to.eql(pm.environment.get(\"PostProducts.Name\"));\r",
+									"    pm.expect(responseJson.id).to.eql(pm.environment.get(\"PostProducts.Id\"));\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Location}}",
+							"host": [
+								"{{Location}}"
 							]
 						}
 					},
@@ -338,10 +376,7 @@
 									"    pm.expect(responseJson.id).to.not.eql(pm.environment.get(\"PostProducts.Id\"))\r",
 									"\r",
 									"    const location = postman.getResponseHeader(\"Location\");\r",
-									"    pm.sendRequest(location, (error, response) => {\r",
-									"        pm.expect(error).to.be.null;\r",
-									"        pm.expect(response).to.have.status(200);\r",
-									"    });\r",
+									"    pm.environment.set(\"Location\", location);\r",
 									"\r",
 									"    // all tests passed, continue with next request\r",
 									"    postman.setNextRequest();\r",
@@ -386,6 +421,47 @@
 							"raw": "{{server}}",
 							"host": [
 								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get for specified new location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"    \r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(200);\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.description).to.eql(pm.environment.get(\"PostProducts.Description\"));\r",
+									"    pm.expect(responseJson.name).to.eql(pm.environment.get(\"PostProducts.Name\"));\r",
+									"    pm.expect(responseJson.id).to.not.eql(pm.environment.get(\"PostProducts.Id\"));\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Location}}",
+							"host": [
+								"{{Location}}"
 							]
 						}
 					},
@@ -551,6 +627,228 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "PostProducts should fail with missing api key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const description = pm.environment.get(\"PostProducts.Description\");\r",
+									"const name = pm.environment.get(\"PostProducts.Name\");\r",
+									"\r",
+									"const body = { description, name };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostProducts should fail with invalid api key (valid guid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const description = pm.environment.get(\"PostProducts.Description\");\r",
+									"const name = pm.environment.get(\"PostProducts.Name\");\r",
+									"\r",
+									"const body = { description, name };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "aae49eb7-3f37-4ca8-8cbd-8f7e167ba35c",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostProducts should fail with invalid api key (invalid guid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const description = pm.environment.get(\"PostProducts.Description\");\r",
+									"const name = pm.environment.get(\"PostProducts.Name\");\r",
+									"\r",
+									"const body = { description, name };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "aae49eb7-3f37-4ca8-8cb",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -596,6 +894,156 @@
 						}
 					],
 					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProducts should fail if api key is missing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProducts should fail if api key is invalid (no guid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "aae49eb7-3f37-4ca8-8cb",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProducts should fail if api key is invalid (wrong guid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "b685b7b9-14c2-407f-8dd5-410ebc1518d8",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-api-key",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -809,6 +1257,192 @@
 						}
 					],
 					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProducts/id should fail if api key is missing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"id\", pm.environment.get(\"PostProducts.Id\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProducts/id should fail if api key is invalid (no guid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"id\", pm.environment.get(\"PostProducts.Id\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "16029c27-167e-4d15-95c9-52e80dc5b8e8",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProducts/id should fail if api key is invalid (wrong guid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"id\", pm.environment.get(\"PostProducts.Id\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "b685b7b9-14c2-407f-8dd5",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-api-key",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1263,6 +1897,225 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "PutProducts should fail if api key is missing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const name = pm.environment.get(\"PostProducts.Name\");\r",
+									"const description = pm.environment.get(\"PostProducts.Description\");\r",
+									"const id = pm.environment.get(\"PostProducts.Id\")\r",
+									"\r",
+									"const body = { name, description, id };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutProducts should fail if api key is invalid (no guid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const name = pm.environment.get(\"PostProducts.Name\");\r",
+									"const description = pm.environment.get(\"PostProducts.Description\");\r",
+									"const id = pm.environment.get(\"PostProducts.Id\")\r",
+									"\r",
+									"const body = { name, description, id };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "16029c27-167e-4d15-95c9-",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutProducts should fail if api key is invalid (wrong guid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const name = pm.environment.get(\"PostProducts.Name\");\r",
+									"const description = pm.environment.get(\"PostProducts.Description\");\r",
+									"const id = pm.environment.get(\"PostProducts.Id\")\r",
+									"\r",
+									"const body = { name, description, id };\r",
+									"pm.variables.set(\"requestBody\", JSON.stringify(body));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "649e389b-fe93-4cdc-a6fb-0122bb9eed5b",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1472,8 +2325,229 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "DeleteProducts/id should fail if api key is missing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"id\", pm.environment.get(\"PostProducts.Id\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteProducts/id should fail if api key is invalid (no guid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"id\", pm.environment.get(\"PostProducts.Id\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "649e389b-fe93-4cdc-a6fb-",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteProducts/id should fail if api key is invalid (wrong guid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"id\", pm.environment.get(\"PostProducts.Id\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "5d875ae0-69e4-4ffa-95b6-e04de462bf71",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{apiKey}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
