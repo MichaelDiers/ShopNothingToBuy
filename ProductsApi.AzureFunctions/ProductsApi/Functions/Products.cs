@@ -4,7 +4,7 @@ namespace ProductsApi
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.Azure.WebJobs;
 	using Microsoft.Azure.WebJobs.Extensions.Http;
-	using Microsoft.Extensions.Logging;
+		using Microsoft.Extensions.Logging;
 
 	using Newtonsoft.Json;
 
@@ -19,17 +19,25 @@ namespace ProductsApi
 	public class Products
 	{
 		private readonly IProductsService productsService;
+		private readonly IApiKeyService apiKeyService;
 
-		public Products(IProductsService productsService)
+		public Products(IProductsService productsService, IApiKeyService apiKeyService)
 		{
 			this.productsService = productsService;
+			this.apiKeyService = apiKeyService;
 		}
 
 		[FunctionName("PostProducts")]
 		public async Task<IActionResult> PostProducts(
 			[HttpTrigger(AuthorizationLevel.Function, "post", Route = "products")] HttpRequest req,
-			ILogger log)
+			ILogger log)			
 		{
+			// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
+			if (!this.apiKeyService.IsValid(req))
+			{
+				return new UnauthorizedResult();
+			}
+
 			var productDTO = await DeserializeBody<ProductDTO>(req.Body, log);
 			if (productDTO is null || productDTO.Id != Guid.Empty)
 			{
@@ -51,6 +59,12 @@ namespace ProductsApi
 			ILogger log,
 			string id)
 		{
+			// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
+			if (!this.apiKeyService.IsValid(req))
+			{
+				return new UnauthorizedResult();
+			}
+
 			var isValid = Guid.TryParse(id, out Guid guid);
 			if (!isValid || guid == Guid.Empty)
 			{
@@ -73,6 +87,12 @@ namespace ProductsApi
 			[HttpTrigger(AuthorizationLevel.Function, "get", Route = "products")] HttpRequest req,
 			ILogger log)
 		{
+			// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
+			if (!this.apiKeyService.IsValid(req))
+			{
+				return new UnauthorizedResult();
+			}
+
 			var products = await productsService.ListProducts(log);
 
 			return new OkObjectResult(products.ToArray());
@@ -84,6 +104,12 @@ namespace ProductsApi
 			ILogger log,
 			string id)
 		{
+			// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
+			if (!this.apiKeyService.IsValid(req))
+			{
+				return new UnauthorizedResult();
+			}
+
 			var isValid = Guid.TryParse(id, out Guid guid);
 			if (isValid && guid != Guid.Empty)
 			{
@@ -102,6 +128,12 @@ namespace ProductsApi
 			[HttpTrigger(AuthorizationLevel.Function, "put", Route = "products")] HttpRequest req,
 			ILogger log)
 		{
+			// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
+			if (!this.apiKeyService.IsValid(req))
+			{
+				return new UnauthorizedResult();
+			}
+
 			var productDTO = await DeserializeBody<ProductDTO>(req.Body, log);
 			if (productDTO is null || productDTO.Id == Guid.Empty)
 			{

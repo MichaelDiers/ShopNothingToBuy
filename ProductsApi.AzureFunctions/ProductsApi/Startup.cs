@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using ProductsApi.Contracts;
+using ProductsApi.Extensions;
 using ProductsApi.Services;
 
 [assembly: FunctionsStartup(typeof(ProductsApi.Startup))]
@@ -22,18 +23,11 @@ namespace ProductsApi
 		/// configure the host.</param>
 		public override void Configure(IFunctionsHostBuilder builder)
 		{
-			// depency injections
+			// dependency injections
 			builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
 			builder.Services.AddSingleton<IProductsService, ProductsService>();
-
-
-			builder.Services.AddSingleton((s) =>
-			{
-				var configuration = s.GetService<IConfiguration>();
-				var connectionString = configuration.GetConnectionString("CosmosDbConnectionString");
-				CosmosClientBuilder cosmosClientBuilder = new CosmosClientBuilder(connectionString);
-				return cosmosClientBuilder.WithConnectionModeDirect().Build();
-			});
+			builder.AddApiKeyService();
+			builder.AddCosmosClient();
 		}
 	}
 }
