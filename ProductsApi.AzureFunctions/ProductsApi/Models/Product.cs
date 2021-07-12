@@ -31,9 +31,9 @@
 		/// <summary>
 		///   Creates a new instance of <see cref="Product" />.
 		/// </summary>
-		/// <param name="productDTO">Defines the new values of the product.</param>
-		public Product(ProductDTO productDTO)
-			: this(productDTO.Description, productDTO.Id, productDTO.Name)
+		/// <param name="productDto">Defines the new values of the product.</param>
+		public Product(ProductDto productDto)
+			: this(productDto.Description, productDto.Id, productDto.Name)
 		{
 		}
 

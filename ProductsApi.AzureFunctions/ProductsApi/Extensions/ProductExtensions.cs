@@ -9,13 +9,13 @@
 	public static class ProductExtensions
 	{
 		/// <summary>
-		///   Create an <see cref="ProductDTO" /> from the given <see cref="Product" />.
+		///   Create an <see cref="ProductDto" /> from the given <see cref="Product" />.
 		/// </summary>
 		/// <param name="product">The dto is created from this product.</param>
-		/// <returns>An instance of <see cref="ProductDTO" />.</returns>
-		public static ProductDTO ToDTO(this Product product)
+		/// <returns>An instance of <see cref="ProductDto" />.</returns>
+		public static ProductDto ToDto(this Product product)
 		{
-			return new ProductDTO(product);
+			return new ProductDto(product);
 		}
 
 		/// <summary>

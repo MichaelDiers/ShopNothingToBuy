@@ -23,18 +23,18 @@
 		/// <summary>
 		///   Used and expected id.
 		/// </summary>
-		private readonly Guid Id = Guid.NewGuid();
+		private readonly Guid id = Guid.NewGuid();
 
 		/// <summary>
-		///   Tests the conversion from <see cref="Product" /> to <see cref="ProductDTO" />.
+		///   Tests the conversion from <see cref="Product" /> to <see cref="ProductDto" />.
 		/// </summary>
 		[Fact]
-		public void ToDTO()
+		public void ToDto()
 		{
-			var product = new Product {Description = Description, Name = Name, Id = this.Id};
-			var productDTO = product.ToDTO();
+			var product = new Product {Description = Description, Name = Name, Id = this.id};
+			var productDto = product.ToDto();
 
-			productDTO.ProductEqual(product, Description, Name, this.Id);
+			productDto.ProductEqual(product, Description, Name, this.id);
 		}
 	}
 }

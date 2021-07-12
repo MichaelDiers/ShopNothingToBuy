@@ -73,13 +73,13 @@ namespace ProductsApi.Functions
 					return new UnauthorizedResult();
 				}
 
-				var productDTO = await DeserializeBody<ProductDTO>(req.Body, log);
-				if (productDTO is null || productDTO.Id != Guid.Empty)
+				var productDto = await DeserializeBody<ProductDto>(req.Body, log);
+				if (productDto is null || productDto.Id != Guid.Empty)
 				{
 					return new BadRequestResult();
 				}
 
-				var createdProduct = await this.productsService.Create(productDTO, log);
+				var createdProduct = await this.productsService.Create(productDto, log);
 				if (createdProduct != null)
 				{
 					return new CreatedResult(
@@ -209,13 +209,13 @@ namespace ProductsApi.Functions
 					return new UnauthorizedResult();
 				}
 
-				var productDTO = await DeserializeBody<ProductDTO>(req.Body, log);
-				if (productDTO is null || productDTO.Id == Guid.Empty)
+				var productDto = await DeserializeBody<ProductDto>(req.Body, log);
+				if (productDto is null || productDto.Id == Guid.Empty)
 				{
 					return new BadRequestResult();
 				}
 
-				var isUpdated = await this.productsService.Update(productDTO, log);
+				var isUpdated = await this.productsService.Update(productDto, log);
 				if (isUpdated)
 				{
 					return new OkResult();
@@ -246,7 +246,7 @@ namespace ProductsApi.Functions
 			catch (JsonSerializationException)
 			{
 				// do not handle missing request data
-				// see json attributes on type T, for example see ProductDTO
+				// see json attributes on type T, for example see ProductDto
 			}
 			catch (Exception ex)
 			{

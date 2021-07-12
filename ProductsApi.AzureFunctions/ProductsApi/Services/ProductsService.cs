@@ -41,15 +41,15 @@
 		/// <summary>
 		///   Creates a new product.
 		/// </summary>
-		/// <param name="productDTO">The product to be created.</param>
+		/// <param name="productDto">The product to be created.</param>
 		/// <param name="log">An <see cref="ILogger" /> instance.</param>
-		/// <returns>The product as <see cref="ProductDTO" /> or null if the operation failed.</returns>
-		public async Task<ProductDTO> Create(ProductDTO productDTO, ILogger log)
+		/// <returns>The product as <see cref="ProductDto" /> or null if the operation failed.</returns>
+		public async Task<ProductDto> Create(ProductDto productDto, ILogger log)
 		{
-			var product = productDTO.FromDTO(Guid.NewGuid());
+			var product = productDto.FromDto(Guid.NewGuid());
 			if (await this.databaseService.Create(product, log))
 			{
-				return product.ToDTO();
+				return product.ToDto();
 			}
 
 			return null;
@@ -71,10 +71,10 @@
 		/// </summary>
 		/// <param name="log">An <see cref="ILogger" /> instance.</param>
 		/// <returns>A list of all products.</returns>
-		public async Task<IEnumerable<ProductDTO>> ListProducts(ILogger log)
+		public async Task<IEnumerable<ProductDto>> ListProducts(ILogger log)
 		{
 			var products = await this.databaseService.List(log);
-			return products.Select(product => product.ToDTO());
+			return products.Select(product => product.ToDto());
 		}
 
 		/// <summary>
@@ -83,21 +83,21 @@
 		/// <param name="id">The id of the product.</param>
 		/// <param name="log">An <see cref="ILogger" /> instance.</param>
 		/// <returns>The product or null if no product with <paramref name="id" /> exists.</returns>
-		public async Task<ProductDTO> ReadById(Guid id, ILogger log)
+		public async Task<ProductDto> ReadById(Guid id, ILogger log)
 		{
 			var product = await this.databaseService.ReadById(id, log);
-			return product?.ToDTO();
+			return product?.ToDto();
 		}
 
 		/// <summary>
 		///   Updates an existing product.
 		/// </summary>
-		/// <param name="product">The new values for the product.</param>
+		/// <param name="productDto">The new values for the product.</param>
 		/// <param name="log">An <see cref="ILogger" /> instance.</param>
-		/// <returns>True if the product is updated and false if no product with <see cref="ProductDTO.Id" /> exists.</returns>
-		public async Task<bool> Update(ProductDTO productDTO, ILogger log)
+		/// <returns>True if the product is updated and false if no product with <see cref="ProductDto.Id" /> exists.</returns>
+		public async Task<bool> Update(ProductDto productDto, ILogger log)
 		{
-			var product = productDTO.FromDTO();
+			var product = productDto.FromDto();
 			return await this.databaseService.Update(product, log);
 		}
 	}

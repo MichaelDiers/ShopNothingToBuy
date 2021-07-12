@@ -7,22 +7,22 @@
 	///   Defines a product used in data transfer context.
 	/// </summary>
 	[JsonObject(MemberSerialization.OptIn, ItemRequired = Required.Always)]
-	public class ProductDTO
+	public class ProductDto
 	{
 		/// <summary>
-		///   Creates a new instance of <see cref="ProductDTO" />.
+		///   Creates a new instance of <see cref="ProductDto" />.
 		/// </summary>
-		public ProductDTO()
+		public ProductDto()
 		{
 		}
 
 		/// <summary>
-		///   Creates a new instance of <see cref="ProductDTO" />.
+		///   Creates a new instance of <see cref="ProductDto" />.
 		/// </summary>
 		/// <param name="description">The description of the new product.</param>
 		/// <param name="id">The id of the new product.</param>
 		/// <param name="name">The name of the new product.</param>
-		public ProductDTO(string description, Guid id, string name)
+		public ProductDto(string description, Guid id, string name)
 		{
 			this.Description = description;
 			this.Id = id;
@@ -30,10 +30,10 @@
 		}
 
 		/// <summary>
-		///   Creates a new instance of <see cref="ProductDTO" />.
+		///   Creates a new instance of <see cref="ProductDto" />.
 		/// </summary>
 		/// <param name="product">Defines the new values of the product.</param>
-		public ProductDTO(Product product)
+		public ProductDto(Product product)
 			: this(product.Description, product.Id, product.Name)
 		{
 		}

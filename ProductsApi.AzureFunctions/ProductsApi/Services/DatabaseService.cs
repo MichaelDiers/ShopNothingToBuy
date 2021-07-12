@@ -24,11 +24,6 @@
 		private readonly string containerName;
 
 		/// <summary>
-		///   Used to access the cosmos db.
-		/// </summary>
-		private readonly CosmosClient cosmosClient;
-
-		/// <summary>
 		///   The cosmos database instance.
 		/// </summary>
 		private readonly Database database;
@@ -42,7 +37,7 @@
 		///   Create a new instance of <see cref="DatabaseService" />.
 		/// </summary>
 		/// <param name="cosmosClient">The client used for accessing the cosmos db.</param>
-		/// <param name="configuration">Used to access the configuration of funtions.</param>
+		/// <param name="configuration">Used to access the configuration of functions.</param>
 		public DatabaseService(CosmosClient cosmosClient, IConfiguration configuration)
 		{
 			if (configuration is null)
@@ -50,8 +45,7 @@
 				throw new ArgumentNullException(nameof(configuration));
 			}
 
-			this.cosmosClient = cosmosClient ?? throw new ArgumentNullException(nameof(cosmosClient));
-			this.database = this.cosmosClient.GetDatabase(configuration.GetValue<string>("DatabaseName"));
+			this.database = cosmosClient.GetDatabase(configuration.GetValue<string>("DatabaseName"));
 			this.containerName = configuration.GetValue<string>("ContainerName");
 			this.container = this.database.GetContainer(this.containerName);
 		}
@@ -93,7 +87,7 @@
 		{
 			try
 			{
-				var createdProduct = await this.container.CreateItemAsync(product);
+				var _ = await this.container.CreateItemAsync(product);
 				return true;
 			}
 			catch (CosmosException ex)

@@ -10,7 +10,7 @@
 	/// <summary>
 	///   Extensions for <see cref="IFunctionsHostBuilder" />.
 	/// </summary>
-	public static class IFunctionsHostBuilderExtensions
+	public static class FunctionsHostBuilderExtensions
 	{
 		/// <summary>
 		///   Name in configuration values of the api key.

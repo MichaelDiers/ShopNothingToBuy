@@ -12,7 +12,7 @@
 		/// <summary>
 		///   Name of the request header that contains the api key.
 		/// </summary>
-		private const string headerName = "x-api-key";
+		private const string HeaderName = "x-api-key";
 
 		/// <summary>
 		///   A valid api key.
@@ -64,7 +64,7 @@
 		/// <returns>True if the api key is valid and otherwise false.</returns>
 		public bool IsValid(HttpRequest httpRequest)
 		{
-			return httpRequest.Headers.ContainsKey(headerName) && this.IsValid(httpRequest.Headers[headerName]);
+			return httpRequest.Headers.ContainsKey(HeaderName) && this.IsValid(httpRequest.Headers[HeaderName]);
 		}
 	}
 }

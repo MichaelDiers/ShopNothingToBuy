@@ -7,9 +7,9 @@
 	using Xunit;
 
 	/// <summary>
-	///   Tests for <see cref="ProductsApi.Extensions.ProductDTOExtensions" />.
+	///   Tests for <see cref="ProductDtoExtensions" />.
 	/// </summary>
-	public class ProductDTOExtensionsTests
+	public class ProductDtoExtensionsTests
 	{
 		/// <summary>
 		///   Used and expected description.
@@ -24,40 +24,40 @@
 		/// <summary>
 		///   Used and expected id.
 		/// </summary>
-		private readonly Guid Id = Guid.NewGuid();
+		private readonly Guid id = Guid.NewGuid();
 
 		/// <summary>
-		///   Tests the conversion from <see cref="ProductDTO" /> to <see cref="Product" />.
+		///   Tests the conversion from <see cref="ProductDto" /> to <see cref="Product" />.
 		/// </summary>
 		[Fact]
-		public void FromDTO()
+		public void FromDto()
 		{
-			var productDTO = new ProductDTO {Description = Description, Name = Name, Id = this.Id};
-			var product = productDTO.FromDTO();
+			var productDto = new ProductDto {Description = Description, Name = Name, Id = this.id};
+			var product = productDto.FromDto();
 
-			productDTO.ProductEqual(product, Description, Name, this.Id);
+			productDto.ProductEqual(product, Description, Name, this.id);
 		}
 
 		/// <summary>
-		///   Tests the conversion from <see cref="ProductDTO" /> to <see cref="Product" /> using additional id.
+		///   Tests the conversion from <see cref="ProductDto" /> to <see cref="Product" /> using additional id.
 		/// </summary>
 		[Fact]
-		public void FromDTOWithGuid()
+		public void FromDtoWithGuid()
 		{
-			var productDTO = new ProductDTO {Description = Description, Name = Name};
-			var product = productDTO.FromDTO(this.Id);
+			var productDto = new ProductDto {Description = Description, Name = Name};
+			var product = productDto.FromDto(this.id);
 
-			Assert.Equal(productDTO.Description, product.Description);
-			Assert.Equal(productDTO.Name, product.Name);
-			Assert.NotEqual(productDTO.Id, product.Id);
+			Assert.Equal(productDto.Description, product.Description);
+			Assert.Equal(productDto.Name, product.Name);
+			Assert.NotEqual(productDto.Id, product.Id);
 
 			var productJson = JsonConvert.SerializeObject(product);
-			var productDTOJson = JsonConvert.SerializeObject(productDTO);
-			Assert.NotEqual(productJson, productDTOJson);
+			var productDtoJson = JsonConvert.SerializeObject(productDto);
+			Assert.NotEqual(productJson, productDtoJson);
 
 			Assert.Equal(Description, product.Description);
 			Assert.Equal(Name, product.Name);
-			Assert.Equal(this.Id, product.Id);
+			Assert.Equal(this.id, product.Id);
 		}
 	}
 }

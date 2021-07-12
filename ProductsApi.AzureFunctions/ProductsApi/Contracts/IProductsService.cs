@@ -24,10 +24,10 @@
 		/// <summary>
 		///   Creates a new product.
 		/// </summary>
-		/// <param name="productDTO">The product to be created.</param>
+		/// <param name="productDto">The product to be created.</param>
 		/// <param name="log">An <see cref="ILogger" /> instance.</param>
-		/// <returns>The product as <see cref="ProductDTO" /> or null if the operation failed.</returns>
-		Task<ProductDTO> Create(ProductDTO productDTO, ILogger log);
+		/// <returns>The product as <see cref="ProductDto" /> or null if the operation failed.</returns>
+		Task<ProductDto> Create(ProductDto productDto, ILogger log);
 
 		/// <summary>
 		///   Delete a product.
@@ -42,7 +42,7 @@
 		/// </summary>
 		/// <param name="log">An <see cref="ILogger" /> instance.</param>
 		/// <returns>A list of all products.</returns>
-		Task<IEnumerable<ProductDTO>> ListProducts(ILogger log);
+		Task<IEnumerable<ProductDto>> ListProducts(ILogger log);
 
 		/// <summary>
 		///   Reads a product by the given <paramref name="id" />.
@@ -50,14 +50,14 @@
 		/// <param name="id">The id of the product.</param>
 		/// <param name="log">An <see cref="ILogger" /> instance.</param>
 		/// <returns>The product or null if no product with <paramref name="id" /> exists.</returns>
-		Task<ProductDTO> ReadById(Guid id, ILogger log);
+		Task<ProductDto> ReadById(Guid id, ILogger log);
 
 		/// <summary>
 		///   Updates an existing product.
 		/// </summary>
-		/// <param name="productDTO">The new values for the product.</param>
+		/// <param name="productDto">The new values for the product.</param>
 		/// <param name="log">An <see cref="ILogger" /> instance.</param>
-		/// <returns>True if the product is updated and false if no product with <see cref="ProductDTO.Id" /> exists.</returns>
-		Task<bool> Update(ProductDTO productDTO, ILogger log);
+		/// <returns>True if the product is updated and false if no product with <see cref="ProductDto.Id" /> exists.</returns>
+		Task<bool> Update(ProductDto productDto, ILogger log);
 	}
 }
