@@ -1,19 +1,17 @@
 ﻿namespace ProductsApi.Tests
 {
 	using System;
-
-	using ProductsApi.Models;
-
-	using Xunit;
 	using Newtonsoft.Json;
+	using ProductsApi.Models;
+	using Xunit;
 
 	/// <summary>
-	/// Extensions used for asserting test objects.
+	///   Extensions used for asserting test objects.
 	/// </summary>
 	public static class AssertExtensions
 	{
 		/// <summary>
-		/// Verify that the given <paramref name="product"/> and <paramref name="productDTO"/> are equal.
+		///   Verify that the given <paramref name="product" /> and <paramref name="productDTO" /> are equal.
 		/// </summary>
 		/// <param name="productDTO">A data transfer object.</param>
 		/// <param name="product">An application object.</param>
@@ -29,16 +27,19 @@
 		}
 
 		/// <summary>
-		/// Verify that the given <paramref name="product"/> and <paramref name="productDTO"/> are equal.
-		/// Additional checks for <paramref name="description"/>, <paramref name="id"/> and <paramref name="name"/>
-		/// for <paramref name="product"/> and <paramref name="productDTO"/>.
+		///   Verify that the given <paramref name="product" /> and <paramref name="productDTO" /> are equal.
+		///   Additional checks for <paramref name="description" />, <paramref name="id" /> and <paramref name="name" />
+		///   for <paramref name="product" /> and <paramref name="productDTO" />.
 		/// </summary>
 		/// <param name="productDTO">A data transfer object.</param>
 		/// <param name="product">An application object.</param>
-		/// <param name="description">The expected description in <paramref name="product"/> and <paramref name="productDTO"/>.</param>
-		/// /// <param name="name">The expected name in <paramref name="product"/> and <paramref name="productDTO"/>.</param>
-		/// /// <param name="id">The expected id in <paramref name="product"/> and <paramref name="productDTO"/>.</param>
-		public static void ProductEqual(this ProductDTO productDTO, Product product, string description, string name, Guid id)
+		/// <param name="description">The expected description in <paramref name="product" /> and <paramref name="productDTO" />.</param>
+		/// ///
+		/// <param name="name">The expected name in <paramref name="product" /> and <paramref name="productDTO" />.</param>
+		/// ///
+		/// <param name="id">The expected id in <paramref name="product" /> and <paramref name="productDTO" />.</param>
+		public static void ProductEqual(this ProductDTO productDTO, Product product, string description, string name,
+			Guid id)
 		{
 			productDTO.ProductEqual(product);
 

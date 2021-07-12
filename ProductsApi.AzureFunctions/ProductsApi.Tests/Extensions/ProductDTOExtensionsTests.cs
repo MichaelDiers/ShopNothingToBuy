@@ -1,54 +1,51 @@
 ﻿namespace ProductsApi.Tests.Extensions
 {
-	using ProductsApi.Tests;
+	using System;
+	using Newtonsoft.Json;
 	using ProductsApi.Extensions;
 	using ProductsApi.Models;
-
-	using System;
-
 	using Xunit;
-	using Newtonsoft.Json;
 
 	/// <summary>
-	/// Tests for <see cref="ProductsApi.Extensions.ProductDTOExtensions"/>.
+	///   Tests for <see cref="ProductsApi.Extensions.ProductDTOExtensions" />.
 	/// </summary>
 	public class ProductDTOExtensionsTests
 	{
 		/// <summary>
-		/// Used and expected description.
+		///   Used and expected description.
 		/// </summary>
 		private const string Description = "My Description";
 
 		/// <summary>
-		/// Used and expected name.
+		///   Used and expected name.
 		/// </summary>
 		private const string Name = "My Name";
 
 		/// <summary>
-		/// Used and expected id.
+		///   Used and expected id.
 		/// </summary>
 		private readonly Guid Id = Guid.NewGuid();
 
 		/// <summary>
-		/// Tests the conversion from <see cref="ProductDTO"/> to <see cref="Product"/>.
+		///   Tests the conversion from <see cref="ProductDTO" /> to <see cref="Product" />.
 		/// </summary>
 		[Fact]
 		public void FromDTO()
 		{
-			var productDTO = new ProductDTO { Description = Description, Name = Name, Id = Id };
+			var productDTO = new ProductDTO {Description = Description, Name = Name, Id = this.Id};
 			var product = productDTO.FromDTO();
 
-			productDTO.ProductEqual(product, Description, Name, Id);
+			productDTO.ProductEqual(product, Description, Name, this.Id);
 		}
 
 		/// <summary>
-		/// Tests the conversion from <see cref="ProductDTO"/> to <see cref="Product"/> using additional id.
+		///   Tests the conversion from <see cref="ProductDTO" /> to <see cref="Product" /> using additional id.
 		/// </summary>
 		[Fact]
 		public void FromDTOWithGuid()
 		{
-			var productDTO = new ProductDTO { Description = Description, Name = Name };
-			var product = productDTO.FromDTO(Id);
+			var productDTO = new ProductDTO {Description = Description, Name = Name};
+			var product = productDTO.FromDTO(this.Id);
 
 			Assert.Equal(productDTO.Description, product.Description);
 			Assert.Equal(productDTO.Name, product.Name);
@@ -60,7 +57,7 @@
 
 			Assert.Equal(Description, product.Description);
 			Assert.Equal(Name, product.Name);
-			Assert.Equal(Id, product.Id);
+			Assert.Equal(this.Id, product.Id);
 		}
 	}
 }

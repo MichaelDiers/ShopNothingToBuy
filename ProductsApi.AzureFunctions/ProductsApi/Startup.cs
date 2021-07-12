@@ -1,26 +1,28 @@
-﻿using Microsoft.Azure.Cosmos.Fluent;
-using Microsoft.Azure.Functions.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using ProductsApi;
 
-using ProductsApi.Contracts;
-using ProductsApi.Extensions;
-using ProductsApi.Services;
-
-[assembly: FunctionsStartup(typeof(ProductsApi.Startup))]
+[assembly: FunctionsStartup(typeof(Startup))]
 
 namespace ProductsApi
 {
+	using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+	using Microsoft.Extensions.DependencyInjection;
+	using ProductsApi.Contracts;
+	using ProductsApi.Extensions;
+	using ProductsApi.Services;
+
 	/// <summary>
-	/// Startup definition for azure functions.
+	///   Startup definition for azure functions.
 	/// </summary>
 	public class Startup : FunctionsStartup
 	{
 		/// <summary>
-		/// Performs the startup configuration action. The runtime will call this method at the right time during initialization.
+		///   Performs the startup configuration action. The runtime will call this method at the right time during initialization.
 		/// </summary>
-		/// <param name="builder">The <see cref="IFunctionsHostBuilder"/> that can be used to
-		/// configure the host.</param>
+		/// <param name="builder">
+		///   The <see cref="IFunctionsHostBuilder" /> that can be used to
+		///   configure the host.
+		/// </param>
 		public override void Configure(IFunctionsHostBuilder builder)
 		{
 			// dependency injections
