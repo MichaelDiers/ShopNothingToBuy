@@ -14,6 +14,17 @@
 	public interface IProductsService
 	{
 		/// <summary>
+		/// Delete all items from the database container.
+		/// </summary>
+		/// <param name="log">/// <param name="log">An <see cref="ILogger"/> instance.</param></param>
+		/// <returns>True if all entries are deleted, otherwise false.</returns>/// <summary>
+		/// Delete all items from the database container.
+		/// </summary>
+		/// <param name="log">/// <param name="log">An <see cref="ILogger"/> instance.</param></param>
+		/// <returns>True if all entries are deleted, otherwise false.</returns>
+		Task<bool> Clear(ILogger log);
+
+		/// <summary>
 		/// Creates a new product.
 		/// </summary>
 		/// <param name="productDTO">The product to be created.</param>

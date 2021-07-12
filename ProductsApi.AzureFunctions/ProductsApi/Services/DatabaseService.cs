@@ -20,10 +20,31 @@
 	/// </summary>
 	public class DatabaseService : IDatabaseService
 	{
+		/// <summary>
+		/// Used to access the cosmos db.
+		/// </summary>
 		private readonly CosmosClient cosmosClient;
-		private readonly Database database;
-		private readonly Container container;
 
+		/// <summary>
+		/// The name of the cosmos container in that items are stored.
+		/// </summary>
+		private readonly string containerName;
+
+		/// <summary>
+		/// The cosmos database instance.
+		/// </summary>
+		private readonly Database database;
+
+		/// <summary>
+		/// The container in that items are stored.
+		/// </summary>
+		private Container container;
+
+		/// <summary>
+		/// Create a new instance of <see cref="DatabaseService"/>.
+		/// </summary>
+		/// <param name="cosmosClient">The client used for accessing the cosmos db.</param>
+		/// <param name="configuration">Used to access the configuration of funtions.</param>
 		public DatabaseService(CosmosClient cosmosClient, IConfiguration configuration)
 		{
 			if (configuration is null)
@@ -33,7 +54,39 @@
 
 			this.cosmosClient = cosmosClient ?? throw new ArgumentNullException(nameof(cosmosClient));
 			this.database = this.cosmosClient.GetDatabase(configuration.GetValue<string>("DatabaseName"));
-			this.container = this.database.GetContainer(configuration.GetValue<string>("ContainerName"));
+			this.containerName = configuration.GetValue<string>("ContainerName");
+			this.container = this.database.GetContainer(this.containerName);
+		}
+
+		/// <summary>
+		/// Delete all items from the database container.
+		/// </summary>
+		/// <param name="log">/// <param name="log">An <see cref="ILogger"/> instance.</param></param>
+		/// <returns>True if all entries are deleted, otherwise false.</returns>/// <summary>
+		/// Delete all items from the database container.
+		/// </summary>
+		/// <param name="log">/// <param name="log">An <see cref="ILogger"/> instance.</param></param>
+		/// <returns>True if all entries are deleted, otherwise false.</returns>
+		public async Task<bool> Clear(ILogger log)
+		{
+			try
+			{
+				// delete the container instead of single items
+				var _ = await this.container.DeleteContainerAsync();
+
+				// recreate the container
+				var containerProperties = new ContainerProperties(this.containerName, "/id");
+				var response = await this.database.CreateContainerAsync(containerProperties);
+				this.container = response.Container;
+
+				return true;
+			}
+			catch (CosmosException ex)
+			{
+				HandleCosmosException(ex, log);
+			}
+
+			return false;
 		}
 
 		/// <summary>
@@ -54,7 +107,7 @@
 				HandleCosmosException(ex, log);
 				return false;
 			}
-		}
+		}		
 
 		/// <summary>
 		/// Delete a product from the database.

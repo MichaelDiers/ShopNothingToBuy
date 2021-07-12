@@ -32,6 +32,36 @@ namespace ProductsApi
 			this.postProductsLocationFormat = configuration.GetValue<string>(postProductsLocationFormatName);
 		}
 
+		[FunctionName("DeleteProductsClearAll")]
+		public async Task<IActionResult> DeleteProductsClearAll(
+			[HttpTrigger(AuthorizationLevel.Function, "delete", Route = "products/clear/all")] HttpRequest req,
+			ILogger log)
+		{
+			// remove try-catch as soon as FunctionExceptionFilterAttribute or alternativ is available
+			try
+			{
+				// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
+				if (!this.apiKeyService.IsValid(req))
+				{
+					return new UnauthorizedResult();
+				}
+				
+				if (await this.productsService.Clear(log))
+				{
+					return new NoContentResult();
+				}
+				else
+				{
+					return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+				}
+			}
+			catch (Exception ex)
+			{
+				log.LogError(ex.ToString());
+				return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+			}
+		}
+
 		[FunctionName("PostProducts")]
 		public async Task<IActionResult> PostProducts(
 			[HttpTrigger(AuthorizationLevel.Function, "post", Route = "products")] HttpRequest req,
