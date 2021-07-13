@@ -9,6 +9,15 @@
 	public static class ServiceCollectionExtensions
 	{
 		/// <summary>
+		///   Suppress default behaviour of enriching empty bodies by the framework.
+		/// </summary>
+		/// <param name="services">An <see cref="IServiceCollection" /> for that additional options are set.</param>
+		public static void AddSuppressMapClientErrors(this IServiceCollection services)
+		{
+			services.AddControllers().ConfigureApiBehaviorOptions(options => { options.SuppressMapClientErrors = true; });
+		}
+
+		/// <summary>
 		///   Global handling for a invalid model state.
 		/// </summary>
 		/// <param name="services">An <see cref="IServiceCollection" /> to that the handling of errors is added.</param>
@@ -17,8 +26,7 @@
 			services.AddControllers()
 				.ConfigureApiBehaviorOptions(options =>
 				{
-					// add string.Empty in order to send with an empty body
-					options.InvalidModelStateResponseFactory = context => new BadRequestObjectResult(string.Empty);
+					options.InvalidModelStateResponseFactory = context => new BadRequestResult();
 				});
 		}
 	}

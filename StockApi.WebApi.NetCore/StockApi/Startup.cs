@@ -21,6 +21,8 @@ namespace StockApi
 		{
 			services.AddHttpContextAccessor();
 			services.HandleInvalidModelState();
+			services.AddSuppressMapClientErrors();
+
 			services.AddSingleton<IDatabaseService, DatabaseService>();
 			services.AddSingleton<IStockService, StockService>();
 		}
