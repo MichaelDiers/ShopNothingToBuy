@@ -6,7 +6,7 @@
 	using StockApi.Models;
 
 	/// <summary>
-	///   Business logic for handling <see cref="StockItem" /> instances.
+	///   Business logic for handling <see cref="StockItemDto" /> instances.
 	/// </summary>
 	public class StockService : IStockService
 	{
@@ -26,16 +26,16 @@
 		}
 
 		/// <summary>
-		///   Create a new <see cref="StockItem" /> in storage.
+		///   Create a new <see cref="StockItemDto" /> in storage.
 		/// </summary>
-		/// <param name="stockItem">The <see cref="StockItem" /> to be created.</param>
+		/// <param name="stockItem">The <see cref="StockItemDto" /> to be created.</param>
 		/// <returns>
-		///   True if the <see cref="StockItem" /> is created or otherwise false.
-		///   False indicates service errors or that the <see cref="StockItem.Id" /> already exists.
+		///   True if the <see cref="StockItemDto" /> is created or otherwise false.
+		///   False indicates service errors or that the <see cref="StockItemDto.Id" /> already exists.
 		/// </returns>
-		public async Task<bool> Create(StockItem stockItem)
+		public async Task<bool> Create(StockItemDto stockItem)
 		{
-			return await this.databaseService.Create(stockItem);
+			return await this.databaseService.Create(new StockItem(stockItem));
 		}
 
 		/// <summary>

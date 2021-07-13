@@ -18,7 +18,7 @@
 		public async void CreateShouldReturnTrueIfDatabaseServiceReturnsTrue()
 		{
 			var stockService = new StockService(new DatabaseServiceMock(true));
-			var stockItem = new StockItem {Id = new Guid(), InStock = 100};
+			var stockItem = new StockItemDto {Id = new Guid(), InStock = 100};
 			Assert.True(await stockService.Create(stockItem));
 		}
 
@@ -29,7 +29,7 @@
 		public async void CreateShouldReturnFalseIfDatabaseServiceReturnsFalse()
 		{
 			var stockService = new StockService(new DatabaseServiceMock(false));
-			var stockItem = new StockItem {Id = new Guid(), InStock = 100};
+			var stockItem = new StockItemDto {Id = new Guid(), InStock = 100};
 			Assert.False(await stockService.Create(stockItem));
 		}
 

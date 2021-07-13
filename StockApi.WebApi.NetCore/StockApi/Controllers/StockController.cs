@@ -62,7 +62,7 @@
 		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] StockItemDto stockItem)
 		{
-			var isCreated = await this.stockService.Create(new StockItem(stockItem));
+			var isCreated = await this.stockService.Create(stockItem);
 			if (isCreated)
 			{
 				return new CreatedResult(
