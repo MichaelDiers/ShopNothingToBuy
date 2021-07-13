@@ -38,6 +38,7 @@ namespace StockApi
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			app.UseExceptionHandler("/error");
+			app.ChangeHttpStatus415To400();
 			app.UseHttpsRedirection();
 
 			app.UseRouting();
