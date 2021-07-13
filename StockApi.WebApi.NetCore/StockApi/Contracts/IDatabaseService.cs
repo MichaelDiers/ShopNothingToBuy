@@ -1,5 +1,6 @@
 ﻿namespace StockApi.Contracts
 {
+	using System;
 	using System.Threading.Tasks;
 	using StockApi.Models;
 
@@ -17,5 +18,12 @@
 		///   database error or that the an item with <see cref="StockItem.Id" /> already exists.
 		/// </returns>
 		Task<bool> Create(StockItem stockItem);
+
+		/// <summary>
+		///   Read a <see cref="StockItem" /> by its id.
+		/// </summary>
+		/// <param name="id">The id of the <see cref="StockItem" />.</param>
+		/// <returns>A <see cref="StockItem" /> if an item with given id exists, null otherwise.</returns>
+		Task<StockItem> ReadById(Guid id);
 	}
 }

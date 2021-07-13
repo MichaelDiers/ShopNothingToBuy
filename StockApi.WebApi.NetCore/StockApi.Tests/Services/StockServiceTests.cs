@@ -32,5 +32,30 @@
 			var stockItem = new StockItem {Id = new Guid(), InStock = 100};
 			Assert.False(await stockService.Create(stockItem));
 		}
+
+		/// <summary>
+		///   <see cref="StockService.ReadById" /> should return <see cref="StockItem" /> if item with given id exists.
+		/// </summary>
+		[Fact]
+		public async void ReadByIdShouldReturnStockItemIfEntryIsFound()
+		{
+			var stockService = new StockService(new DatabaseServiceMock(true));
+			var id = Guid.NewGuid();
+			var stockItem = await stockService.ReadById(id);
+			Assert.NotNull(stockItem);
+			Assert.Equal(id, stockItem.Id);
+		}
+
+		/// <summary>
+		///   <see cref="StockService.ReadById" /> should return null if no item with given id exists.
+		/// </summary>
+		[Fact]
+		public async void ReadByIdShouldReturnNullIfNoEntryIsFound()
+		{
+			var stockService = new StockService(new DatabaseServiceMock(false));
+			var id = Guid.NewGuid();
+			var stockItem = await stockService.ReadById(id);
+			Assert.Null(stockItem);
+		}
 	}
 }

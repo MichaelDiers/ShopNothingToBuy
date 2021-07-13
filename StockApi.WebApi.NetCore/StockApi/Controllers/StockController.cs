@@ -66,12 +66,34 @@
 			if (isCreated)
 			{
 				return new CreatedResult(
-					new Uri(string.Format(this.stockCreateLocationFormat, this.httpContextAccessor.HttpContext.Request.Host.Value,
-						stockItem.Id)),
+					new Uri(string.Format(this.stockCreateLocationFormat, stockItem.Id)),
 					stockItem);
 			}
 
-			return new BadRequestResult();
+			return new ConflictResult();
+		}
+
+		/// <summary>
+		///   Read <see cref="StockItem" /> data by the given <paramref name="id" />.
+		/// </summary>
+		/// <param name="id">The <see cref="StockItem.Id" /> of the item.</param>
+		/// <returns>An <see cref="OkObjectResult" /> containing the <see cref="StockItemDto" /> or <see cref="NotFoundResult" />.</returns>
+		[HttpGet]
+		[Route("{id}")]
+		public async Task<IActionResult> ReadById([FromRoute] Guid id)
+		{
+			if (id != Guid.Empty)
+			{
+				var stockItem = await this.stockService.ReadById(id);
+				if (stockItem is null)
+				{
+					return new NotFoundResult();
+				}
+
+				return new OkObjectResult(stockItem);
+			}
+
+			return null;
 		}
 	}
 }

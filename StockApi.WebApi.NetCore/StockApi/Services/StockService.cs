@@ -37,5 +37,16 @@
 		{
 			return await this.databaseService.Create(stockItem);
 		}
+
+		/// <summary>
+		///   Read a <see cref="StockItem" /> by its id.
+		/// </summary>
+		/// <param name="id">The id of the <see cref="StockItem" />.</param>
+		/// <returns>A <see cref="StockItemDto" /> if an item with given id exists, null otherwise.</returns>
+		public async Task<StockItemDto> ReadById(Guid id)
+		{
+			var stockItem = await this.databaseService.ReadById(id);
+			return stockItem != null ? new StockItemDto(stockItem) : null;
+		}
 	}
 }

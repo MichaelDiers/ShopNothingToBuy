@@ -61,6 +61,34 @@
 		}
 
 		/// <summary>
+		///   Read a <see cref="StockItem" /> by its id.
+		/// </summary>
+		/// <param name="id">The id of the <see cref="StockItem" />.</param>
+		/// <returns>A <see cref="StockItem" /> if an item with given id exists, null otherwise.</returns>
+		public async Task<StockItem> ReadById(Guid id)
+		{
+			try
+			{
+				var database = this.redis.GetDatabase();
+				var result = await database.StringGetAsync(id.ToString());
+				if (!result.IsNullOrEmpty && uint.TryParse(result, out var inStock))
+				{
+					return new StockItem
+					{
+						Id = id, InStock = inStock
+					};
+				}
+			}
+			catch (Exception ex)
+			{
+				// Todo: logging
+				Console.WriteLine(ex);
+			}
+
+			return null;
+		}
+
+		/// <summary>
 		///   Dispose database.
 		/// </summary>
 		public void Dispose()
