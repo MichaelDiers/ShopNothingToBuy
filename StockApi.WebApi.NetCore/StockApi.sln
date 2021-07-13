@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31025.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApi", "StockApi\StockApi.csproj", "{4457B211-3DDC-4811-A39A-2E063BE7DB74}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApi.Tests", "StockApi.Tests\StockApi.Tests.csproj", "{9AB62BAE-C5FE-4ACA-B50A-B67C5C35C815}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3B235DC7-7DF4-4999-9B44-68C65A581B16}"
+	ProjectSection(SolutionItems) = preProject
+		StockApi.postman_collection.json = StockApi.postman_collection.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4457B211-3DDC-4811-A39A-2E063BE7DB74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4457B211-3DDC-4811-A39A-2E063BE7DB74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4457B211-3DDC-4811-A39A-2E063BE7DB74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4457B211-3DDC-4811-A39A-2E063BE7DB74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AB62BAE-C5FE-4ACA-B50A-B67C5C35C815}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AB62BAE-C5FE-4ACA-B50A-B67C5C35C815}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AB62BAE-C5FE-4ACA-B50A-B67C5C35C815}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AB62BAE-C5FE-4ACA-B50A-B67C5C35C815}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BF47DB9A-BDD8-47D9-AA0A-F30A25DBA3EA}
+	EndGlobalSection
+EndGlobal
