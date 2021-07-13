@@ -35,6 +35,7 @@ namespace StockApi
 		/// <param name="env">Provides information about the web hosting environment an application is running in.</param>
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
+			app.UseExceptionHandler("/error");
 			app.UseHttpsRedirection();
 
 			app.UseRouting();

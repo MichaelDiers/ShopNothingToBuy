@@ -6,7 +6,6 @@
 	/// <summary>
 	///   Handler for requests of unknown routes.
 	/// </summary>
-	[Route("{*url}", Order = 999)]
 	[ApiController]
 	public class ErrorController : ControllerBase
 	{
@@ -14,14 +13,22 @@
 		///   Send a <see cref="NotFoundObjectResult" /> for unknown routes.
 		/// </summary>
 		/// <returns>A <see cref="NotFoundObjectResult" />.</returns>
-		[HttpDelete]
-		[HttpGet]
-		[HttpPost]
-		[HttpPut]
-		public IActionResult HandleError()
+		[Route("{*url}", Order = 999)]
+		public IActionResult HandleNotFound()
 		{
 			var question = new JObject {{"question", "Missed the intersection?"}};
 			return new NotFoundObjectResult(question.ToString());
+		}
+
+		/// <summary>
+		///   Handle all exceptions.
+		/// </summary>
+		/// <returns></returns>
+		[Route("error")]
+		public IActionResult HandleException()
+		{
+			// Todo: logging
+			return this.Problem();
 		}
 	}
 }
