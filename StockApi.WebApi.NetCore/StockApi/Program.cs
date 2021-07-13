@@ -1,6 +1,7 @@
 namespace StockApi
 {
 	using Microsoft.AspNetCore.Hosting;
+	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.Hosting;
 
 	/// <summary>
@@ -25,6 +26,11 @@ namespace StockApi
 		public static IHostBuilder CreateHostBuilder(string[] args)
 		{
 			return Host.CreateDefaultBuilder(args)
+				.ConfigureAppConfiguration((hostingContext, config) =>
+				{
+					config.AddJsonFile("appsettings.secrets.json", true, false);
+					config.AddEnvironmentVariables();
+				})
 				.ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
 		}
 	}
