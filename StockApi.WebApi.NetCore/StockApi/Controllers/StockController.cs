@@ -5,6 +5,7 @@
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.Extensions.Configuration;
+	using StockApi.Attributes;
 	using StockApi.Contracts;
 	using StockApi.Models;
 
@@ -13,6 +14,7 @@
 	/// </summary>
 	[Route("api/[controller]")]
 	[ApiController]
+	[ApiKey]
 	public class StockController : ControllerBase
 	{
 		/// <summary>
