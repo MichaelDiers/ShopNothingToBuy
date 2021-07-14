@@ -95,5 +95,30 @@
 		{
 			this.redis?.Dispose();
 		}
+
+		/// <summary>
+		///   Clear all entries from database.
+		/// </summary>
+		/// <returns>True if operation succeeds and false otherwise.</returns>
+		public async Task<bool> Clear()
+		{
+			try
+			{
+				var endPoints = this.redis.GetEndPoints();
+				foreach (var endPoint in endPoints)
+				{
+					await this.redis.GetServer(endPoint).FlushDatabaseAsync();
+				}
+
+				return true;
+			}
+			catch (Exception ex)
+			{
+				// Todo: logging
+				Console.WriteLine(ex);
+			}
+
+			return false;
+		}
 	}
 }

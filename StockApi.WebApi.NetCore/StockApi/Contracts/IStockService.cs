@@ -10,6 +10,12 @@
 	public interface IStockService
 	{
 		/// <summary>
+		///   Clear all entries from database.
+		/// </summary>
+		/// <returns>True if operation succeeds and false otherwise.</returns>
+		Task<bool> Clear();
+
+		/// <summary>
 		///   Create a new <see cref="StockItem" /> in storage.
 		/// </summary>
 		/// <param name="stockItem">The <see cref="StockItemDto" /> to be created.</param>

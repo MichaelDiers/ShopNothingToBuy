@@ -10,6 +10,12 @@
 	public interface IDatabaseService
 	{
 		/// <summary>
+		///   Clear all entries from database.
+		/// </summary>
+		/// <returns>True if operation succeeds and false otherwise.</returns>
+		Task<bool> Clear();
+
+		/// <summary>
 		///   Create a new <see cref="StockItem" />.
 		/// </summary>
 		/// <param name="stockItem">The <see cref="StockItem" /> to be created.</param>

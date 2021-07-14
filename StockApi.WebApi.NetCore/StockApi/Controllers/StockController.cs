@@ -57,6 +57,18 @@
 		}
 
 		/// <summary>
+		///   Delete all entries from the storage.
+		/// </summary>
+		/// <returns>True if operation succeeded and false otherwise.</returns>
+		[HttpDelete]
+		[Route("all")]
+		public async Task<IActionResult> Clear()
+		{
+			var deleted = await this.stockService.Clear();
+			return deleted ? new OkResult() : new StatusCodeResult(500);
+		}
+
+		/// <summary>
 		///   Create a new <see cref="StockItemDto" /> in storage.
 		/// </summary>
 		/// <param name="stockItem">The <see cref="StockItemDto" /> to be created.</param>

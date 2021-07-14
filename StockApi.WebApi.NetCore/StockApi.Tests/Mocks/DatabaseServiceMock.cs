@@ -25,6 +25,15 @@
 		}
 
 		/// <summary>
+		///   Fakes <see cref="IDatabaseService.Clear" />.
+		/// </summary>
+		/// <returns>Always returns <see cref="defaultReturnValue" />.</returns>
+		public Task<bool> Clear()
+		{
+			return Task.FromResult(this.defaultReturnValue);
+		}
+
+		/// <summary>
 		///   Fakes to create a <see cref="StockItem" />.
 		/// </summary>
 		/// <param name="stockItem">The <see cref="StockItem" /> to be created.</param>

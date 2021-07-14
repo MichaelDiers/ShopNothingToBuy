@@ -26,6 +26,15 @@
 		}
 
 		/// <summary>
+		///   Clear all entries from database.
+		/// </summary>
+		/// <returns>True if operation succeeds and false otherwise.</returns>
+		public async Task<bool> Clear()
+		{
+			return await this.databaseService.Clear();
+		}
+
+		/// <summary>
 		///   Create a new <see cref="StockItemDto" /> in storage.
 		/// </summary>
 		/// <param name="stockItem">The <see cref="StockItemDto" /> to be created.</param>

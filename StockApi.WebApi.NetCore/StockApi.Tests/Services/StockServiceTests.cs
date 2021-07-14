@@ -12,6 +12,26 @@
 	public class StockServiceTests
 	{
 		/// <summary>
+		///   <see cref="StockService.Clear" /> should return true if <see cref="DatabaseServiceMock.Clear" /> returns true.
+		/// </summary>
+		[Fact]
+		public async void ClearShouldReturnTrueIfDatabaseServiceReturnsTrue()
+		{
+			var stockService = new StockService(new DatabaseServiceMock(true));
+			Assert.True(await stockService.Clear());
+		}
+
+		/// <summary>
+		///   <see cref="StockService.Clear" /> should return true if <see cref="DatabaseServiceMock.Clear" /> returns true.
+		/// </summary>
+		[Fact]
+		public async void ClearShouldReturnFalseIfDatabaseServiceReturnsFalse()
+		{
+			var stockService = new StockService(new DatabaseServiceMock(false));
+			Assert.False(await stockService.Clear());
+		}
+
+		/// <summary>
 		///   <see cref="StockService.Create" /> should return true if <see cref="DatabaseServiceMock.Create" /> returns true.
 		/// </summary>
 		[Fact]
