@@ -3,6 +3,7 @@ namespace StockApi
 	using Microsoft.AspNetCore.Hosting;
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.Hosting;
+	using Microsoft.Extensions.Logging;
 
 	/// <summary>
 	///   Entry point of the application.
@@ -26,6 +27,11 @@ namespace StockApi
 		public static IHostBuilder CreateHostBuilder(string[] args)
 		{
 			return Host.CreateDefaultBuilder(args)
+				.ConfigureLogging(logging =>
+				{
+					logging.ClearProviders();
+					logging.AddConsole();
+				})
 				.ConfigureAppConfiguration((hostingContext, config) =>
 				{
 					config.AddJsonFile("appsettings.secrets.json", true, false);

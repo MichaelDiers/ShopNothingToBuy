@@ -3,6 +3,7 @@
 	using System;
 	using System.Threading.Tasks;
 	using Microsoft.Extensions.Configuration;
+	using Microsoft.Extensions.Logging;
 	using StackExchange.Redis;
 	using StockApi.Contracts;
 	using StockApi.Models;
@@ -13,6 +14,11 @@
 	public class DatabaseService : IDatabaseService, IDisposable
 	{
 		/// <summary>
+		///   Logger for errors.
+		/// </summary>
+		private readonly ILogger<DatabaseService> logger;
+
+		/// <summary>
 		///   Redis database connection.
 		/// </summary>
 		private readonly IConnectionMultiplexer redis;
@@ -21,15 +27,42 @@
 		///   Creates a new instance of <see cref="DatabaseService" />.
 		/// </summary>
 		/// <param name="configuration">Provides access to configuration data.</param>
-		public DatabaseService(IConfiguration configuration)
+		/// <param name="logger">Used for error logging.</param>
+		public DatabaseService(IConfiguration configuration, ILogger<DatabaseService> logger)
 		{
 			if (configuration == null)
 			{
 				throw new ArgumentNullException(nameof(configuration));
 			}
 
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
 			var connectionsString = configuration["RedisConnectionString"];
 			this.redis = ConnectionMultiplexer.Connect(connectionsString);
+		}
+
+		/// <summary>
+		///   Clear all entries from database.
+		/// </summary>
+		/// <returns>True if operation succeeds and false otherwise.</returns>
+		public async Task<bool> Clear()
+		{
+			try
+			{
+				var endPoints = this.redis.GetEndPoints();
+				foreach (var endPoint in endPoints)
+				{
+					await this.redis.GetServer(endPoint).FlushDatabaseAsync();
+				}
+
+				return true;
+			}
+			catch (Exception ex)
+			{
+				this.logger.LogError(ex, "Error while clearing database.");
+			}
+
+			return false;
 		}
 
 		/// <summary>
@@ -54,8 +87,7 @@
 			}
 			catch (Exception ex)
 			{
-				// Todo: logging
-				Console.WriteLine(ex);
+				this.logger.LogError(ex, "Error while creating stock item.");
 				return false;
 			}
 		}
@@ -81,8 +113,7 @@
 			}
 			catch (Exception ex)
 			{
-				// Todo: logging
-				Console.WriteLine(ex);
+				this.logger.LogError(ex, "Error while reading stock item.");
 			}
 
 			return null;
@@ -94,31 +125,6 @@
 		public void Dispose()
 		{
 			this.redis?.Dispose();
-		}
-
-		/// <summary>
-		///   Clear all entries from database.
-		/// </summary>
-		/// <returns>True if operation succeeds and false otherwise.</returns>
-		public async Task<bool> Clear()
-		{
-			try
-			{
-				var endPoints = this.redis.GetEndPoints();
-				foreach (var endPoint in endPoints)
-				{
-					await this.redis.GetServer(endPoint).FlushDatabaseAsync();
-				}
-
-				return true;
-			}
-			catch (Exception ex)
-			{
-				// Todo: logging
-				Console.WriteLine(ex);
-			}
-
-			return false;
 		}
 	}
 }
