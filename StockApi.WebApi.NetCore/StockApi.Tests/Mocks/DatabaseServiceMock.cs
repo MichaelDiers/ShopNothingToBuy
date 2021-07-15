@@ -49,6 +49,16 @@
 		}
 
 		/// <summary>
+		///   Fakes the deletion of a <see cref="StockItem" />.
+		/// </summary>
+		/// <param name="id">The id to delete.</param>
+		/// <returns>The value specified with <see cref="defaultReturnValue" />.</returns>
+		public Task<bool> Delete(Guid id)
+		{
+			return Task.FromResult(this.defaultReturnValue);
+		}
+
+		/// <summary>
 		///   Fakes read by id.
 		/// </summary>
 		/// <param name="id">The id of the <see cref="StockItem" />.</param>

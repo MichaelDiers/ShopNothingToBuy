@@ -77,6 +77,19 @@
 		}
 
 		/// <summary>
+		///   Delete a <see cref="StockItemDto" /> by its <paramref name="id" />.
+		/// </summary>
+		/// <param name="id">The <see cref="StockItemDto.Id" /> of the item to delete.</param>
+		/// <returns>True if the operation succeeds and false otherwise.</returns>
+		[HttpDelete]
+		[Route("{id:guid}")]
+		public async Task<IActionResult> Delete([FromRoute] Guid id)
+		{
+			var isDeleted = await this.stockService.Delete(id);
+			return isDeleted ? (IActionResult) new NoContentResult() : new NotFoundResult();
+		}
+
+		/// <summary>
 		///   Read <see cref="StockItem" /> data by the given <paramref name="id" />.
 		/// </summary>
 		/// <param name="id">The <see cref="StockItem.Id" /> of the item.</param>

@@ -54,6 +54,26 @@
 		}
 
 		/// <summary>
+		///   <see cref="StockService.Delete" /> should fail if database operation fails.
+		/// </summary>
+		[Fact]
+		public async void DeleteShouldFailUnknownStockItemId()
+		{
+			var stockService = new StockService(new DatabaseServiceMock(false));
+			Assert.False(await stockService.Delete(new Guid()));
+		}
+
+		/// <summary>
+		///   <see cref="StockService.Delete" /> should succeed if database operation succeeds.
+		/// </summary>
+		[Fact]
+		public async void DeleteShouldSucceedForKnownStockItemId()
+		{
+			var stockService = new StockService(new DatabaseServiceMock(true));
+			Assert.True(await stockService.Delete(new Guid()));
+		}
+
+		/// <summary>
 		///   <see cref="StockService.ReadById" /> should return null if no item with given id exists.
 		/// </summary>
 		[Fact]

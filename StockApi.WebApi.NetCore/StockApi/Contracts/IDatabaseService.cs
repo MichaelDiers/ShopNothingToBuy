@@ -26,6 +26,13 @@
 		Task<bool> Create(StockItem stockItem);
 
 		/// <summary>
+		///   Delete a <see cref="StockItem" /> by <paramref name="id" />.
+		/// </summary>
+		/// <param name="id">The <see cref="StockItem.Id" /> to delete.</param>
+		/// <returns>True if operation succeeds and false otherwise.</returns>
+		Task<bool> Delete(Guid id);
+
+		/// <summary>
 		///   Read a <see cref="StockItem" /> by its id.
 		/// </summary>
 		/// <param name="id">The id of the <see cref="StockItem" />.</param>

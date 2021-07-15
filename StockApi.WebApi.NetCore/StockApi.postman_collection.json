@@ -1828,6 +1828,355 @@
 			]
 		},
 		{
+			"name": "DELETE /api/stocks/{id}",
+			"item": [
+				{
+					"name": "DELETE /api/stocks/{id}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(204);\r",
+									"    pm.response.to.not.be.withBody;    \r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{Post.Id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{Post.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /api/stocks/{id} should fail for unknown id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(404);\r",
+									"    pm.response.to.not.be.withBody;    \r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{Post.Id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{Post.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /api/stocks/{id} should fail for missing id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(404);\r",
+									"    const responseJson = pm.response.json();    \r",
+									"    pm.expect(responseJson.question).to.equal(\"Missed the intersection?\");    \r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}",
+							"host": [
+								"{{server}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /api/stocks/{id} should fail for invalid id (no guid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(404);\r",
+									"    const responseJson = pm.response.json();    \r",
+									"    pm.expect(responseJson.question).to.equal(\"Missed the intersection?\");    \r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"id\", pm.environment.get(\"Post.Id\").substring(0, 10));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /api/stocks/{id} should fail without api key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;    \r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{Post.Id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{Post.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /api/stocks/{id} should fail with invalid api key (no guid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;    \r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "a326e19e-9324-4b97-a434",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{Post.Id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{Post.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /api/stocks/{id} should fail with invalid api key (wrong api key)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check response\", function () {\r",
+									"    // do not execute if next request at any error\r",
+									"    postman.setNextRequest(null);\r",
+									"\r",
+									"    // check the correct environment\r",
+									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
+									"\r",
+									"    // actual tests\r",
+									"    pm.response.to.have.status(401);\r",
+									"    pm.response.to.not.be.withBody;    \r",
+									"\r",
+									"    // all tests passed, continue with next request\r",
+									"    postman.setNextRequest();\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "c76e6c29-ce60-4e67-bd2b-c43b0b098625",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{Post.Id}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{Post.Id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "DELETE /api/stocks/all",
 			"item": [
 				{

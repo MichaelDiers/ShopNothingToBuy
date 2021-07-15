@@ -93,6 +93,25 @@
 		}
 
 		/// <summary>
+		///   Delete a <see cref="StockItem" /> by <paramref name="id" />.
+		/// </summary>
+		/// <param name="id">The <see cref="StockItem.Id" /> to delete.</param>
+		/// <returns>True if operation succeeds and false otherwise.</returns>
+		public async Task<bool> Delete(Guid id)
+		{
+			try
+			{
+				var database = this.redis.GetDatabase();
+				return await database.KeyDeleteAsync(id.ToString());
+			}
+			catch (Exception ex)
+			{
+				this.logger.LogError(ex, "Cannot delete stock item by id.");
+				return false;
+			}
+		}
+
+		/// <summary>
 		///   Read a <see cref="StockItem" /> by its id.
 		/// </summary>
 		/// <param name="id">The id of the <see cref="StockItem" />.</param>
