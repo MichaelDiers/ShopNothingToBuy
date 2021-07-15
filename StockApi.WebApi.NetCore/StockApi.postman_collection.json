@@ -2194,7 +2194,7 @@
 									"    pm.expect(pm.environment.get(\"environment\")).to.equal(pm.environment.get(\"ExpectedEnvironment\"));\r",
 									"\r",
 									"    // actual tests\r",
-									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.status(204);\r",
 									"    pm.response.to.not.be.withBody;    \r",
 									"\r",
 									"    // all tests passed, continue with next request\r",

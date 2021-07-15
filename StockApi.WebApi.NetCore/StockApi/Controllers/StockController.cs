@@ -54,7 +54,7 @@
 		public async Task<IActionResult> Clear()
 		{
 			var deleted = await this.stockService.Clear();
-			return deleted ? new OkResult() : new StatusCodeResult(500);
+			return deleted ? new NoContentResult() : new StatusCodeResult(500);
 		}
 
 		/// <summary>
@@ -100,7 +100,7 @@
 		{
 			if (id == Guid.Empty)
 			{
-				return null;
+				return new NotFoundResult();
 			}
 
 			var stockItem = await this.stockService.ReadById(id);
