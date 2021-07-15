@@ -29,6 +29,43 @@ namespace ProductsApi.Functions
 			this.postProductsLocationFormat = configuration.GetValue<string>(PostProductsLocationFormatName);
 		}
 
+		[FunctionName("DeleteProducts")]
+		public async Task<IActionResult> DeleteProducts(
+			[HttpTrigger(AuthorizationLevel.Function, "delete", Route = "products/{id}")]
+			HttpRequest req,
+			ILogger log,
+			string id)
+		{
+			// remove try-catch as soon as FunctionExceptionFilterAttribute or an alternative is available
+			try
+			{
+				// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
+				if (!this.apiKeyService.IsValid(req))
+				{
+					return new UnauthorizedResult();
+				}
+
+				var isValid = Guid.TryParse(id, out var guid);
+				if (!isValid || guid == Guid.Empty)
+				{
+					return new BadRequestResult();
+				}
+
+				var isDeleted = await this.productsService.Delete(guid, log);
+				if (isDeleted)
+				{
+					return new NoContentResult();
+				}
+
+				return new NotFoundResult();
+			}
+			catch (Exception ex)
+			{
+				log.LogError(ex.ToString());
+				return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+			}
+		}
+
 		[FunctionName("DeleteProductsClearAll")]
 		public async Task<IActionResult> DeleteProductsClearAll(
 			[HttpTrigger(AuthorizationLevel.Function, "delete", Route = "products/clear/all")]
@@ -50,6 +87,95 @@ namespace ProductsApi.Functions
 				}
 
 				return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+			}
+			catch (Exception ex)
+			{
+				log.LogError(ex.ToString());
+				return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+			}
+		}
+
+		private static async Task<T> DeserializeBody<T>(Stream body, ILogger log) where T : class
+		{
+			try
+			{
+				var requestBody = await new StreamReader(body).ReadToEndAsync();
+				if (string.IsNullOrWhiteSpace(requestBody))
+				{
+					return null;
+				}
+
+				var deserializeObject = JsonConvert.DeserializeObject<T>(requestBody);
+				return deserializeObject;
+			}
+			catch (JsonSerializationException)
+			{
+				// do not handle missing request data
+				// see json attributes on type T, for example see ProductDto
+			}
+			catch (Exception ex)
+			{
+				log.LogError(ex.ToString());
+			}
+
+			return null;
+		}
+
+		[FunctionName("GetProducts")]
+		public async Task<IActionResult> GetProducts(
+			[HttpTrigger(AuthorizationLevel.Function, "get", Route = "products")]
+			HttpRequest req,
+			ILogger log)
+		{
+			// remove try-catch as soon as FunctionExceptionFilterAttribute or an alternative is available
+			try
+			{
+				// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
+				if (!this.apiKeyService.IsValid(req))
+				{
+					return new UnauthorizedResult();
+				}
+
+				var products = await this.productsService.ListProducts(log);
+
+				return new OkObjectResult(products.ToArray());
+			}
+			catch (Exception ex)
+			{
+				log.LogError(ex.ToString());
+				return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+			}
+		}
+
+		[FunctionName("GetProductsById")]
+		public async Task<IActionResult> GetProductsById(
+			[HttpTrigger(AuthorizationLevel.Function, "get", Route = "products/{id}")]
+			HttpRequest req,
+			ILogger log,
+			string id)
+		{
+			// remove try-catch as soon as FunctionExceptionFilterAttribute or an alternative is available
+			try
+			{
+				// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
+				if (!this.apiKeyService.IsValid(req))
+				{
+					return new UnauthorizedResult();
+				}
+
+				var isValid = Guid.TryParse(id, out var guid);
+				if (!isValid || guid == Guid.Empty)
+				{
+					return new NotFoundResult();
+				}
+
+				var product = await this.productsService.ReadById(guid, log);
+				if (product != null)
+				{
+					return new OkObjectResult(product);
+				}
+
+				return new NotFoundResult();
 			}
 			catch (Exception ex)
 			{
@@ -96,104 +222,6 @@ namespace ProductsApi.Functions
 			}
 		}
 
-		[FunctionName("DeleteProducts")]
-		public async Task<IActionResult> DeleteProducts(
-			[HttpTrigger(AuthorizationLevel.Function, "delete", Route = "products/{id}")]
-			HttpRequest req,
-			ILogger log,
-			string id)
-		{
-			// remove try-catch as soon as FunctionExceptionFilterAttribute or an alternative is available
-			try
-			{
-				// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
-				if (!this.apiKeyService.IsValid(req))
-				{
-					return new UnauthorizedResult();
-				}
-
-				var isValid = Guid.TryParse(id, out var guid);
-				if (!isValid || guid == Guid.Empty)
-				{
-					return new BadRequestResult();
-				}
-
-				var isDeleted = await this.productsService.Delete(guid, log);
-				if (isDeleted)
-				{
-					return new NoContentResult();
-				}
-
-				return new NotFoundResult();
-			}
-			catch (Exception ex)
-			{
-				log.LogError(ex.ToString());
-				return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
-			}
-		}
-
-		[FunctionName("GetProducts")]
-		public async Task<IActionResult> GetProducts(
-			[HttpTrigger(AuthorizationLevel.Function, "get", Route = "products")]
-			HttpRequest req,
-			ILogger log)
-		{
-			// remove try-catch as soon as FunctionExceptionFilterAttribute or an alternative is available
-			try
-			{
-				// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
-				if (!this.apiKeyService.IsValid(req))
-				{
-					return new UnauthorizedResult();
-				}
-
-				var products = await this.productsService.ListProducts(log);
-
-				return new OkObjectResult(products.ToArray());
-			}
-			catch (Exception ex)
-			{
-				log.LogError(ex.ToString());
-				return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
-			}
-		}
-
-		[FunctionName("GetProductsById")]
-		public async Task<IActionResult> GetProductsById(
-			[HttpTrigger(AuthorizationLevel.Function, "get", Route = "products/{id}")]
-			HttpRequest req,
-			ILogger log,
-			string id)
-		{
-			// remove try-catch as soon as FunctionExceptionFilterAttribute or an alternative is available
-			try
-			{
-				// use FunctionInvocationFilterAttribute as soon as microsoft does not flag it with deprecated
-				if (!this.apiKeyService.IsValid(req))
-				{
-					return new UnauthorizedResult();
-				}
-
-				var isValid = Guid.TryParse(id, out var guid);
-				if (isValid && guid != Guid.Empty)
-				{
-					var product = await this.productsService.ReadById(guid, log);
-					if (product != null)
-					{
-						return new OkObjectResult(product);
-					}
-				}
-
-				return new NotFoundResult();
-			}
-			catch (Exception ex)
-			{
-				log.LogError(ex.ToString());
-				return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
-			}
-		}
-
 		[FunctionName("PutProducts")]
 		public async Task<IActionResult> PutProducts(
 			[HttpTrigger(AuthorizationLevel.Function, "put", Route = "products")]
@@ -228,32 +256,6 @@ namespace ProductsApi.Functions
 				log.LogError(ex.ToString());
 				return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
 			}
-		}
-
-		private static async Task<T> DeserializeBody<T>(Stream body, ILogger log) where T : class
-		{
-			try
-			{
-				var requestBody = await new StreamReader(body).ReadToEndAsync();
-				if (string.IsNullOrWhiteSpace(requestBody))
-				{
-					return null;
-				}
-
-				var deserializeObject = JsonConvert.DeserializeObject<T>(requestBody);
-				return deserializeObject;
-			}
-			catch (JsonSerializationException)
-			{
-				// do not handle missing request data
-				// see json attributes on type T, for example see ProductDto
-			}
-			catch (Exception ex)
-			{
-				log.LogError(ex.ToString());
-			}
-
-			return null;
 		}
 	}
 }

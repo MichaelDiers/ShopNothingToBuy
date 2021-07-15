@@ -38,7 +38,10 @@
 		/// <param name="name">The expected name in <paramref name="product" /> and <paramref name="productDto" />.</param>
 		/// ///
 		/// <param name="id">The expected id in <paramref name="product" /> and <paramref name="productDto" />.</param>
-		public static void ProductEqual(this ProductDto productDto, Product product, string description, string name,
+		public static void ProductEqual(this ProductDto productDto,
+			Product product,
+			string description,
+			string name,
 			Guid id)
 		{
 			productDto.ProductEqual(product);
