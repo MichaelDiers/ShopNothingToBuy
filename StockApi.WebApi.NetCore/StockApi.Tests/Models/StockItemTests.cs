@@ -12,13 +12,17 @@
 	public class StockItemTests
 	{
 		/// <summary>
-		///   Dummy test for calling the default constructor.
+		///   Should succeed for valid parameters.
 		/// </summary>
 		[Fact]
-		public void DefaultConstructorTest()
+		public void ConstructorShouldSucceedForValidDto()
 		{
-			var model = new StockItem();
-			Assert.NotNull(model);
+			var id = Guid.NewGuid();
+			const int inStock = 100;
+			var model = new StockItemDto {Id = id, InStock = inStock};
+			var stockItem = new StockItem(model);
+			Assert.Equal(inStock, stockItem.InStock);
+			Assert.Equal(id, stockItem.Id);
 		}
 
 		/// <summary>
@@ -51,30 +55,13 @@
 		}
 
 		/// <summary>
-		///   Should succeed for valid parameters.
+		///   Dummy test for calling the default constructor.
 		/// </summary>
 		[Fact]
-		public void ConstructorShouldSucceedForValidDto()
+		public void DefaultConstructorTest()
 		{
-			var id = Guid.NewGuid();
-			const int inStock = 100;
-			var model = new StockItemDto {Id = id, InStock = inStock};
-			var stockItem = new StockItem(model);
-			Assert.Equal((uint) inStock, stockItem.InStock);
-			Assert.Equal(id, stockItem.Id);
-		}
-
-		/// <summary>
-		///   Validation fails for invalid id.
-		/// </summary>
-		[Fact]
-		public void RequiredValidationForId()
-		{
-			var model = new StockItem {InStock = 10};
-			var context = new ValidationContext(model);
-			var results = new List<ValidationResult>();
-			var isValid = Validator.TryValidateObject(model, context, results, true);
-			Assert.False(isValid);
+			var model = new StockItem();
+			Assert.NotNull(model);
 		}
 
 		/// <summary>
@@ -104,6 +91,19 @@
 		}
 
 		/// <summary>
+		///   Validation fails for invalid id.
+		/// </summary>
+		[Fact]
+		public void RequiredValidationForId()
+		{
+			var model = new StockItem {InStock = 10};
+			var context = new ValidationContext(model);
+			var results = new List<ValidationResult>();
+			var isValid = Validator.TryValidateObject(model, context, results, true);
+			Assert.False(isValid);
+		}
+
+		/// <summary>
 		///   Validation should succeed for valid <see cref="StockItem" /> values.
 		/// </summary>
 		/// <param name="id">The id of the <see cref="StockItem" />.</param>
@@ -113,7 +113,7 @@
 		[InlineData("7c3eea8b-01a4-4195-88b7-2323310e1c7d", 10000)]
 		public void ValidationSuccess(string id, int inStock)
 		{
-			var model = new StockItem {Id = new Guid(id), InStock = (uint) inStock};
+			var model = new StockItem {Id = new Guid(id), InStock = inStock};
 			var context = new ValidationContext(model);
 			var results = new List<ValidationResult>();
 			var isValid = Validator.TryValidateObject(model, context, results, true);

@@ -10,17 +10,6 @@
 	public class NonEmptyGuidAttributeTests
 	{
 		/// <summary>
-		///   <see cref="NonEmptyGuidAttribute.IsValid" /> should return true for non-empty <see cref="Guid" />.
-		/// </summary>
-		[Fact]
-		public void IsValidReturnsTrueForNonEmptyGuid()
-		{
-			var guid = Guid.NewGuid();
-			var attribute = new NonEmptyGuidAttribute();
-			Assert.True(attribute.IsValid(guid));
-		}
-
-		/// <summary>
 		///   <see cref="NonEmptyGuidAttribute.IsValid" /> should return false for empty <see cref="Guid" />.
 		/// </summary>
 		[Fact]
@@ -28,7 +17,7 @@
 		{
 			var guid = Guid.Empty;
 			var attribute = new NonEmptyGuidAttribute();
-			Assert.False(new NonEmptyGuidAttribute().IsValid(guid));
+			Assert.False(attribute.IsValid(guid));
 		}
 
 		/// <summary>
@@ -38,7 +27,18 @@
 		public void IsValidReturnsFalseForNull()
 		{
 			var attribute = new NonEmptyGuidAttribute();
-			Assert.False(new NonEmptyGuidAttribute().IsValid(null));
+			Assert.False(attribute.IsValid(null));
+		}
+
+		/// <summary>
+		///   <see cref="NonEmptyGuidAttribute.IsValid" /> should return true for non-empty <see cref="Guid" />.
+		/// </summary>
+		[Fact]
+		public void IsValidReturnsTrueForNonEmptyGuid()
+		{
+			var guid = Guid.NewGuid();
+			var attribute = new NonEmptyGuidAttribute();
+			Assert.True(attribute.IsValid(guid));
 		}
 	}
 }

@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.Threading.Tasks;
-	using Microsoft.AspNetCore.Http;
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.Extensions.Configuration;
 	using StockApi.Attributes;
@@ -18,11 +17,6 @@
 	public class StockController : ControllerBase
 	{
 		/// <summary>
-		///   Access the current http context.
-		/// </summary>
-		private readonly IHttpContextAccessor httpContextAccessor;
-
-		/// <summary>
 		///   Format string for the location of created <see cref="StockItemDto" /> instances.
 		/// </summary>
 		private readonly string stockCreateLocationFormat;
@@ -36,15 +30,11 @@
 		///   Creates a new instance of <see cref="StockController" />.
 		/// </summary>
 		/// <param name="stockService">Service for processing <see cref="StockItemDto" /> instances.</param>
-		/// <param name="httpContextAccessor">Accessor for the http context.</param>
 		/// <param name="configuration">Access the configuration of the application.</param>
 		/// <exception cref="ArgumentNullException">
-		///   If <paramref name="stockService" />, <paramref name="httpContextAccessor" /> or
-		///   <paramref name="configuration" /> is null.
+		///   If <paramref name="stockService" /> or <paramref name="configuration" /> is null.
 		/// </exception>
-		public StockController(IStockService stockService,
-			IHttpContextAccessor httpContextAccessor,
-			IConfiguration configuration)
+		public StockController(IStockService stockService, IConfiguration configuration)
 		{
 			if (configuration == null)
 			{
@@ -52,7 +42,6 @@
 			}
 
 			this.stockService = stockService ?? throw new ArgumentNullException(nameof(stockService));
-			this.httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
 			this.stockCreateLocationFormat = configuration["StockCreateLocationFormat"];
 		}
 
@@ -93,21 +82,53 @@
 		/// <param name="id">The <see cref="StockItem.Id" /> of the item.</param>
 		/// <returns>An <see cref="OkObjectResult" /> containing the <see cref="StockItemDto" /> or <see cref="NotFoundResult" />.</returns>
 		[HttpGet]
-		[Route("{id}")]
+		[Route("{id:guid}")]
 		public async Task<IActionResult> ReadById([FromRoute] Guid id)
 		{
-			if (id != Guid.Empty)
+			if (id == Guid.Empty)
 			{
-				var stockItem = await this.stockService.ReadById(id);
-				if (stockItem is null)
-				{
-					return new NotFoundResult();
-				}
+				return null;
+			}
 
+			var stockItem = await this.stockService.ReadById(id);
+			if (stockItem is null)
+			{
+				return new NotFoundResult();
+			}
+
+			return new OkObjectResult(stockItem);
+		}
+
+		/// <summary>
+		///   Update <see cref="StockItemDto.InStock" /> for item with <paramref name="id" /> by adding the given
+		///   <paramref name="delta" />.
+		/// </summary>
+		/// <param name="id">The <see cref="StockItemDto.Id" /> of the item to be updated.</param>
+		/// <param name="delta">The difference of the <see cref="StockItemDto.InStock" /> to be added.</param>
+		/// <returns>
+		///   A <see cref="NotFoundResult" /> if the <see cref="StockItemDto.Id" /> is unknown, an
+		///   <see cref="OkObjectResult" /> if the update operation succeeded and a <see cref="ConflictResult" /> if less items in
+		///   storage than requested.
+		/// </returns>
+		[HttpPut]
+		[Route("{id:guid}/{delta:int}")]
+		public async Task<IActionResult> Update([FromRoute] Guid id, [FromRoute] int delta)
+		{
+			var (stockItem, isUpdated) = await this.stockService.Update(id, delta);
+			// stock item does not exist
+			if (stockItem is null)
+			{
+				return new NotFoundResult();
+			}
+
+			// less items in stock than requested
+			if (isUpdated)
+			{
 				return new OkObjectResult(stockItem);
 			}
 
-			return null;
+			// update successful
+			return new ConflictObjectResult(stockItem);
 		}
 	}
 }

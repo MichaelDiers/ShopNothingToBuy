@@ -29,7 +29,7 @@
 			}
 
 			this.Id = stockItem.Id;
-			this.InStock = (int) stockItem.InStock;
+			this.InStock = stockItem.InStock;
 		}
 
 		/// <summary>

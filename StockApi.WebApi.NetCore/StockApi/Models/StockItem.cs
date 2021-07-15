@@ -23,13 +23,13 @@
 		/// <exception cref="ArgumentNullException">Thrown if <paramref name="stockItemDto" /> or one of its properties is null.</exception>
 		public StockItem(StockItemDto stockItemDto)
 		{
-			if (stockItemDto?.Id is null || stockItemDto?.InStock is null)
+			if (stockItemDto?.Id is null || stockItemDto.InStock is null)
 			{
 				throw new ArgumentNullException(nameof(stockItemDto), "Invalid object!");
 			}
 
 			this.Id = stockItemDto.Id.Value;
-			this.InStock = (uint) stockItemDto.InStock.Value;
+			this.InStock = stockItemDto.InStock.Value;
 		}
 
 		/// <summary>
@@ -44,6 +44,6 @@
 		/// </summary>
 		[Required]
 		[Range(0, 10000)]
-		public uint InStock { get; set; }
+		public int InStock { get; set; }
 	}
 }

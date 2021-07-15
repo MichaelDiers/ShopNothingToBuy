@@ -103,7 +103,7 @@
 			{
 				var database = this.redis.GetDatabase();
 				var result = await database.StringGetAsync(id.ToString());
-				if (!result.IsNullOrEmpty && uint.TryParse(result, out var inStock))
+				if (!result.IsNullOrEmpty && int.TryParse(result, out var inStock))
 				{
 					return new StockItem
 					{
@@ -114,6 +114,32 @@
 			catch (Exception ex)
 			{
 				this.logger.LogError(ex, "Error while reading stock item.");
+			}
+
+			return null;
+		}
+
+		/// <summary>
+		///   Update <see cref="StockItem.InStock" /> with given <paramref name="id" /> and increase
+		///   <see cref="StockItem.InStock" /> by <paramref name="delta" />.
+		/// </summary>
+		/// <param name="id">The <see cref="StockItem.Id" />.</param>
+		/// <param name="delta">Values that is added to <see cref="StockItem.InStock" />.</param>
+		/// <returns>The updated <see cref="StockItem" /> if the operation succeeds and null otherwise.</returns>
+		public async Task<StockItem> Update(Guid id, int delta)
+		{
+			try
+			{
+				var database = this.redis.GetDatabase();
+				if (await database.KeyExistsAsync(id.ToString()))
+				{
+					var updatedInStock = (int) await database.StringIncrementAsync(id.ToString(), delta);
+					return new StockItem {Id = id, InStock = updatedInStock};
+				}
+			}
+			catch (Exception ex)
+			{
+				this.logger.LogError(ex, "Error while updating stock item.");
 			}
 
 			return null;

@@ -25,6 +25,11 @@
 		}
 
 		/// <summary>
+		///   Number of calls to <see cref="Update" />.
+		/// </summary>
+		public int UpdateCallCount { get; private set; }
+
+		/// <summary>
 		///   Fakes <see cref="IDatabaseService.Clear" />.
 		/// </summary>
 		/// <returns>Always returns <see cref="defaultReturnValue" />.</returns>
@@ -54,6 +59,20 @@
 		public Task<StockItem> ReadById(Guid id)
 		{
 			return Task.FromResult(this.defaultReturnValue ? new StockItem {Id = id, InStock = 1000} : null);
+		}
+
+		/// <summary>
+		///   Fakes an update operation.
+		/// </summary>
+		/// <param name="id">The id of the stock item.</param>
+		/// <param name="delta">The delta for updating.</param>
+		/// <returns>A <see cref="ValueTuple{T1,T2}" />.</returns>
+		public Task<StockItem> Update(Guid id, int delta)
+		{
+			this.UpdateCallCount++;
+			return this.defaultReturnValue
+				? Task.FromResult(new StockItem {Id = id, InStock = delta})
+				: Task.FromResult<StockItem>(null);
 		}
 	}
 }

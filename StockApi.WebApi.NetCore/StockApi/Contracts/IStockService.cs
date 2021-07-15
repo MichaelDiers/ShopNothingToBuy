@@ -31,5 +31,18 @@
 		/// <param name="id">The id of the <see cref="StockItem" />.</param>
 		/// <returns>A <see cref="StockItemDto" /> if an item with given id exists, null otherwise.</returns>
 		Task<StockItemDto> ReadById(Guid id);
+
+		/// <summary>
+		///   Update <see cref="StockItemDto.InStock" /> with given <paramref name="id" /> and increase
+		///   <see cref="StockItemDto.InStock" /> by <paramref name="delta" />.
+		/// </summary>
+		/// <param name="id">The <see cref="StockItemDto.Id" />.</param>
+		/// <param name="delta">Values that is added to <see cref="StockItemDto.InStock" />.</param>
+		/// <returns>
+		///   A <see cref="ValueTuple{T1, T2}" /> of <see cref="StockItemDto" /> and <see cref="bool" />.
+		///   <see cref="StockItemDto" /> is null if not found by <paramref name="id" /> or a database error occurred.
+		///   True indicates update was executed and otherwise false is returned.
+		/// </returns>
+		Task<(StockItemDto stockItem, bool isUpdated)> Update(Guid id, int delta);
 	}
 }

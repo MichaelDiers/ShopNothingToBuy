@@ -31,5 +31,14 @@
 		/// <param name="id">The id of the <see cref="StockItem" />.</param>
 		/// <returns>A <see cref="StockItem" /> if an item with given id exists, null otherwise.</returns>
 		Task<StockItem> ReadById(Guid id);
+
+		/// <summary>
+		///   Update <see cref="StockItem.InStock" /> with given <paramref name="id" /> and increase
+		///   <see cref="StockItem.InStock" /> by <paramref name="delta" />.
+		/// </summary>
+		/// <param name="id">The <see cref="StockItem.Id" />.</param>
+		/// <param name="delta">Values that is added to <see cref="StockItem.InStock" />.</param>
+		/// <returns>The updated <see cref="StockItem" /> if the operation succeeds and null otherwise.</returns>
+		Task<StockItem> Update(Guid id, int delta);
 	}
 }
