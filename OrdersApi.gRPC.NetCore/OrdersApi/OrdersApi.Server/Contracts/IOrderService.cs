@@ -1,0 +1,66 @@
+﻿namespace OrdersApi.Server.Contracts
+{
+	using System;
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
+	using OrdersApi.Server.Models;
+
+	/// <summary>
+	///   Provides operations for processing orders.
+	/// </summary>
+	public interface IOrderService
+	{
+		/// <summary>
+		///   Delete all orders from storage.
+		/// </summary>
+		/// <returns>A <see cref="Task" />.</returns>
+		Task Clear();
+
+		/// <summary>
+		///   Create a new order in the database.
+		/// </summary>
+		/// <param name="order">The order to be created.</param>
+		/// <returns>The created and enriched <see cref="IOrder" />.</returns>
+		Task<IOrder> CreateOrder(Order order);
+
+		/// <summary>
+		///   Delete an order of a customer by its id.
+		/// </summary>
+		/// <param name="customerId">The id of the customer.</param>
+		/// <param name="orderId">The id of the order.</param>
+		/// <returns>True if the operation succeeds and false otherwise.</returns>
+		Task<bool> DeleteOrder(Guid customerId, Guid orderId);
+
+		/// <summary>
+		///   List all known ids of orders.
+		/// </summary>
+		/// <returns>A list of order ids.</returns>
+		Task<IEnumerable<Guid>> ListOrderIds();
+
+		/// <summary>
+		///   List all known ids of orders for given customer id.
+		/// </summary>
+		/// <param name="customerId">The id of the customer id.</param>
+		/// <returns>A list of order ids.</returns>
+		Task<IEnumerable<Guid>> ListOrderIds(Guid customerId);
+
+		/// <summary>
+		///   Read an order by its id for a specified customer.
+		/// </summary>
+		/// <param name="customerId">The id of the customer.</param>
+		/// <param name="orderId">The id of the order.</param>
+		/// <returns>
+		///   An instance of <see cref="IOrder" /> or null if no matching order is found.
+		/// </returns>
+		Task<IOrder> ReadOrder(Guid customerId, Guid orderId);
+
+		/// <summary>
+		///   Update the order status for an order of a given customer to a new status.
+		/// </summary>
+		/// <param name="customerId">The customer that owns the order.</param>
+		/// <param name="orderId">The id of the order.</param>
+		/// <param name="newOrderStatus">The new status of the order.</param>
+		/// <returns>True if the operation succeeds and false otherwise.</returns>
+		Task<bool> UpdateOrderStatus(Guid customerId, Guid orderId, OrderStatus newOrderStatus);
+	}
+}

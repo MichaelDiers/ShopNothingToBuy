@@ -1,0 +1,59 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "OrdersApi.Server";
+
+package orders;
+
+service Orders {
+	rpc Clear(google.protobuf.Empty) returns (google.protobuf.Empty);
+	rpc CreateOrder (CreateOrderRequest) returns (OrderResponse);
+	rpc DeleteOrder (OrderIdRequest) returns (google.protobuf.Empty);
+	rpc ReadOrder (OrderIdRequest) returns (OrderResponse);
+	rpc ListOrderIds (google.protobuf.Empty) returns (ListOrderIdsResponse);
+	rpc ListOrderIdsByCustomer (CustomerIdRequest) returns (ListOrderIdsResponse);
+	rpc UpdateStatus (UpdateStatusRequest) returns (google.protobuf.Empty);
+}
+
+enum OrderStatusDto {
+	NONE = 0;
+	CREATED = 1;
+	REJECTED = 2;
+}
+
+message PositionDto {
+	string productId = 1;
+	uint32 amount = 2;	
+}
+
+message CreateOrderRequest {	
+	repeated PositionDto positions = 1;
+	string customerId = 2;
+}
+
+message OrderResponse {
+	OrderStatusDto orderStatus = 1;
+	string orderId = 2;
+	repeated PositionDto positions = 3;
+	string customerId = 4;
+}
+
+message OrderIdRequest {
+	string customerId = 1;
+	string orderId = 2;
+}
+
+message CustomerIdRequest {
+	string customerId = 1;
+}
+
+message ListOrderIdsResponse {
+	repeated string orderIds = 2;
+}
+
+message UpdateStatusRequest {
+	string customerId = 1;
+	string orderId = 2;
+	OrderStatusDto newStatus = 3;
+}
