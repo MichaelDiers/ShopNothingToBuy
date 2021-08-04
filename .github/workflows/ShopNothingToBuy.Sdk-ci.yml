@@ -16,7 +16,7 @@ jobs:
         with:
           dotnet-version: 3.1.x
       - name: build
-        run: dotnet pack ShopNothingToBuy.Sdk.csproj -c Release -p:PackageVersion=1.1.${{GITHUB_RUN_NUMBER}}
+        run: dotnet pack ShopNothingToBuy.Sdk.csproj -c Release -p:PackageVersion=1.1.$GITHUB_RUN_NUMBER
 defaults:
   run:
     working-directory: 'ShopNothingToBuy.Sdk/ShopNothingToBuy.Sdk'
