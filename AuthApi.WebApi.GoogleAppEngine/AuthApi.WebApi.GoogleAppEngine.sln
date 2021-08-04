@@ -10,6 +10,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2F66EA79-B2F2-4DC4-B4E1-2D86A4B4E079}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		AuthApi.postman_collection.json = AuthApi.postman_collection.json
+		.github\workflows\ci.yml = .github\workflows\ci.yml
 	EndProjectSection
 EndProject
 Global
