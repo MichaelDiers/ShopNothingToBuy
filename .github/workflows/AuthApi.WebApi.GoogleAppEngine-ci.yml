@@ -1,4 +1,4 @@
-name: ci
+name: AuthApi.WebApi.GoogleAppEngine CI
 on:
   push:
     branches:
