@@ -1,0 +1,22 @@
+name: ShopNothingToBuy.Sdk CI
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'ShopNothingToBuy.Sdk/**'
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: use .net core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+      - name: build
+        run: dotnet pack ShopNothingToBuy.Sdk.csproj -c Release -p:PackageVersion=1.1.${{GITHUB_RUN_NUMBER}}
+defaults:
+  run:
+    working-directory: 'ShopNothingToBuy.Sdk/ShopNothingToBuy.Sdk'
