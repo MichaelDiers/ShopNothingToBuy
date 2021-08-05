@@ -6,6 +6,9 @@
 		<Version>1.0.0</Version>
 		<IsPackable>True</IsPackable>
 		<OutputType>Library</OutputType>
+		<Authors>MichaelDiers</Authors>
+	  <PackageDescription>Sdk for Shop NotthingToBuy</PackageDescription>
+	  <RepositoryUrl>https://github.com/MichaelDiers/ShopNothingToBuy</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
