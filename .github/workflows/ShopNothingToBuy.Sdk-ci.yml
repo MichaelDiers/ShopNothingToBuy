@@ -9,6 +9,8 @@ on:
 jobs:
   main:
     runs-on: ubuntu-latest
+    env:
+      CONFIG: Release
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -25,8 +27,7 @@ jobs:
       - name: publish
         run: dotnet nuget push "ShopNothingToBuy.Sdk/bin/$CONFIG/ShopNothingToBuy.Sdk.1.1.$GITHUB_RUN_NUMBER.nupkg"  --api-key "$SNTB_TOKEN" --source "github"
         env:
-          SNTB_TOKEN: ${{ secrets.SNTB_NUGET_CI_TOKEN}}
-          CONFIG: Release
+          SNTB_TOKEN: ${{ secrets.SNTB_NUGET_CI_TOKEN}}          
 defaults:
   run:
     working-directory: 'ShopNothingToBuy.Sdk'
