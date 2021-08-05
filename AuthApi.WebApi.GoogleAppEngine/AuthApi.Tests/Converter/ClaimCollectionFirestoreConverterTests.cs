@@ -4,7 +4,6 @@
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
-	using System.Linq;
 	using System.Security.Claims;
 	using AuthApi.Converter;
 	using Google.Cloud.Firestore;
@@ -45,7 +44,12 @@
 			var result = converter.FromFirestore(data);
 			foreach (var dict in data)
 			{
-				Assert.True(result.Any(claim => claim.Type == dict["type"] && claim.Value == dict["value"]));
+				var type = dict["type"] as string;
+				var value = dict["value"] as string;
+
+				Assert.Contains(
+					result,
+					claim => claim.Type == type && claim.Value == value);
 			}
 		}
 
@@ -88,10 +92,10 @@
 
 			foreach (var obj in result)
 			{
-				var type = obj.GetType().GetProperty("type").GetValue(obj);
-				var value = obj.GetType().GetProperty("value").GetValue(obj);
+				var type = obj.GetType().GetProperty("type").GetValue(obj) as string;
+				var value = obj.GetType().GetProperty("value").GetValue(obj) as string;
 
-				Assert.True(data.Any(expectedClaim => expectedClaim.Type == type && expectedClaim.Value == value));
+				Assert.Contains(data, expectedClaim => expectedClaim.Type == type && expectedClaim.Value == value);
 			}
 		}
 
