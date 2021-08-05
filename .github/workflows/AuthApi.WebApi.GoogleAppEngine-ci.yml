@@ -14,6 +14,21 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+      - name: production config
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: 'AuthApi/appsettings.json'
+        env:
+          ApiKey: ${{ secrets.AUTHAPI_API_KEY }}
+          Database.GoogleProject: ${{ secrets.AUTHAPI_DATABASE_GOOGLEPROJECT }}
+          Database.CollectionNameApplications: ${{ secrets.AUTHAPI_DATABASE_COLLECTIONNAMEAPPLICATIONS }}
+          Database.CollectionNameAccounts: ${{ secrets.AUTHAPI_DATABASE_COLLECTIONNAMEACCOUNTS }}
+          Database.CollectionNameRefreshTokens: ${{ secrets.AUTHAPI_DATABASE_CollectionNameRefreshTokens }}
+          Jwt.Keys[0].PrivateKey: ${{ secrets.AUTHAPI_JWT_KEYS_PRIVATEKEY }}
+          Jwt.Keys[0].PublicKey: ${{ secrets.AUTHAPI_JWT_KEYS_PUBLICKEY }}
+          Jwt.Keys[0].Version: 1
+          Jwt.KeyVersion: 1
+          Jwt.MaxRefreshCount: 5
       - name: nuget source
         run: dotnet nuget add source --username MichaelDiers --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/MichaelDiers/index.json"
       - name: use .net core
