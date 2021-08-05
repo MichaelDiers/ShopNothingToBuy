@@ -24,6 +24,12 @@ jobs:
         run: dotnet build --configuration "$CONFIG"
       - name: test
         run: dotnet test --configuration "$CONFIG" --no-build
+      - name: deploy google app engine
+        uses: google-github-actions/deploy-appengine@main
+        with:
+          credentials: ${{ secrets.GCP_CREDENTIALS_AUTHAPI }}
+          project_id: ${{ secrets.PROJECT_ID_AUTHAPI }}
+          working_directory: AuthApi.WebApi.GoogleAppEngine/AuthApi
 defaults:
   run:
     working-directory: 'AuthApi.WebApi.GoogleAppEngine'
