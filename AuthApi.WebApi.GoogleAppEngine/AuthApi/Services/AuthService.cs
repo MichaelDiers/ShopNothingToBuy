@@ -9,8 +9,10 @@
 	using AuthApi.Models;
 	using BCrypt.Net;
 	using Microsoft.Extensions.Configuration;
+	using Microsoft.Extensions.Logging;
 	using ShopNothingToBuy.Sdk.Attributes;
 	using ShopNothingToBuy.Sdk.Contracts;
+	using ShopNothingToBuy.Sdk.Models;
 
 	/// <summary>
 	///   Describes operations in authentication context.
@@ -50,7 +52,8 @@
 			IAccountService accountService,
 			IJwtService jwtService,
 			IAuthDatabaseService auhAuthDatabaseService,
-			IConfiguration configuration)
+			IConfiguration configuration,
+			ILogger<AuthService> logger)
 		{
 			if (configuration == null)
 			{
@@ -62,6 +65,11 @@
 			this.auhAuthDatabaseService =
 				auhAuthDatabaseService ?? throw new ArgumentNullException(nameof(auhAuthDatabaseService));
 			this.maxRefreshCount = configuration.GetValue<int>("Jwt:MaxRefreshCount");
+			var c = new JwtConfiguration();
+			configuration.Bind("Jwt", c);
+
+			logger.LogError(c.Keys.First().PrivateKey);
+			logger.LogError(c.Keys.First().PublicKey);
 		}
 
 		/// <summary>
