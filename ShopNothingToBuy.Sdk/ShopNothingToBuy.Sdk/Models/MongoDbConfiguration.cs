@@ -1,9 +1,11 @@
 ﻿namespace ShopNothingToBuy.Sdk.Models
 {
+	using ShopNothingToBuy.Sdk.Contracts;
+
 	/// <summary>
 	///   Configuration for MongoDb connections.
 	/// </summary>
-	public class MongoDbConfiguration
+	public class MongoDbConfiguration : IMongoDbConfiguration
 	{
 		/// <summary>
 		///   Gets or sets the name of the database collection.

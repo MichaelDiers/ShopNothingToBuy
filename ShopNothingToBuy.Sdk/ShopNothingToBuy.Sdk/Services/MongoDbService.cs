@@ -3,7 +3,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
-	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.Logging;
 	using MongoDB.Bson;
 	using MongoDB.Driver;
@@ -19,11 +18,6 @@
 		where TEntry : class, IDatabaseEntry<TId>
 	{
 		/// <summary>
-		///   Name of the entry in app settings for database configurations.
-		/// </summary>
-		public const string ConfigurationName = "MongoDb";
-
-		/// <summary>
 		///   Connection to the database.
 		/// </summary>
 		private readonly IMongoDatabase mongoDatabase;
@@ -31,25 +25,28 @@
 		/// <summary>
 		///   Database configuration.
 		/// </summary>
-		private readonly MongoDbConfiguration mongoDbConfiguration;
+		private readonly IMongoDbConfiguration mongoDbConfiguration;
 
 		/// <summary>
 		///   Creates a new instance of <see cref="MongoDbService{TEntry, TId}" />.
 		/// </summary>
-		/// <param name="configuration">Access to the configuration of the application.</param>
+		/// <param name="mongoDbConfigurationReader">Access to the mongodb configuration.</param>
 		/// <param name="logger">A logger for errors.</param>
 		public MongoDbService(
-			IConfiguration configuration,
+			IMongoDbConfigurationReader mongoDbConfigurationReader,
 			ILogger<AbstractDatabaseService<TEntry, TId>> logger)
 			: base(logger)
 		{
-			if (configuration == null)
+			if (mongoDbConfigurationReader == null)
 			{
-				throw new ArgumentNullException(nameof(configuration));
+				throw new ArgumentNullException(nameof(mongoDbConfigurationReader));
 			}
 
-			this.mongoDbConfiguration = new MongoDbConfiguration();
-			configuration.Bind(ConfigurationName, this.mongoDbConfiguration);
+			this.mongoDbConfiguration = mongoDbConfigurationReader.Read();
+			if (this.mongoDbConfiguration == null)
+			{
+				throw new ArgumentException("Cannot read mongodb configuration.", nameof(mongoDbConfigurationReader));
+			}
 
 			var client = new MongoClient(this.mongoDbConfiguration.ConnectionString);
 			this.mongoDatabase = client.GetDatabase(this.mongoDbConfiguration.DatabaseName);
