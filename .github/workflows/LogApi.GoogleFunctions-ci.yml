@@ -33,8 +33,13 @@ jobs:
         run: dotnet build --configuration "$CONFIG"
       - name: test
         run: dotnet test --configuration "$CONFIG" --no-build
-      - name: publish
-        run: dotnet publish -c "$CONFIG"      
+      - name: google cloud deployment
+        uses: google-github-actions/deploy-cloud-functions@main
+        with:
+          name: LogFunction
+          runtime: dotnet3
+          credentials: ${{ secrets.GCP_CREDENTIALS_AUTHAPI }}
+          source_dir: LogApi.GoogleFunctions/LogApi
 defaults:
   run:
     working-directory: 'LogApi.GoogleFunctions'
