@@ -7,11 +7,13 @@
 	using Google.Cloud.Functions.Framework;
 	using Google.Cloud.Functions.Hosting;
 	using Microsoft.AspNetCore.Http;
+	using Microsoft.Extensions.Logging;
 	using MongoDB.Bson;
 	using Newtonsoft.Json;
 	using ShopNothingToBuy.Sdk.Contracts;
 	using ShopNothingToBuy.Sdk.Extensions;
 	using ShopNothingToBuy.Sdk.Models;
+	using LogLevel = ShopNothingToBuy.Sdk.Contracts.LogLevel;
 
 	/// <summary>
 	///   An <see cref="IHttpFunction" /> using the google cloud.
@@ -32,13 +34,16 @@
 		/// </summary>
 		private readonly IDatabase<LogEntry, ObjectId> database;
 
+		private readonly ILogger<LogFunction> logger;
+
 		/// <summary>
 		///   Creates a new instance of <see cref="LogFunction" />.
 		/// </summary>
 		/// <param name="database">Service for accessing the database.</param>
-		public LogFunction(IDatabase<LogEntry, ObjectId> database)
+		public LogFunction(IDatabase<LogEntry, ObjectId> database, ILogger<LogFunction> logger)
 		{
 			this.database = database ?? throw new ArgumentNullException(nameof(database));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		/// <summary>
@@ -64,8 +69,9 @@
 					}
 				}
 			}
-			catch
+			catch (Exception ex)
 			{
+				this.logger.LogError(ex, "unexpected error");
 				// the logger cannot log its own errors
 			}
 		}

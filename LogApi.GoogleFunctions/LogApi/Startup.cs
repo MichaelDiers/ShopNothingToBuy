@@ -20,7 +20,7 @@
 		/// <param name="logging">The <see cref="ILoggingBuilder" />.</param>
 		public override void ConfigureLogging(WebHostBuilderContext context, ILoggingBuilder logging)
 		{
-			logging.ClearProviders();
+			// logging.ClearProviders();
 		}
 
 		/// <summary>
