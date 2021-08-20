@@ -1,0 +1,40 @@
+name: LogApi.GoogleFunctions CI
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'LogApi.GoogleFunctions/**'
+  workflow_dispatch:
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    env:
+      CONFIG: Release
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: production config
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: 'LogApi.GoogleFunctions/LogApi/appsettings.json'
+        env:
+          ApiKey: ${{ secrets.LOGAPI_API_KEY }}
+          MongoDb.CollectionName: ${{ secrets.LOGAPI_MONGODB_COLLECTION_NAME }}
+          MongoDb.ConnectionString: ${{ LOGAPI_MONGODB_CONNECTION_STRING }}
+          MongoDb.DatabaseName: ${{ LOGAPI_MONGODB_DATABASE_NAME }}
+      - name: nuget source
+        run: dotnet nuget add source --username MichaelDiers --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/MichaelDiers/index.json"
+      - name: use .net core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+      - name: build
+        run: dotnet build --configuration "$CONFIG"
+      - name: test
+        run: dotnet test --configuration "$CONFIG" --no-build
+      - name: publish
+        run: dotnet publish -c "$CONFIG"      
+defaults:
+  run:
+    working-directory: 'LogApi.GoogleFunctions'
