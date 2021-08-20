@@ -25,8 +25,8 @@ jobs:
           MongoDb.DatabaseName: ${{ secrets.LOGAPI_MONGODB_DATABASE_NAME }}
       - name: copy and edit nuget config
         run: |
-          mv ../.github/workflows/LogApi.GoogleFunctions-ci-nuget.config nuget.config
-          echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" nuget.config) >nuget.config
+          mv ../.github/workflows/LogApi.GoogleFunctions-ci-nuget.config LogApi/nuget.config
+          echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" LogApi/nuget.config) >LogApi/nuget.config
       - name: use .net core
         uses: actions/setup-dotnet@v1
         with:
