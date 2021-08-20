@@ -21,8 +21,8 @@ jobs:
         env:
           ApiKey: ${{ secrets.LOGAPI_API_KEY }}
           MongoDb.CollectionName: ${{ secrets.LOGAPI_MONGODB_COLLECTION_NAME }}
-          MongoDb.ConnectionString: ${{ LOGAPI_MONGODB_CONNECTION_STRING }}
-          MongoDb.DatabaseName: ${{ LOGAPI_MONGODB_DATABASE_NAME }}
+          MongoDb.ConnectionString: ${{ secrets.LOGAPI_MONGODB_CONNECTION_STRING }}
+          MongoDb.DatabaseName: ${{ secrets.LOGAPI_MONGODB_DATABASE_NAME }}
       - name: nuget source
         run: dotnet nuget add source --username MichaelDiers --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/MichaelDiers/index.json"
       - name: use .net core
