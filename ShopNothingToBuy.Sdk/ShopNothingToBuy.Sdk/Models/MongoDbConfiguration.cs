@@ -8,14 +8,19 @@
 	public class MongoDbConfiguration : IMongoDbConfiguration
 	{
 		/// <summary>
+		///   Gets or sets the mongodb connection string.
+		/// </summary>
+		public string ConnectionStringFormat { get; set; }
+
+		/// <summary>
 		///   Gets or sets the name of the database collection.
 		/// </summary>
 		public string CollectionName { get; set; }
 
 		/// <summary>
-		///   Gets or sets the mongodb connection string.
+		///   Gets the formatted connection string.
 		/// </summary>
-		public string ConnectionString { get; set; }
+		public string ConnectionString => string.Format(this.ConnectionStringFormat, this.DatabaseName);
 
 		/// <summary>
 		///   Gets or set the name of the database.

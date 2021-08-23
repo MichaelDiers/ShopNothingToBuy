@@ -17,7 +17,7 @@
 		/// <summary>
 		///   Name of the environment variable for the connection string.
 		/// </summary>
-		private const string MongoDbConnectionString = nameof(MongoDbConnectionString);
+		private const string MongoDbConnectionStringFormat = nameof(MongoDbConnectionStringFormat);
 
 		/// <summary>
 		///   Name of the environment variable for the database name.
@@ -47,10 +47,10 @@
 					               ?? throw new ArgumentNullException(
 						               MongoDbDatabaseName,
 						               "Missing configuration entry"),
-					ConnectionString = Environment.GetEnvironmentVariable(MongoDbConnectionString)
-					                   ?? throw new ArgumentNullException(
-						                   MongoDbConnectionString,
-						                   "Missing configuration entry")
+					ConnectionStringFormat = Environment.GetEnvironmentVariable(MongoDbConnectionStringFormat)
+					                         ?? throw new ArgumentNullException(
+						                         MongoDbConnectionStringFormat,
+						                         "Missing configuration entry")
 				};
 			}
 
