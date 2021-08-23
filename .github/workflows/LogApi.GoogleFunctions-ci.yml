@@ -42,6 +42,7 @@ jobs:
           runtime: dotnet3
           credentials: ${{ secrets.GCP_CREDENTIALS_AUTHAPI }}
           source_dir: LogApi.GoogleFunctions/LogApi
+          entry_point: LogFunction
 defaults:
   run:
     working-directory: 'LogApi.GoogleFunctions'
