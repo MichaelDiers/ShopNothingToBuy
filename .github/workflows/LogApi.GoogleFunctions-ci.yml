@@ -21,7 +21,7 @@ jobs:
         env:
           ApiKey: ${{ secrets.LOGAPI_API_KEY }}
           MongoDb.CollectionName: ${{ secrets.LOGAPI_MONGODB_COLLECTION_NAME }}
-          MongoDb.ConnectionString: ${{ secrets.LOGAPI_MONGODB_CONNECTION_STRING }}
+          MongoDb.ConnectionStringFormat: ${{ secrets.LOGAPI_MONGODB_CONNECTION_STRING_FORMAT }}
           MongoDb.DatabaseName: ${{ secrets.LOGAPI_MONGODB_DATABASE_NAME }}
       - name: copy and edit nuget config
         run: |
