@@ -7,6 +7,7 @@
 	using Google.Cloud.Functions.Framework;
 	using Google.Cloud.Functions.Hosting;
 	using Microsoft.AspNetCore.Http;
+	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.Logging;
 	using MongoDB.Bson;
 	using Newtonsoft.Json;
@@ -21,29 +22,51 @@
 	[FunctionsStartup(typeof(Startup))]
 	public class LogFunction : IHttpFunction
 	{
-		// Todo: config
-		private const string ApiKey = "0a1f9f6b-11ff-4ae6-9cb1-8efb33960d38";
+		/// <summary>
+		///   Name of the configuration entry that specifies the api key.
+		/// </summary>
+		private const string ApiKeyConfigurationName = "ApiKey";
 
 		/// <summary>
 		///   Name of the header that used for the api key.
 		/// </summary>
-		private const string ApiKeyName = "x-api-key";
+		private const string ApiKeyHeaderName = "x-api-key";
+
+		/// <summary>
+		///   The expected api key for requests.
+		/// </summary>
+		private readonly string apiKey;
 
 		/// <summary>
 		///   Service for accessing the database.
 		/// </summary>
 		private readonly IDatabase<LogEntry, ObjectId> database;
 
+		/// <summary>
+		///   The cloud function logger.
+		/// </summary>
 		private readonly ILogger<LogFunction> logger;
 
 		/// <summary>
 		///   Creates a new instance of <see cref="LogFunction" />.
 		/// </summary>
 		/// <param name="database">Service for accessing the database.</param>
-		public LogFunction(IDatabase<LogEntry, ObjectId> database, ILogger<LogFunction> logger)
+		/// <param name="logger">Cloud function logger.</param>
+		/// <param name="configuration">Access the application configuration.</param>
+		public LogFunction(
+			IDatabase<LogEntry, ObjectId> database,
+			ILogger<LogFunction> logger,
+			IConfiguration configuration)
 		{
 			this.database = database ?? throw new ArgumentNullException(nameof(database));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			this.apiKey = configuration.GetValue<string>(ApiKeyConfigurationName);
+			if (string.IsNullOrWhiteSpace(this.apiKey)
+			    || !Guid.TryParse(this.apiKey, out var configApiKey)
+			    || configApiKey == Guid.Empty)
+			{
+				throw new InvalidOperationException("Invalid api key specified in configuration.");
+			}
 		}
 
 		/// <summary>
@@ -55,7 +78,7 @@
 		{
 			try
 			{
-				if (CheckApiKey(context, ApiKey) && HandleHttpMethods(context))
+				if (CheckApiKey(context, this.apiKey) && HandleHttpMethods(context))
 				{
 					var logEntry = await ReadBody<LogEntryDto>(context);
 					if (logEntry != null && logEntry.Level != LogLevel.None)
@@ -72,7 +95,6 @@
 			catch (Exception ex)
 			{
 				this.logger.LogError(ex, "unexpected error");
-				// the logger cannot log its own errors
 			}
 		}
 
@@ -85,7 +107,8 @@
 		/// <returns>True if the <paramref name="expectedApiKey" /> matches and false otherwise.</returns>
 		private static bool CheckApiKey(HttpContext context, string expectedApiKey)
 		{
-			if (!context.Request.Headers.ContainsKey(ApiKeyName) || context.Request.Headers[ApiKeyName] != expectedApiKey)
+			if (!context.Request.Headers.ContainsKey(ApiKeyHeaderName)
+			    || context.Request.Headers[ApiKeyHeaderName] != expectedApiKey)
 			{
 				context.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
 				return false;
