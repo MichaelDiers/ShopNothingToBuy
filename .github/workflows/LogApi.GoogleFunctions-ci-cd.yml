@@ -24,6 +24,10 @@ jobs:
     env:
       CONFIG: Release
     steps:
+      - name: ls
+        run: ls
+      - name: pwd
+        run: pwd
       - name: dev config
         uses: microsoft/variable-substitution@v1
         with:
