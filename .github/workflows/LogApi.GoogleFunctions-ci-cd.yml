@@ -24,7 +24,7 @@ jobs:
       - name: dev config
         uses: microsoft/variable-substitution@v1
         with:
-          files: 'LogApi/appsettings.json'
+          files: 'LogApi.GoogleFunctions/LogApi/appsettings.json'
         env:
           ApiKey: ${{ secrets.API_KEY }}
           MongoDb.CollectionName: ${{ secrets.MONGODB_COLLECTION_NAME }}
@@ -32,8 +32,8 @@ jobs:
           MongoDb.DatabaseName: ${{ secrets.MONGODB_DATABASE_NAME }}
       - name: copy and edit nuget config
         run: |
-          mv ../.github/workflows/LogApi.GoogleFunctions-ci-nuget.config LogApi/nuget.config
-          echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" LogApi/nuget.config) >LogApi/nuget.config
+          mv .github/workflows/LogApi.GoogleFunctions-ci-nuget.config LogApi.GoogleFunctions/LogApi/nuget.config
+          echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" LogApi.GoogleFunctions/LogApi/nuget.config) >LogApi.GoogleFunctions/LogApi/nuget.config
       - name: use .net core
         uses: actions/setup-dotnet@v1
         with:
@@ -50,6 +50,3 @@ jobs:
           credentials: ${{ secrets.GCP_CREDENTIALS_AUTHAPI }}
           source_dir: LogApi.GoogleFunctions/LogApi
           entry_point: LogApi.LogFunction
-defaults:
-  run:
-    working-directory: 'LogApi.GoogleFunctions'
