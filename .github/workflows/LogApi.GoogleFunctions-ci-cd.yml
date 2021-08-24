@@ -25,7 +25,7 @@ jobs:
       CONFIG: Release
     steps:
       - name: ls
-        run: ls
+        run: ls -lha
       - name: pwd
         run: pwd
       - name: dev config
