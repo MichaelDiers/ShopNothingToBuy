@@ -19,16 +19,12 @@ jobs:
     steps:
       - name: checkout source
         uses: actions/checkout@v2
-      - name: ls
-        run: ls -lha
-      - name: pwd
-        run: pwd
       - name: dev config
         uses: microsoft/variable-substitution@v1
         with:
           files: 'LogApi.GoogleFunctions/LogApi/appsettings.json'
         env:
-          ApiKey: ${{ secrets.LOGAPI_API_KEY }}
-          MongoDb.CollectionName: ${{ secrets.LOGAPI_MONGODB_COLLECTION_NAME }}
-          MongoDb.ConnectionStringFormat: ${{ secrets.LOGAPI_MONGODB_CONNECTION_STRING_FORMAT }}
-          MongoDb.DatabaseName: ${{ secrets.LOGAPI_MONGODB_DATABASE_NAME }}
+          ApiKey: ${{ secrets.API_KEY }}
+          MongoDb.CollectionName: ${{ secrets.MONGODB_COLLECTION_NAME }}
+          MongoDb.ConnectionStringFormat: ${{ secrets.MONGODB_CONNECTION_STRING_FORMAT }}
+          MongoDb.DatabaseName: ${{ secrets.MONGODB_DATABASE_NAME }}
