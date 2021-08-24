@@ -1,0 +1,38 @@
+name: LogApi.GoogleFunctions CI/CD
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'LogApi.GoogleFunctions/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'LogApi.GoogleFunctions/**'
+  workflow_dispatch:
+jobs:
+  prebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout source
+        uses: actions/checkout@v2
+  devDeployment:
+    runs-on: ubuntu-latest
+    needs:
+      - prebuild
+    env:
+      CONFIG: Release
+    steps:
+      - name: dev config
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: 'LogApi.GoogleFunctions/LogApi/appsettings.json'
+        env:
+          ApiKey: ${{ secrets.LOGAPI_API_KEY }}
+          MongoDb.CollectionName: ${{ secrets.LOGAPI_MONGODB_COLLECTION_NAME }}
+          MongoDb.ConnectionStringFormat: ${{ secrets.LOGAPI_MONGODB_CONNECTION_STRING_FORMAT }}
+          MongoDb.DatabaseName: ${{ secrets.LOGAPI_MONGODB_DATABASE_NAME }}
+defaults:
+  run:
+    working-directory: 'LogApi.GoogleFunctions'
