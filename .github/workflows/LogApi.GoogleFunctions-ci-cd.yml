@@ -14,9 +14,11 @@ on:
 jobs:
   devDeployment:
     runs-on: ubuntu-latest
-    env:
-      CONFIG: Release
+    environment:
+      name: LogApiDevDeployment
     steps:
+      - name: echo
+        run: echo '${{ secrets.API_KEY }}'
       - name: checkout source
         uses: actions/checkout@v2
       - name: dev config
