@@ -12,18 +12,13 @@ on:
       - 'LogApi.GoogleFunctions/**'
   workflow_dispatch:
 jobs:
-  prebuild:
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout source
-        uses: actions/checkout@v2
   devDeployment:
     runs-on: ubuntu-latest
-    needs:
-      - prebuild
     env:
       CONFIG: Release
     steps:
+      - name: checkout source
+        uses: actions/checkout@v2
       - name: ls
         run: ls -lha
       - name: pwd
