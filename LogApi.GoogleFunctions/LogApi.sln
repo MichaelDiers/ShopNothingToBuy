@@ -8,8 +8,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2B3D5801-7F4B-4AE0-95AE-56B8B152DB2F}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		..\.github\workflows\LogApi.GoogleFunctions-ci.yml = ..\.github\workflows\LogApi.GoogleFunctions-ci.yml
 		..\.github\workflows\LogApi.GoogleFunctions-ci-nuget.config = ..\.github\workflows\LogApi.GoogleFunctions-ci-nuget.config
+		..\.github\workflows\LogApi.GoogleFunctions-ci-cd.yml = ..\.github\workflows\LogApi.GoogleFunctions-ci-cd.yml
 	EndProjectSection
 EndProject
 Global
