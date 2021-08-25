@@ -1,17 +1,14 @@
 ﻿namespace ShopNothingToBuy.Sdk.GoogleCloud
 {
 	/// <summary>
-	///   Describes an empty request body.
+	///   Specifies an object validator.
 	/// </summary>
-	public class EmptyRequest : IIsValid
+	public interface IIsValid
 	{
 		/// <summary>
-		///   Checks if the object is valid.
+		///   Checks if an object is valid.
 		/// </summary>
 		/// <returns>True if the object is valid and false otherwise.</returns>
-		public bool IsValid()
-		{
-			return true;
-		}
+		bool IsValid();
 	}
 }
