@@ -18,10 +18,11 @@ jobs:
       name: LogApiDevDeployment
     env:
       CONFIG: Release
+      CURRENT_ENVIRONEMNT: dev
     steps:      
       - name: checkout source
         uses: actions/checkout@v2
-      - name: dev config
+      - name: "config ${CURRENT_ENVIRONEMNT}"
         uses: microsoft/variable-substitution@v1
         with:
           files: 'LogApi.GoogleFunctions/LogApi/appsettings.json'
@@ -45,11 +46,11 @@ jobs:
       - name: google cloud deployment
         uses: google-github-actions/deploy-cloud-functions@main
         with:
-          name: log-function
+          name: "log-function-${CURRENT_ENVIRONEMNT}"
           runtime: dotnet3
           credentials: ${{ secrets.GCP_CREDENTIALS_AUTHAPI }}
           source_dir: LogApi.GoogleFunctions/LogApi
-          entry_point: LogApi.LogFunction
+          entry_point: LogApi.LogFunction  
 defaults:
   run:
     working-directory: 'LogApi.GoogleFunctions'
