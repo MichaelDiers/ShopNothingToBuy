@@ -15,11 +15,9 @@ jobs:
   devDeployment:
     runs-on: ubuntu-latest
     environment:
-      name: LogApiDevDeployment
+      name: LogApiDev
     env:
       CONFIG: Release
-      CURRENT_ENVIRONEMNT: dev
-      LOG_FUNCTION_NAME: log-function-dev
     steps:      
       - name: checkout source
         uses: actions/checkout@v2
@@ -28,10 +26,10 @@ jobs:
         with:
           files: 'LogApi.GoogleFunctions/LogApi/appsettings.json'
         env:
-          ApiKey: ${{ secrets.API_KEY }}
-          MongoDb.CollectionName: ${{ secrets.MONGODB_COLLECTION_NAME }}
-          MongoDb.ConnectionStringFormat: ${{ secrets.MONGODB_CONNECTION_STRING_FORMAT }}
-          MongoDb.DatabaseName: ${{ secrets.MONGODB_DATABASE_NAME }}
+          ApiKey: ${{ secrets.LOGAPI_API_KEY }}
+          MongoDb.CollectionName: ${{ secrets.LOGAPI_MONGODB_COLLECTION_NAME }}
+          MongoDb.ConnectionStringFormat: ${{ secrets.LOGAPI_MONGODB_CONNECTION_STRING_FORMAT }}
+          MongoDb.DatabaseName: ${{ secrets.LOGAPI_MONGODB_DATABASE_NAME }}
       - name: copy and edit nuget config
         run: |
           mv ../.github/workflows/LogApi.GoogleFunctions-ci-nuget.config LogApi/nuget.config
@@ -47,7 +45,7 @@ jobs:
       - name: google cloud deployment
         uses: google-github-actions/deploy-cloud-functions@main
         with:
-          name: "${LOG_FUNCTION_NAME}"
+          name: ${{ secrets.LOGAPI_LOG_FUNCTION_NAME }}
           runtime: dotnet3
           credentials: ${{ secrets.GCP_CREDENTIALS_AUTHAPI }}
           source_dir: LogApi.GoogleFunctions/LogApi
