@@ -50,6 +50,86 @@ jobs:
           credentials: ${{ secrets.GCP_CREDENTIALS_AUTHAPI }}
           source_dir: LogApi.GoogleFunctions/LogApi
           entry_point: LogApi.LogFunction  
+  stageDeployment:
+    runs-on: ubuntu-latest
+    needs:
+      - devDeployment
+    environment:
+      name: LogApiStage
+    env:
+      CONFIG: Release
+    steps:      
+      - name: checkout source
+        uses: actions/checkout@v2
+      - name: configure appsettings.json
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: 'LogApi.GoogleFunctions/LogApi/appsettings.json'
+        env:
+          ApiKey: ${{ secrets.LOGAPI_API_KEY }}
+          MongoDb.CollectionName: ${{ secrets.LOGAPI_MONGODB_COLLECTION_NAME }}
+          MongoDb.ConnectionStringFormat: ${{ secrets.LOGAPI_MONGODB_CONNECTION_STRING_FORMAT }}
+          MongoDb.DatabaseName: ${{ secrets.LOGAPI_MONGODB_DATABASE_NAME }}
+      - name: copy and edit nuget config
+        run: |
+          mv ../.github/workflows/LogApi.GoogleFunctions-ci-nuget.config LogApi/nuget.config
+          echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" LogApi/nuget.config) >LogApi/nuget.config
+      - name: use .net core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+      - name: build
+        run: dotnet build --configuration "$CONFIG"
+      - name: test
+        run: dotnet test --configuration "$CONFIG" --no-build
+      - name: google cloud deployment
+        uses: google-github-actions/deploy-cloud-functions@main
+        with:
+          name: ${{ secrets.LOGAPI_LOG_FUNCTION_NAME }}
+          runtime: dotnet3
+          credentials: ${{ secrets.GCP_CREDENTIALS_AUTHAPI }}
+          source_dir: LogApi.GoogleFunctions/LogApi
+          entry_point: LogApi.LogFunction  
+  prodDeployment:
+    runs-on: ubuntu-latest
+    needs:
+      - stageDeployment
+    environment:
+      name: LogApiProd
+    env:
+      CONFIG: Release
+    steps:      
+      - name: checkout source
+        uses: actions/checkout@v2
+      - name: configure appsettings.json
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: 'LogApi.GoogleFunctions/LogApi/appsettings.json'
+        env:
+          ApiKey: ${{ secrets.LOGAPI_API_KEY }}
+          MongoDb.CollectionName: ${{ secrets.LOGAPI_MONGODB_COLLECTION_NAME }}
+          MongoDb.ConnectionStringFormat: ${{ secrets.LOGAPI_MONGODB_CONNECTION_STRING_FORMAT }}
+          MongoDb.DatabaseName: ${{ secrets.LOGAPI_MONGODB_DATABASE_NAME }}
+      - name: copy and edit nuget config
+        run: |
+          mv ../.github/workflows/LogApi.GoogleFunctions-ci-nuget.config LogApi/nuget.config
+          echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" LogApi/nuget.config) >LogApi/nuget.config
+      - name: use .net core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+      - name: build
+        run: dotnet build --configuration "$CONFIG"
+      - name: test
+        run: dotnet test --configuration "$CONFIG" --no-build
+      - name: google cloud deployment
+        uses: google-github-actions/deploy-cloud-functions@main
+        with:
+          name: ${{ secrets.LOGAPI_LOG_FUNCTION_NAME }}
+          runtime: dotnet3
+          credentials: ${{ secrets.GCP_CREDENTIALS_AUTHAPI }}
+          source_dir: LogApi.GoogleFunctions/LogApi
+          entry_point: LogApi.LogFunction  
 defaults:
   run:
     working-directory: 'LogApi.GoogleFunctions'
