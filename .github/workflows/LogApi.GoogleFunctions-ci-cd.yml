@@ -19,6 +19,7 @@ jobs:
     env:
       CONFIG: Release
       CURRENT_ENVIRONEMNT: dev
+      LOG_FUNCTION_NAME: log-function-dev
     steps:      
       - name: checkout source
         uses: actions/checkout@v2
@@ -46,7 +47,7 @@ jobs:
       - name: google cloud deployment
         uses: google-github-actions/deploy-cloud-functions@main
         with:
-          name: log-function-${CURRENT_ENVIRONEMNT}
+          name: ${{LOG_FUNCTION_NAME}}
           runtime: dotnet3
           credentials: ${{ secrets.GCP_CREDENTIALS_AUTHAPI }}
           source_dir: LogApi.GoogleFunctions/LogApi
