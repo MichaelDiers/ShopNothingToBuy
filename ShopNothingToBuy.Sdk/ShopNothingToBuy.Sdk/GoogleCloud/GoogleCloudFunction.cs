@@ -105,7 +105,7 @@
 				    && !await this.HandleMethod<TPost>(HttpMethods.Post, context, this.HandlePost)
 				    && !await this.HandleMethod<TPut>(HttpMethods.Put, context, this.HandlePut))
 				{
-					context.Response.StatusCode = (int) HttpStatusCode.Forbidden;
+					await this.SetForbidden(context);
 				}
 			}
 			catch (Exception ex)
@@ -173,12 +173,13 @@
 		protected abstract Task HandlePut(HttpContext context, TPut body);
 
 		/// <summary>
-		///   Sets the status code for the <paramref name="context" /> to <see cref="HttpStatusCode.BadRequest" />.
+		///   Sets the status code for the <paramref name="context" /> to <see cref="HttpStatusCode.Forbidden" />.
 		/// </summary>
 		/// <param name="context">The current <see cref="HttpContext" />.</param>
-		protected void SetBadRequest(HttpContext context)
+		protected Task SetForbidden(HttpContext context)
 		{
-			context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+			context.Response.StatusCode = (int) HttpStatusCode.Forbidden;
+			return Task.CompletedTask;
 		}
 
 		/// <summary>
@@ -205,7 +206,7 @@
 				}
 				else
 				{
-					this.SetBadRequest(context);
+					context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
 				}
 
 				return true;
