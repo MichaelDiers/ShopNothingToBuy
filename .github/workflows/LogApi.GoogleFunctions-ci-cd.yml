@@ -22,7 +22,7 @@ jobs:
     steps:      
       - name: checkout source
         uses: actions/checkout@v2
-      - name: "config ${CURRENT_ENVIRONEMNT}"
+      - name: configure appsettings.json
         uses: microsoft/variable-substitution@v1
         with:
           files: 'LogApi.GoogleFunctions/LogApi/appsettings.json'
@@ -46,7 +46,7 @@ jobs:
       - name: google cloud deployment
         uses: google-github-actions/deploy-cloud-functions@main
         with:
-          name: "log-function-${CURRENT_ENVIRONEMNT}"
+          name: log-function-${CURRENT_ENVIRONEMNT}
           runtime: dotnet3
           credentials: ${{ secrets.GCP_CREDENTIALS_AUTHAPI }}
           source_dir: LogApi.GoogleFunctions/LogApi
