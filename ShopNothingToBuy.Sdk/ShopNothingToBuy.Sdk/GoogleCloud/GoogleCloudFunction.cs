@@ -173,6 +173,15 @@
 		protected abstract Task HandlePut(HttpContext context, TPut body);
 
 		/// <summary>
+		///   Sets the status code for the <paramref name="context" /> to <see cref="HttpStatusCode.BadRequest" />.
+		/// </summary>
+		/// <param name="context">The current <see cref="HttpContext" />.</param>
+		protected void SetBadRequest(HttpContext context)
+		{
+			context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+		}
+
+		/// <summary>
 		///   If <paramref name="method" /> matches <see cref="HttpRequest.Method" /> of the <paramref name="context" /> the
 		///   <paramref name="handleHttpMethod" /> function will be called.
 		/// </summary>
@@ -196,7 +205,7 @@
 				}
 				else
 				{
-					context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+					this.SetBadRequest(context);
 				}
 
 				return true;
