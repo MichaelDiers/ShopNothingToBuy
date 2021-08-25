@@ -47,7 +47,7 @@ jobs:
       - name: google cloud deployment
         uses: google-github-actions/deploy-cloud-functions@main
         with:
-          name: ${{LOG_FUNCTION_NAME}}
+          name: ${LOG_FUNCTION_NAME}
           runtime: dotnet3
           credentials: ${{ secrets.GCP_CREDENTIALS_AUTHAPI }}
           source_dir: LogApi.GoogleFunctions/LogApi
