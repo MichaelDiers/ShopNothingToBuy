@@ -18,10 +18,10 @@
 	/// <typeparam name="TPut">Type of a put request body.</typeparam>
 	/// <typeparam name="TLogger">Type of the <see cref="ILogger{T}" />.</typeparam>
 	public abstract class GoogleCloudFunction<TDelete, TGet, TPost, TPut, TLogger> : IHttpFunction
-		where TDelete : class
-		where TGet : class
-		where TPost : class
-		where TPut : class
+		where TDelete : class, new()
+		where TGet : class, new()
+		where TPost : class, new()
+		where TPut : class, new()
 	{
 		/// <summary>
 		///   Default name of the header that used for the api key.
@@ -185,7 +185,7 @@
 			string method,
 			HttpContext context,
 			Func<HttpContext, T, Task> handleHttpMethod)
-			where T : class
+			where T : class, new()
 		{
 			if (string.Equals(context.Request.Method, method, StringComparison.CurrentCultureIgnoreCase))
 			{
@@ -211,7 +211,7 @@
 		/// <typeparam name="T">The type of the body object.</typeparam>
 		/// <param name="context">The current <see cref="HttpContext" />.</param>
 		/// <returns>An instance of <see cref="T" /> if body is valid and null otherwise.</returns>
-		private static async Task<T> ReadBody<T>(HttpContext context) where T : class
+		private static async Task<T> ReadBody<T>(HttpContext context) where T : class, new()
 		{
 			try
 			{
@@ -220,7 +220,7 @@
 			}
 			catch
 			{
-				return null;
+				return typeof(T) == typeof(EmptyRequest) ? new T() : null;
 			}
 		}
 	}
