@@ -1,4 +1,4 @@
-name: ShopNothingToBuy.Sdk CI
+name: Services.Sdk CI
 on:
   push:
     branches:
