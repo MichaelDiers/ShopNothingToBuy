@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+		<PackageId>Service.Sdk</PackageId>
+		<IsPackable>True</IsPackable>
+		<OutputType>Library</OutputType>
+		<Authors>MichaelDiers</Authors>
+		<PackageDescription>Sdk for service implementations.</PackageDescription>
+		<RepositoryUrl>https://github.com/MichaelDiers/ShopNothingToBuy</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
