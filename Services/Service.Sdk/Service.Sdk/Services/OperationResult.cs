@@ -1,4 +1,4 @@
-﻿namespace Service.Sdk
+﻿namespace Service.Sdk.Services
 {
 	using Service.Sdk.Contracts;
 

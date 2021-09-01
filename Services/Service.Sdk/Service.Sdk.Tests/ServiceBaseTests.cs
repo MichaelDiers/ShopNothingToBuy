@@ -2,6 +2,7 @@
 {
 	using System;
 	using Service.Sdk.Contracts;
+	using Service.Sdk.Services;
 	using Service.Sdk.Tests.Mocks;
 	using Service.Sdk.Tests.Models;
 	using Xunit;

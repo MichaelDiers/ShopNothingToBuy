@@ -3,6 +3,7 @@
 	using System;
 	using System.Threading.Tasks;
 	using Service.Sdk.Contracts;
+	using Service.Sdk.Services;
 	using Service.Sdk.Tests.Models;
 
 	internal class ErrorServiceMock : ServiceBase<StringEntry, string, CreateEntry, UpdateEntry>

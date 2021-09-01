@@ -2,6 +2,7 @@
 {
 	using System.Threading.Tasks;
 	using Service.Sdk.Contracts;
+	using Service.Sdk.Services;
 	using Service.Sdk.Tests.Models;
 
 	internal class NotFoundOrExistsServiceMock : ServiceBase<StringEntry, string, CreateEntry, UpdateEntry>
