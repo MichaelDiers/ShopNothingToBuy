@@ -19,4 +19,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Service.Sdk.Contracts\Service.Sdk.Contracts.csproj" />
+    <ProjectReference Include="..\Service.Sdk\Service.Sdk.csproj" />
+  </ItemGroup>
+
 </Project>
