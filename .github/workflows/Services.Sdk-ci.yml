@@ -13,7 +13,7 @@ jobs:
       CONFIG: Release
       PACKAGE_VERSION: "1.1"
       CSPROJ: Service.Sdk/Service.Sdk.csproj
-      NUPGKG: Service.Sdk/bin/$CONFIG/Service.Sdk
+      $NUPKG: Service.Sdk/bin/$CONFIG/Service.Sdk
     steps:
       - name: checkout
         uses: actions/checkout@v2
