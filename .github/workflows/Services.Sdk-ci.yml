@@ -1,0 +1,33 @@
+name: ShopNothingToBuy.Sdk CI
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Services/Service.Sdk/**'
+  workflow_dispatch:
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    env:
+      CONFIG: Release
+      PACKAGE_VERSION: 1.1.$GITHUB_RUN_NUMBER
+      CSPROJ: Services/Service.Sdk/Service.Sdk/Service.Sdk.csproj
+      NUPGKG: Services/Service.Sdk/Service.Sdk/bin/$CONFIG/Service.Sdk.$PACKAGE_VERSION.nupkg
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: use .net core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+      - name: build
+        run: dotnet build --configuration "$CONFIG"
+      - name: test
+        run: dotnet test --configuration "$CONFIG" --no-build
+      - name: pack
+        run: dotnet pack "$CSPROJ" -c "$CONFIG" -p:PackageVersion=$PACKAGE_VERSION --no-build
+      - name: publish
+        run: dotnet nuget push "$NUPKG" --api-key "$SNTB_TOKEN" --source "https://nuget.pkg.github.com/MichaelDiers/index.json"
+        env:
+          SNTB_TOKEN: ${{ secrets.SNTB_NUGET_CI_TOKEN}}          
