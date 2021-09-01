@@ -12,8 +12,8 @@ jobs:
     env:
       CONFIG: Release
       PACKAGE_VERSION: "1.1"
-      CSPROJ: Service.Sdk/Service.Sdk.csproj
-      $NUPKG: Service.Sdk/bin/$CONFIG/Service.Sdk
+      CSPROJ_FOLDER: Service.Sdk
+      CSPROJ_NAME: Service.Sdk
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -26,9 +26,9 @@ jobs:
       - name: test
         run: dotnet test --configuration "$CONFIG" --no-build
       - name: pack
-        run: dotnet pack "$CSPROJ" -c "$CONFIG" -p:PackageVersion=$PACKAGE_VERSION.$GITHUB_RUN_NUMBER --no-build
+        run: dotnet pack "$CSPROJ_FOLDER/$CSPROJ_NAME.csproj" -c "$CONFIG" -p:PackageVersion=$PACKAGE_VERSION.$GITHUB_RUN_NUMBER --no-build
       - name: publish
-        run: dotnet nuget push "$NUPKG.$PACKAGE_VERSION.$GITHUB_RUN_NUMBER.nupkg" --api-key "$SNTB_TOKEN" --source "https://nuget.pkg.github.com/MichaelDiers/index.json"
+        run: dotnet nuget push "$CSPROJ_FOLDER/bin/$CONFIG/$CSPROJ_NAME.$PACKAGE_VERSION.$GITHUB_RUN_NUMBER.nupkg" --api-key "$SNTB_TOKEN" --source "https://nuget.pkg.github.com/MichaelDiers/index.json"
         env:
           SNTB_TOKEN: ${{ secrets.SNTB_NUGET_CI_TOKEN}}          
 defaults:
