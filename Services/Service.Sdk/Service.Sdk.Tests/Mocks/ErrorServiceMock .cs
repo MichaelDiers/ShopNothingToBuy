@@ -28,6 +28,11 @@
 			throw new Exception(nameof(this.Delete));
 		}
 
+		protected override Task<ExistsResult> ExistsEntry(string entryId)
+		{
+			throw new Exception(nameof(this.Exists));
+		}
+
 		protected override Task<IOperationResult<StringEntry, string, ReadResult>> ReadEntry(string entryId)
 		{
 			throw new Exception(nameof(this.Read));

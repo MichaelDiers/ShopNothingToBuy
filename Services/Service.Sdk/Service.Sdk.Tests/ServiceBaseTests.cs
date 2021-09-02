@@ -30,6 +30,23 @@
 		}
 
 		[Fact]
+		public async void Clear_ShouldFailIfServiceFails()
+		{
+			var (logger, validator, service) = InitOperationFailServiceMock();
+
+			Assert.Equal(ClearResult.InternalError, await service.Clear());
+
+			Assert.Equal(0, logger.ErrorMessageAndExceptionCallCount);
+			Assert.Equal(0, logger.ErrorMessageCallCount);
+			Assert.Null(logger.ErrorMessage);
+			Assert.Null(logger.Exception);
+
+			Assert.Equal(0, validator.ValidateCreateEntryCallCount);
+			Assert.Equal(0, validator.ValidateUpdateEntryCallCount);
+			Assert.Equal(0, validator.ValidateEntryIdCallCount);
+		}
+
+		[Fact]
 		public async void Clear_ShouldFailIfServiceThrowsAnException()
 		{
 			var (logger, validator, service) = InitErrorServiceMock();
@@ -66,7 +83,7 @@
 		[Fact]
 		public async void Create_ShouldFailIfAlreadyExists()
 		{
-			var (logger, validator, service) = InitNotFoundOrExistsServiceMock();
+			var (logger, validator, service) = InitOperationFailServiceMock();
 			const int value = 10;
 			var createEntry = new CreateEntry(value);
 
@@ -220,7 +237,7 @@
 		[Fact]
 		public async void Delete_ShouldFailIfNotFound()
 		{
-			var (logger, validator, service) = InitNotFoundOrExistsServiceMock();
+			var (logger, validator, service) = InitOperationFailServiceMock();
 			const string id = "10";
 
 			var result = await service.Delete(id);
@@ -323,6 +340,128 @@
 			Assert.Equal(1, validator.ValidateEntryIdCallCount);
 		}
 
+		// 
+
+		[Fact]
+		public async void Exists_ShouldFailIfIdIsInvalid()
+		{
+			var (logger, validator, service) = InitServiceMock(new ValidatorMock(true, false, true));
+			const string id = "10";
+
+			var result = await service.Exists(id);
+
+			Assert.Equal(ExistsResult.InvalidData, result);
+
+			Assert.Equal(0, logger.ErrorMessageAndExceptionCallCount);
+			Assert.Equal(0, logger.ErrorMessageCallCount);
+			Assert.Null(logger.ErrorMessage);
+			Assert.Null(logger.Exception);
+
+			Assert.Equal(0, validator.ValidateCreateEntryCallCount);
+			Assert.Equal(0, validator.ValidateUpdateEntryCallCount);
+			Assert.Equal(1, validator.ValidateEntryIdCallCount);
+		}
+
+		[Fact]
+		public async void Exists_ShouldFailIfNotFound()
+		{
+			var (logger, validator, service) = InitOperationFailServiceMock();
+			const string id = "10";
+
+			var result = await service.Exists(id);
+
+			Assert.Equal(ExistsResult.NotFound, result);
+
+			Assert.Equal(0, logger.ErrorMessageAndExceptionCallCount);
+			Assert.Equal(0, logger.ErrorMessageCallCount);
+			Assert.Null(logger.ErrorMessage);
+			Assert.Null(logger.Exception);
+
+			Assert.Equal(0, validator.ValidateCreateEntryCallCount);
+			Assert.Equal(0, validator.ValidateUpdateEntryCallCount);
+			Assert.Equal(1, validator.ValidateEntryIdCallCount);
+		}
+
+		[Fact]
+		public async void Exists_ShouldFailIfServiceAndLoggerThrowsAnException()
+		{
+			var (logger, validator, service) = InitErrorServiceMock(new ErrorLoggerMock());
+			const string id = "10";
+
+			var result = await service.Exists(id);
+
+			Assert.Equal(ExistsResult.InternalError, result);
+
+			Assert.Equal(1, logger.ErrorMessageAndExceptionCallCount);
+			Assert.Equal(0, logger.ErrorMessageCallCount);
+			Assert.Equal("Error executing exists entry.", logger.ErrorMessage);
+			Assert.Equal(nameof(service.Exists), logger.Exception.Message);
+
+			Assert.Equal(0, validator.ValidateCreateEntryCallCount);
+			Assert.Equal(0, validator.ValidateUpdateEntryCallCount);
+			Assert.Equal(1, validator.ValidateEntryIdCallCount);
+		}
+
+		[Fact]
+		public async void Exists_ShouldFailIfServiceThrowsAnException()
+		{
+			var (logger, validator, service) = InitErrorServiceMock();
+			const string id = "10";
+
+			var result = await service.Exists(id);
+
+			Assert.Equal(ExistsResult.InternalError, result);
+
+			Assert.Equal(1, logger.ErrorMessageAndExceptionCallCount);
+			Assert.Equal(0, logger.ErrorMessageCallCount);
+			Assert.Equal("Error executing exists entry.", logger.ErrorMessage);
+			Assert.Equal(nameof(service.Exists), logger.Exception.Message);
+
+			Assert.Equal(0, validator.ValidateCreateEntryCallCount);
+			Assert.Equal(0, validator.ValidateUpdateEntryCallCount);
+			Assert.Equal(1, validator.ValidateEntryIdCallCount);
+		}
+
+		[Fact]
+		public async void Exists_ShouldFailIfValidatorThrowsAnException()
+		{
+			var (logger, validator, service) = InitServiceMock(new ErrorValidatorMock());
+			const string id = "10";
+
+			var result = await service.Exists(id);
+
+			Assert.Equal(ExistsResult.InternalError, result);
+
+			Assert.Equal(1, logger.ErrorMessageAndExceptionCallCount);
+			Assert.Equal(0, logger.ErrorMessageCallCount);
+			Assert.Equal("Error executing exists entry.", logger.ErrorMessage);
+			Assert.Equal(nameof(validator.ValidateEntryId), logger.Exception.Message);
+
+			Assert.Equal(0, validator.ValidateCreateEntryCallCount);
+			Assert.Equal(0, validator.ValidateUpdateEntryCallCount);
+			Assert.Equal(1, validator.ValidateEntryIdCallCount);
+		}
+
+		[Fact]
+		public async void Exists_ShouldSucceed()
+		{
+			var (logger, validator, service) = InitServiceMock();
+			const string id = "10";
+
+			var result = await service.Exists(id);
+
+			Assert.Equal(ExistsResult.Exists, result);
+
+			Assert.Equal(0, logger.ErrorMessageAndExceptionCallCount);
+			Assert.Equal(0, logger.ErrorMessageCallCount);
+			Assert.Null(logger.ErrorMessage);
+			Assert.Null(logger.Exception);
+
+			Assert.Equal(0, validator.ValidateCreateEntryCallCount);
+			Assert.Equal(0, validator.ValidateUpdateEntryCallCount);
+			Assert.Equal(1, validator.ValidateEntryIdCallCount);
+		}
+
 		[Fact]
 		public async void Read_ShouldFailIfIdIsInvalid()
 		{
@@ -347,7 +486,7 @@
 		[Fact]
 		public async void Read_ShouldFailIfNotFound()
 		{
-			var (logger, validator, service) = InitNotFoundOrExistsServiceMock();
+			var (logger, validator, service) = InitOperationFailServiceMock();
 			const string id = "10";
 
 			var result = await service.Read(id);
@@ -465,7 +604,7 @@
 		[Fact]
 		public async void Update_ShouldFailIfNotFound()
 		{
-			var (logger, validator, service) = InitNotFoundOrExistsServiceMock();
+			var (logger, validator, service) = InitOperationFailServiceMock();
 			const string id = "10";
 			const string value = "value";
 			var updateEntry = new UpdateEntry(id, value);
@@ -632,11 +771,11 @@
 
 		private static (IExtendedLogger, IExtendedEntryValidator,
 			IServiceBase<StringEntry, string, CreateEntry, UpdateEntry>)
-			InitNotFoundOrExistsServiceMock()
+			InitOperationFailServiceMock()
 		{
 			var logger = new LoggerMock();
 			var validatorMock = new ValidatorMock();
-			var service = new NotFoundOrExistsServiceMock(logger, validatorMock);
+			var service = new OperationFailServiceMock(logger, validatorMock);
 			return (logger, validatorMock, service);
 		}
 

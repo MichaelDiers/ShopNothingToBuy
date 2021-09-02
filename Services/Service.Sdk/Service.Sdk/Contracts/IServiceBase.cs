@@ -41,6 +41,15 @@
 		Task<IOperationResult<TEntry, TEntryId, DeleteResult>> Delete(TEntryId entryId);
 
 		/// <summary>
+		///   Check if an entry exists.
+		/// </summary>
+		/// <param name="entryId">The id of the entry.</param>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is a <see cref="ExistsResult" />.
+		/// </returns>
+		Task<ExistsResult> Exists(TEntryId entryId);
+
+		/// <summary>
 		///   Read an entry by its id.
 		/// </summary>
 		/// <param name="entryId">The id of the entry.</param>

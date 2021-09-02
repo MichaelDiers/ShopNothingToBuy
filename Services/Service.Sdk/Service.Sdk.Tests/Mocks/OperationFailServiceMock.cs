@@ -5,16 +5,16 @@
 	using Service.Sdk.Services;
 	using Service.Sdk.Tests.Models;
 
-	internal class NotFoundOrExistsServiceMock : ServiceBase<StringEntry, string, CreateEntry, UpdateEntry>
+	internal class OperationFailServiceMock : ServiceBase<StringEntry, string, CreateEntry, UpdateEntry>
 	{
-		public NotFoundOrExistsServiceMock(ILogger logger, IEntryValidator<CreateEntry, UpdateEntry, string> validator)
+		public OperationFailServiceMock(ILogger logger, IEntryValidator<CreateEntry, UpdateEntry, string> validator)
 			: base(logger, validator)
 		{
 		}
 
 		protected override Task<ClearResult> ClearEntries()
 		{
-			return Task.FromResult(ClearResult.Cleared);
+			return Task.FromResult(ClearResult.InternalError);
 		}
 
 		protected override Task<IOperationResult<StringEntry, string, CreateResult>> CreateEntry(CreateEntry entry)
@@ -27,6 +27,11 @@
 		{
 			var result = new OperationResult<StringEntry, string, DeleteResult>(DeleteResult.NotFound);
 			return Task.FromResult(result as IOperationResult<StringEntry, string, DeleteResult>);
+		}
+
+		protected override Task<ExistsResult> ExistsEntry(string entryId)
+		{
+			return Task.FromResult(ExistsResult.NotFound);
 		}
 
 		protected override Task<IOperationResult<StringEntry, string, ReadResult>> ReadEntry(string entryId)

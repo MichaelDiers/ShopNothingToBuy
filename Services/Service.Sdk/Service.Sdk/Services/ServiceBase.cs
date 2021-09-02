@@ -108,6 +108,31 @@
 		}
 
 		/// <summary>
+		///   Check if an entry exists.
+		/// </summary>
+		/// <param name="entryId">The id of the entry.</param>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is a <see cref="ExistsResult" />.
+		/// </returns>
+		public async Task<ExistsResult> Exists(TEntryId entryId)
+		{
+			try
+			{
+				if (await this.validator.ValidateEntryId(entryId))
+				{
+					return await this.ExistsEntry(entryId);
+				}
+
+				return ExistsResult.InvalidData;
+			}
+			catch (Exception ex)
+			{
+				await this.LogError("Error executing exists entry.", ex);
+				return ExistsResult.InternalError;
+			}
+		}
+
+		/// <summary>
 		///   Read an entry by its id.
 		/// </summary>
 		/// <param name="entryId">The id of the entry.</param>
@@ -184,6 +209,15 @@
 		///   that contains the <see cref="DeleteResult" />.
 		/// </returns>
 		protected abstract Task<IOperationResult<TEntry, TEntryId, DeleteResult>> DeleteEntry(TEntryId entryId);
+
+		/// <summary>
+		///   Check if an entry exists.
+		/// </summary>
+		/// <param name="entryId">The id of the entry.</param>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is a <see cref="ExistsResult" />.
+		/// </returns>
+		protected abstract Task<ExistsResult> ExistsEntry(TEntryId entryId);
 
 		/// <summary>
 		///   Adds the given <paramref name="message" /> to the error log.

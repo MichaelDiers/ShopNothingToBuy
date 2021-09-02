@@ -32,6 +32,11 @@
 			return Task.FromResult(result as IOperationResult<StringEntry, string, DeleteResult>);
 		}
 
+		protected override Task<ExistsResult> ExistsEntry(string entryId)
+		{
+			return Task.FromResult(ExistsResult.Exists);
+		}
+
 		protected override Task<IOperationResult<StringEntry, string, ReadResult>> ReadEntry(string entryId)
 		{
 			var result = new OperationResult<StringEntry, string, ReadResult>(
