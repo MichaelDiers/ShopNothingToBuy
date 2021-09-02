@@ -33,6 +33,11 @@
 			throw new Exception(nameof(this.Exists));
 		}
 
+		protected override Task<IOperationListResult<string, ListResult>> ListEntries()
+		{
+			throw new Exception(nameof(this.List));
+		}
+
 		protected override Task<IOperationResult<StringEntry, string, ReadResult>> ReadEntry(string entryId)
 		{
 			throw new Exception(nameof(this.Read));

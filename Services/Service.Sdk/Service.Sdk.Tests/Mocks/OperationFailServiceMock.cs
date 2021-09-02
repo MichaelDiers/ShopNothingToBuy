@@ -34,6 +34,12 @@
 			return Task.FromResult(ExistsResult.NotFound);
 		}
 
+		protected override Task<IOperationListResult<string, ListResult>> ListEntries()
+		{
+			var result = new OperationListResult<string, ListResult>(ListResult.InternalError);
+			return Task.FromResult(result as IOperationListResult<string, ListResult>);
+		}
+
 		protected override Task<IOperationResult<StringEntry, string, ReadResult>> ReadEntry(string entryId)
 		{
 			var result = new OperationResult<StringEntry, string, ReadResult>(ReadResult.NotFound);

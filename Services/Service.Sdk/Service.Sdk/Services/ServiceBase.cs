@@ -133,6 +133,26 @@
 		}
 
 		/// <summary>
+		///   List the ids of all entries.
+		/// </summary>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is an <see cref="IOperationListResult{T,TOperationResult}" />
+		///   that contains the <see cref="ListResult" />.
+		/// </returns>
+		public async Task<IOperationListResult<TEntryId, ListResult>> List()
+		{
+			try
+			{
+				return await this.ListEntries();
+			}
+			catch (Exception ex)
+			{
+				await this.LogError("Error executing list.", ex);
+				return new OperationListResult<TEntryId, ListResult>(ListResult.InternalError);
+			}
+		}
+
+		/// <summary>
 		///   Read an entry by its id.
 		/// </summary>
 		/// <param name="entryId">The id of the entry.</param>
@@ -218,6 +238,15 @@
 		///   A <see cref="Task" /> whose result is a <see cref="ExistsResult" />.
 		/// </returns>
 		protected abstract Task<ExistsResult> ExistsEntry(TEntryId entryId);
+
+		/// <summary>
+		///   List the ids of all entries.
+		/// </summary>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is an <see cref="IOperationListResult{T,TOperationResult}" />
+		///   that contains the <see cref="ListResult" />.
+		/// </returns>
+		protected abstract Task<IOperationListResult<TEntryId, ListResult>> ListEntries();
 
 		/// <summary>
 		///   Adds the given <paramref name="message" /> to the error log.

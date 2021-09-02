@@ -37,6 +37,18 @@
 			return Task.FromResult(ExistsResult.Exists);
 		}
 
+		protected override Task<IOperationListResult<string, ListResult>> ListEntries()
+		{
+			var result = new OperationListResult<string, ListResult>(
+				ListResult.Completed,
+				new[]
+				{
+					Guid.NewGuid().ToString(),
+					Guid.NewGuid().ToString()
+				});
+			return Task.FromResult(result as IOperationListResult<string, ListResult>);
+		}
+
 		protected override Task<IOperationResult<StringEntry, string, ReadResult>> ReadEntry(string entryId)
 		{
 			var result = new OperationResult<StringEntry, string, ReadResult>(

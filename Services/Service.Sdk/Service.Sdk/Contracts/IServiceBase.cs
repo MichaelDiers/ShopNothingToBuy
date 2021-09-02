@@ -50,6 +50,15 @@
 		Task<ExistsResult> Exists(TEntryId entryId);
 
 		/// <summary>
+		///   List the ids of all entries.
+		/// </summary>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is an <see cref="IOperationListResult{T,TOperationResult}" />
+		///   that contains the <see cref="ListResult" />.
+		/// </returns>
+		Task<IOperationListResult<TEntryId, ListResult>> List();
+
+		/// <summary>
 		///   Read an entry by its id.
 		/// </summary>
 		/// <param name="entryId">The id of the entry.</param>

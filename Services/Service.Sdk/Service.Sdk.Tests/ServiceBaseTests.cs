@@ -463,6 +463,83 @@
 		}
 
 		[Fact]
+		public async void List_ShouldFailIfServiceAndLoggerThrowsAnException()
+		{
+			var (logger, validator, service) = InitErrorServiceMock(new ErrorLoggerMock());
+
+			var result = await service.List();
+			Assert.Equal(ListResult.InternalError, result.Result);
+			Assert.Null(result.Entries);
+
+			Assert.Equal(1, logger.ErrorMessageAndExceptionCallCount);
+			Assert.Equal(0, logger.ErrorMessageCallCount);
+			Assert.Equal("Error executing list.", logger.ErrorMessage);
+			Assert.Equal(nameof(service.List), logger.Exception.Message);
+
+			Assert.Equal(0, validator.ValidateCreateEntryCallCount);
+			Assert.Equal(0, validator.ValidateUpdateEntryCallCount);
+			Assert.Equal(0, validator.ValidateEntryIdCallCount);
+		}
+
+		[Fact]
+		public async void List_ShouldFailIfServiceFails()
+		{
+			var (logger, validator, service) = InitOperationFailServiceMock();
+
+			var result = await service.List();
+			Assert.Equal(ListResult.InternalError, result.Result);
+			Assert.Null(result.Entries);
+
+			Assert.Equal(0, logger.ErrorMessageAndExceptionCallCount);
+			Assert.Equal(0, logger.ErrorMessageCallCount);
+			Assert.Null(logger.ErrorMessage);
+			Assert.Null(logger.Exception);
+
+			Assert.Equal(0, validator.ValidateCreateEntryCallCount);
+			Assert.Equal(0, validator.ValidateUpdateEntryCallCount);
+			Assert.Equal(0, validator.ValidateEntryIdCallCount);
+		}
+
+		[Fact]
+		public async void List_ShouldFailIfServiceThrowsAnException()
+		{
+			var (logger, validator, service) = InitErrorServiceMock();
+
+			var result = await service.List();
+			Assert.Equal(ListResult.InternalError, result.Result);
+			Assert.Null(result.Entries);
+
+			Assert.Equal(1, logger.ErrorMessageAndExceptionCallCount);
+			Assert.Equal(0, logger.ErrorMessageCallCount);
+			Assert.Equal("Error executing list.", logger.ErrorMessage);
+			Assert.Equal(nameof(service.List), logger.Exception.Message);
+
+			Assert.Equal(0, validator.ValidateCreateEntryCallCount);
+			Assert.Equal(0, validator.ValidateUpdateEntryCallCount);
+			Assert.Equal(0, validator.ValidateEntryIdCallCount);
+		}
+
+		[Fact]
+		public async void List_ShouldSucceed()
+		{
+			var (logger, validator, service) = InitServiceMock();
+
+			var result = await service.List();
+			Assert.Equal(ListResult.Completed, result.Result);
+			Assert.NotNull(result.Entries);
+			Assert.NotEmpty(result.Entries);
+
+			Assert.Equal(0, logger.ErrorMessageAndExceptionCallCount);
+			Assert.Equal(0, logger.ErrorMessageCallCount);
+			Assert.Null(logger.Exception);
+			Assert.Null(logger.ErrorMessage);
+
+			Assert.Equal(0, validator.ValidateCreateEntryCallCount);
+			Assert.Equal(0, validator.ValidateUpdateEntryCallCount);
+			Assert.Equal(0, validator.ValidateEntryIdCallCount);
+		}
+
+		[Fact]
 		public async void Read_ShouldFailIfIdIsInvalid()
 		{
 			var (logger, validator, service) = InitServiceMock(new ValidatorMock(true, false, true));
