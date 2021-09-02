@@ -40,6 +40,23 @@
 		}
 
 		[Fact]
+		public async void Exists_ShouldSucceed()
+		{
+			var id = Guid.NewGuid().ToString();
+			var result = await new UserService(new LoggerMock()).Exists(id);
+			Assert.Equal(ExistsResult.Exists, result);
+		}
+
+		[Fact]
+		public async void List_ShouldSucceed()
+		{
+			var result = await new UserService(new LoggerMock()).List();
+			Assert.Equal(ListResult.Completed, result.Result);
+			Assert.NotNull(result.Entries);
+			Assert.Empty(result.Entries);
+		}
+
+		[Fact]
 		public async void Read_ShouldSucceed()
 		{
 			var id = Guid.NewGuid().ToString();

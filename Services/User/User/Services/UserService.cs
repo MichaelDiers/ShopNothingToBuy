@@ -1,6 +1,7 @@
 ﻿namespace User.Services
 {
 	using System;
+	using System.Linq;
 	using System.Threading.Tasks;
 	using Service.Sdk.Contracts;
 	using Service.Sdk.Services;
@@ -69,6 +70,31 @@
 			IOperationResult<UserEntry, string, DeleteResult> result =
 				new OperationResult<UserEntry, string, DeleteResult>(DeleteResult.Deleted, new UserEntry(entryId));
 			return Task.FromResult(result);
+		}
+
+		/// <summary>
+		///   Check if an entry exists.
+		/// </summary>
+		/// <param name="entryId">The id of the entry.</param>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is a <see cref="ExistsResult" />.
+		/// </returns>
+		protected override Task<ExistsResult> ExistsEntry(string entryId)
+		{
+			return Task.FromResult(ExistsResult.Exists);
+		}
+
+		/// <summary>
+		///   List the ids of all entries.
+		/// </summary>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is an <see cref="IOperationListResult{T,TOperationResult}" />
+		///   that contains the <see cref="ListResult" />.
+		/// </returns>
+		protected override Task<IOperationListResult<string, ListResult>> ListEntries()
+		{
+			var result = new OperationListResult<string, ListResult>(ListResult.Completed, Enumerable.Empty<string>());
+			return Task.FromResult(result as IOperationListResult<string, ListResult>);
 		}
 
 		/// <summary>
