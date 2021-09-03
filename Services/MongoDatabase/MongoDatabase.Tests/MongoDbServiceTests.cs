@@ -11,13 +11,20 @@
 
 	public class MongoDbServiceTests
 	{
-		private const string Skip = "Integration Test";
+		private const bool Skip = true;
+
+		private const string SkipText = "Integration Test";
 
 		private static IDatabaseService<Entry, string> databaseService;
 
-		[Fact(Skip = Skip)]
+		[Fact]
 		public async void Clear()
 		{
+			if (Skip)
+			{
+				return;
+			}
+
 			var id = Guid.NewGuid().ToString();
 			const string value = "my new create value";
 			var createResult = await InitDatabaseService().Create(new Entry(id, value));
@@ -32,9 +39,14 @@
 			Assert.Equal(ExistsResult.NotFound, existsResult);
 		}
 
-		[Fact(Skip = Skip)]
+		[Fact]
 		public async void Create()
 		{
+			if (Skip)
+			{
+				return;
+			}
+
 			var id = Guid.NewGuid().ToString();
 			const string value = "my new create value";
 			var result = await InitDatabaseService().Create(new Entry(id, value));
@@ -43,9 +55,14 @@
 			Assert.Equal(value, result.Entry.Value);
 		}
 
-		[Fact(Skip = Skip)]
+		[Fact]
 		public async void Delete()
 		{
+			if (Skip)
+			{
+				return;
+			}
+
 			var id = Guid.NewGuid().ToString();
 			const string value = "my new create value";
 			var createResult = await InitDatabaseService().Create(new Entry(id, value));
@@ -59,9 +76,14 @@
 			Assert.Equal(value, deleteResult.Entry.Value);
 		}
 
-		[Fact(Skip = Skip)]
+		[Fact]
 		public async void Exists()
 		{
+			if (Skip)
+			{
+				return;
+			}
+
 			var id = Guid.NewGuid().ToString();
 			const string value = "my new create value";
 			var createResult = await InitDatabaseService().Create(new Entry(id, value));
@@ -73,9 +95,14 @@
 			Assert.Equal(ExistsResult.Exists, existsResult);
 		}
 
-		[Fact(Skip = Skip)]
+		[Fact]
 		public async void List()
 		{
+			if (Skip)
+			{
+				return;
+			}
+
 			var id1 = Guid.NewGuid().ToString();
 			const string value1 = "my new create value 1";
 			var result1 = await InitDatabaseService().Create(new Entry(id1, value1));
@@ -96,9 +123,14 @@
 			Assert.Contains(id2, listResult.Entries);
 		}
 
-		[Fact(Skip = Skip)]
+		[Fact]
 		public async void Read()
 		{
+			if (Skip)
+			{
+				return;
+			}
+
 			var id = Guid.NewGuid().ToString();
 			const string value = "my new create value";
 			var createResult = await InitDatabaseService().Create(new Entry(id, value));
@@ -112,9 +144,14 @@
 			Assert.Equal(value, readResult.Entry.Value);
 		}
 
-		[Fact(Skip = Skip)]
+		[Fact]
 		public async void Update()
 		{
+			if (Skip)
+			{
+				return;
+			}
+
 			var id = Guid.NewGuid().ToString();
 			const string value = "my new create value";
 			var createResult = await InitDatabaseService().Create(new Entry(id, value));
