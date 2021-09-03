@@ -13,8 +13,6 @@
 	{
 		private const bool Skip = true;
 
-		private const string SkipText = "Integration Test";
-
 		private static IDatabaseService<Entry, string> databaseService;
 
 		[Fact]
