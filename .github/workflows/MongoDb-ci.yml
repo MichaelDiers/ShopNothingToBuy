@@ -1,0 +1,40 @@
+name: MongoDatabase Service CI
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Services/MongoDatabase/**'
+  workflow_dispatch:
+jobs:
+  MongoDatabaseNuget:
+    runs-on: ubuntu-latest
+    env:
+      CONFIG: Release
+      PACKAGE_VERSION: "1.1"
+      CSPROJ_FOLDER: MongoDatabase
+      CSPROJ_NAME: MongoDatabase
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: use .net core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+      - name: copy and edit nuget config
+        run: |
+          mv ../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER/nuget.config
+          echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" $CSPROJ_FOLDER/nuget.config) >$CSPROJ_FOLDER/nuget.config
+      - name: build
+        run: dotnet build --configuration "$CONFIG"
+      - name: test
+        run: dotnet test --configuration "$CONFIG" --no-build
+      - name: pack
+        run: dotnet pack "$CSPROJ_FOLDER/$CSPROJ_NAME.csproj" -c "$CONFIG" -p:PackageVersion=$PACKAGE_VERSION.$GITHUB_RUN_NUMBER --no-build
+      - name: publish
+        run: dotnet nuget push "$CSPROJ_FOLDER/bin/$CONFIG/$CSPROJ_NAME.$PACKAGE_VERSION.$GITHUB_RUN_NUMBER.nupkg" --api-key "$SNTB_TOKEN" --source "https://nuget.pkg.github.com/MichaelDiers/index.json"
+        env:
+          SNTB_TOKEN: ${{ secrets.SNTB_NUGET_CI_TOKEN}}          
+defaults:
+  run:
+    working-directory: 'Services/MongoDatabase'
