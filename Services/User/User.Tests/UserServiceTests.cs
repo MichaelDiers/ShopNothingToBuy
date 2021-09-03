@@ -2,6 +2,7 @@
 {
 	using System;
 	using Service.Sdk.Contracts;
+	using User.Contracts;
 	using User.Services;
 	using User.Services.Models;
 	using User.Tests.Mocks;
@@ -12,7 +13,8 @@
 		[Fact]
 		public async void Clear_ShouldSucceed()
 		{
-			var result = await new UserService(new LoggerMock()).Clear();
+			var service = InitUserService();
+			var result = await service.Clear();
 			Assert.Equal(ClearResult.Cleared, result);
 		}
 
@@ -20,7 +22,8 @@
 		public async void Create_ShouldSucceed()
 		{
 			var createUser = new CreateUserEntry();
-			var result = await new UserService(new LoggerMock()).Create(createUser);
+			var service = InitUserService();
+			var result = await service.Create(createUser);
 			Assert.Equal(CreateResult.Created, result.Result);
 			Assert.NotNull(result.Entry);
 			Assert.True(
@@ -33,7 +36,8 @@
 		public async void Delete_ShouldSucceed()
 		{
 			var id = Guid.NewGuid().ToString();
-			var result = await new UserService(new LoggerMock()).Delete(id);
+			var service = InitUserService();
+			var result = await service.Delete(id);
 			Assert.Equal(DeleteResult.Deleted, result.Result);
 			Assert.NotNull(result.Entry);
 			Assert.Equal(id, result.Entry.Id);
@@ -43,14 +47,16 @@
 		public async void Exists_ShouldSucceed()
 		{
 			var id = Guid.NewGuid().ToString();
-			var result = await new UserService(new LoggerMock()).Exists(id);
+			var service = InitUserService();
+			var result = await service.Exists(id);
 			Assert.Equal(ExistsResult.Exists, result);
 		}
 
 		[Fact]
 		public async void List_ShouldSucceed()
 		{
-			var result = await new UserService(new LoggerMock()).List();
+			var service = InitUserService();
+			var result = await service.List();
 			Assert.Equal(ListResult.Completed, result.Result);
 			Assert.NotNull(result.Entries);
 			Assert.Empty(result.Entries);
@@ -60,7 +66,8 @@
 		public async void Read_ShouldSucceed()
 		{
 			var id = Guid.NewGuid().ToString();
-			var result = await new UserService(new LoggerMock()).Read(id);
+			var service = InitUserService();
+			var result = await service.Read(id);
 			Assert.Equal(ReadResult.Read, result.Result);
 			Assert.NotNull(result.Entry);
 			Assert.Equal(id, result.Entry.Id);
@@ -75,7 +82,8 @@
 				Id = id
 			};
 
-			var result = await new UserService(new LoggerMock()).Update(updateEntry);
+			var service = InitUserService();
+			var result = await service.Update(updateEntry);
 			Assert.Equal(UpdateResult.Updated, result.Result);
 			Assert.NotNull(result.Entry);
 			Assert.Equal(id, result.Entry.Id);
@@ -84,7 +92,7 @@
 		[Fact]
 		public async void WorkflowTest()
 		{
-			var service = new UserService(new LoggerMock());
+			var service = InitUserService();
 
 			var createUser = new CreateUserEntry();
 			var createResult = await service.Create(createUser);
@@ -101,6 +109,11 @@
 			var deleteResult = await service.Delete(createResult.Entry.Id);
 			Assert.Equal(DeleteResult.Deleted, deleteResult.Result);
 			Assert.Equal(createResult.Entry.Id, deleteResult.Entry.Id);
+		}
+
+		private static IUserService InitUserService()
+		{
+			return new UserService(new LoggerMock(), new UserServiceValidator(), new DatabaseServiceMock());
 		}
 	}
 }

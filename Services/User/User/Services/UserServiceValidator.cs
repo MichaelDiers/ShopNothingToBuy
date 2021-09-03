@@ -8,7 +8,7 @@
 	/// <summary>
 	///   Validator for the input data of the <see cref="UserService" />.
 	/// </summary>
-	public class UserValidator : IEntryValidator<CreateUserEntry, UpdateUserEntry, string>
+	public class UserServiceValidator : IEntryValidator<CreateUserEntry, UpdateUserEntry, string>
 	{
 		/// <summary>
 		///   Validates input data for create operations.

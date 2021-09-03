@@ -4,18 +4,18 @@
 	using User.Services.Models;
 	using Xunit;
 
-	public class UserValidatorTests
+	public class UserServiceValidatorTests
 	{
 		[Fact]
 		public async void ValidateCreateEntry_ShouldReturnFalseIfUserIsNull()
 		{
-			Assert.False(await new UserValidator().ValidateCreateEntry(null));
+			Assert.False(await new UserServiceValidator().ValidateCreateEntry(null));
 		}
 
 		[Fact]
 		public async void ValidateCreateEntry_ShouldSucceed()
 		{
-			Assert.True(await new UserValidator().ValidateCreateEntry(new CreateUserEntry()));
+			Assert.True(await new UserServiceValidator().ValidateCreateEntry(new CreateUserEntry()));
 		}
 
 		[Theory]
@@ -26,7 +26,7 @@
 		[InlineData("549f40dd-65a2-4015-9e91-86a374c7a14c", true)]
 		public async void ValidateEntryId_ShouldAcceptOnlyAGuid(string userId, bool expectedResult)
 		{
-			var validator = new UserValidator();
+			var validator = new UserServiceValidator();
 			Assert.Equal(await validator.ValidateEntryId(userId), expectedResult);
 		}
 
@@ -38,7 +38,7 @@
 		[InlineData("549f40dd-65a2-4015-9e91-86a374c7a14c", true)]
 		public async void ValidateUpdateEntry(string userId, bool expectedResult)
 		{
-			var validator = new UserValidator();
+			var validator = new UserServiceValidator();
 			var entry = new UpdateUserEntry
 			{
 				Id = userId
@@ -50,7 +50,7 @@
 		[Fact]
 		public async void ValidateUpdateEntry_ShouldIfUpdateUserIsNull()
 		{
-			Assert.False(await new UserValidator().ValidateUpdateEntry(null));
+			Assert.False(await new UserServiceValidator().ValidateUpdateEntry(null));
 		}
 	}
 }
