@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-	  <PackageId>MongoDbService</PackageId>
+	  <PackageId>MongoDatabase</PackageId>
 	  <IsPackable>True</IsPackable>
 	  <OutputType>Library</OutputType>
 	  <Authors>MichaelDiers</Authors>
