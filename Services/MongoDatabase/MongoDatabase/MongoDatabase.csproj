@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+	  <PackageId>MongoDbService</PackageId>
+	  <IsPackable>True</IsPackable>
+	  <OutputType>Library</OutputType>
+	  <Authors>MichaelDiers</Authors>
+	  <PackageDescription>Generic MongoDb Service implementation.</PackageDescription>
+	  <RepositoryUrl>https://github.com/MichaelDiers/ShopNothingToBuy</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
