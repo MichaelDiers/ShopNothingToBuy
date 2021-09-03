@@ -23,11 +23,11 @@ jobs:
           dotnet-version: 3.1.x
       - name: copy and edit nuget config to MongoDatabase
         run: |
-          mv ../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER/nuget.config
+          cp ../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER/nuget.config
           echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" $CSPROJ_FOLDER/nuget.config) >$CSPROJ_FOLDER/nuget.config
       - name: copy and edit nuget config to MongoDatabase.Tests
         run: |
-          mv ../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER.Tests/nuget.config
+          cp ../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER.Tests/nuget.config
           echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" $CSPROJ_FOLDER.Tests/nuget.config) >$CSPROJ_FOLDER.Tests/nuget.config
       - name: build
         run: dotnet build --configuration "$CONFIG"
