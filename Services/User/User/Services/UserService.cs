@@ -1,6 +1,5 @@
 ﻿namespace User.Services
 {
-	using System;
 	using System.Threading.Tasks;
 	using MongoDatabase.Contracts;
 	using MongoDatabase.Services;
@@ -54,7 +53,7 @@
 		/// </returns>
 		protected override async Task<IOperationResult<UserEntry, string, CreateResult>> CreateEntry(CreateUserEntry entry)
 		{
-			var userEntry = new UserEntry(Guid.NewGuid().ToString());
+			var userEntry = new UserEntry(entry);
 			return await this.DatabaseService.Create(userEntry);
 		}
 
@@ -68,7 +67,7 @@
 		/// </returns>
 		protected override async Task<IOperationResult<UserEntry, string, UpdateResult>> UpdateEntry(UpdateUserEntry entry)
 		{
-			var userEntry = new UserEntry(entry.Id);
+			var userEntry = new UserEntry(entry);
 			return await this.DatabaseService.Update(userEntry);
 		}
 	}

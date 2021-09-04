@@ -17,7 +17,7 @@
 		/// <returns>A <see cref="Task" /> whose result is true if the data is valid and false otherwise.</returns>
 		public Task<bool> ValidateCreateEntry(CreateUserEntry entry)
 		{
-			return Task.FromResult(entry != null);
+			return Task.FromResult(entry != null && !string.IsNullOrWhiteSpace(entry.Name));
 		}
 
 		/// <summary>
@@ -40,7 +40,7 @@
 		/// <returns>A <see cref="Task" /> whose result is true if the data is valid and false otherwise.</returns>
 		public async Task<bool> ValidateUpdateEntry(UpdateUserEntry entry)
 		{
-			var result = entry != null && await this.ValidateEntryId(entry.Id);
+			var result = entry != null && await this.ValidateEntryId(entry.Id) && !string.IsNullOrWhiteSpace(entry.Name);
 			return result;
 		}
 	}

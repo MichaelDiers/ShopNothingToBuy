@@ -21,7 +21,12 @@
 
 		public Task<IOperationResult<UserEntry, string, DeleteResult>> Delete(string entryId)
 		{
-			var result = new OperationResult<UserEntry, string, DeleteResult>(DeleteResult.Deleted, new UserEntry(entryId));
+			var result = new OperationResult<UserEntry, string, DeleteResult>(
+				DeleteResult.Deleted,
+				new UserEntry
+				{
+					Id = entryId
+				});
 			return Task.FromResult<IOperationResult<UserEntry, string, DeleteResult>>(result);
 		}
 
@@ -38,7 +43,12 @@
 
 		public Task<IOperationResult<UserEntry, string, ReadResult>> Read(string entryId)
 		{
-			var result = new OperationResult<UserEntry, string, ReadResult>(ReadResult.Read, new UserEntry(entryId));
+			var result = new OperationResult<UserEntry, string, ReadResult>(
+				ReadResult.Read,
+				new UserEntry
+				{
+					Id = entryId
+				});
 			return Task.FromResult<IOperationResult<UserEntry, string, ReadResult>>(result);
 		}
 

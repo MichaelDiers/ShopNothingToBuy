@@ -21,7 +21,11 @@
 		[Fact]
 		public async void Create_ShouldSucceed()
 		{
-			var createUser = new CreateUserEntry();
+			var createUser = new CreateUserEntry
+			{
+				Name = Guid.NewGuid().ToString()
+			};
+
 			var service = InitUserService();
 			var result = await service.Create(createUser);
 			Assert.Equal(CreateResult.Created, result.Result);
@@ -79,7 +83,8 @@
 			var id = Guid.NewGuid().ToString();
 			var updateEntry = new UpdateUserEntry
 			{
-				Id = id
+				Id = id,
+				Name = "name"
 			};
 
 			var service = InitUserService();
@@ -94,13 +99,17 @@
 		{
 			var service = InitUserService();
 
-			var createUser = new CreateUserEntry();
+			var createUser = new CreateUserEntry
+			{
+				Name = "Name"
+			};
 			var createResult = await service.Create(createUser);
 			Assert.Equal(CreateResult.Created, createResult.Result);
 
 			var updateUser = new UpdateUserEntry
 			{
-				Id = createResult.Entry.Id
+				Id = createResult.Entry.Id,
+				Name = createResult.Entry.Name + "2"
 			};
 			var updateResult = await service.Update(updateUser);
 			Assert.Equal(UpdateResult.Updated, updateResult.Result);
