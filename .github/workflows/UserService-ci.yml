@@ -22,11 +22,11 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.x
-      - name: copy and edit nuget config to $CSPROJ_FOLDER
+      - name: copy and edit nuget config to project folder
         run: |
           cp ../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER/nuget.config
           echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" $CSPROJ_FOLDER/nuget.config) >$CSPROJ_FOLDER/nuget.config
-      - name: copy and edit nuget config to $CSPROJ_FOLDER.Tests
+      - name: copy and edit nuget config to test project folder
         run: |
           cp ../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER.Tests/nuget.config
           echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" $CSPROJ_FOLDER.Tests/nuget.config) >$CSPROJ_FOLDER.Tests/nuget.config
