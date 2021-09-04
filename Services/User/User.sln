@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B1B145DF-B1CE-4E5B-8136-72C6C59D13FF}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		..\..\.github\workflows\UserService-ci.yml = ..\..\.github\workflows\UserService-ci.yml
 	EndProjectSection
 EndProject
 Global
