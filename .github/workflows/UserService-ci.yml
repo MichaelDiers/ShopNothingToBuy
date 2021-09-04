@@ -7,7 +7,7 @@ on:
       - 'Services/User/**'
   workflow_dispatch:
 jobs:
-  MongoDatabaseNuget:
+  UserServiceNuget:
     runs-on: ubuntu-latest
     env:
       CONFIG: Release
