@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\" />
-    <Folder Include="Services\" />
+    <PackageReference Include="MongoDatabase" Version="1.1.10" />
+    <PackageReference Include="Service.Sdk" Version="1.1.11" />
   </ItemGroup>
 
 </Project>
