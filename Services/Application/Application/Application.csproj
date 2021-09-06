@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+	  <PackageId>ApplicationService</PackageId>
+	  <IsPackable>True</IsPackable>
+	  <OutputType>Library</OutputType>
+	  <Authors>MichaelDiers</Authors>
+	  <PackageDescription>Service for creating, reading, updating and deleting application.</PackageDescription>
+	  <RepositoryUrl>https://github.com/MichaelDiers/ShopNothingToBuy</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
