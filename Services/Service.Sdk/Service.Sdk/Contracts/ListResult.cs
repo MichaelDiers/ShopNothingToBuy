@@ -19,6 +19,11 @@
 		/// <summary>
 		///   An unexpected error occurred.
 		/// </summary>
-		InternalError = 2
+		InternalError = 2,
+
+		/// <summary>
+		///   The operation is not allowed.
+		/// </summary>
+		Unauthorized = 3
 	}
 }
