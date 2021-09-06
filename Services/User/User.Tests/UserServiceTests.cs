@@ -122,7 +122,11 @@
 
 		private static IUserService InitUserService()
 		{
-			return new UserService(new LoggerMock(), new UserServiceValidator(), new DatabaseServiceMock());
+			return new UserService(
+				new LoggerMock(),
+				new UserServiceValidator(),
+				new DatabaseServiceMock(),
+				new ApplicationServiceMock());
 		}
 	}
 }

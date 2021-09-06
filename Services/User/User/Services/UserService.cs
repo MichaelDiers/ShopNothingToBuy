@@ -1,6 +1,8 @@
 ﻿namespace User.Services
 {
+	using System;
 	using System.Threading.Tasks;
+	using Application.Contracts;
 	using MongoDatabase.Contracts;
 	using MongoDatabase.Services;
 	using Service.Sdk.Contracts;
@@ -14,18 +16,28 @@
 	public class UserService : ServiceDatabaseBase<UserEntry, string, CreateUserEntry, UpdateUserEntry>, IUserService
 	{
 		/// <summary>
+		///   Access to the application service.
+		/// </summary>
+		private readonly IApplicationService applicationService;
+
+		/// <summary>
 		///   Creates a new instance of <see cref="UserService" /> using a MongoDb connection.
 		/// </summary>
 		/// <param name="logger">The logger for error messages.</param>
 		/// <param name="mongoDbConfiguration">The configuration of the used MongoDb.</param>
-		public UserService(ILogger logger, IMongoDbConfiguration mongoDbConfiguration)
+		/// <param name="applicationService">Service for accessing the known applications.</param>
+		public UserService(
+			ILogger logger,
+			IMongoDbConfiguration mongoDbConfiguration,
+			IApplicationService applicationService)
 			: this(
 				logger,
 				new UserServiceValidator(),
 				new MongoDbService<UserEntry, string>(
 					logger,
 					new DefaultValidator<UserEntry, UserEntry, string>(),
-					mongoDbConfiguration))
+					mongoDbConfiguration),
+				applicationService)
 		{
 		}
 
@@ -35,12 +47,15 @@
 		/// <param name="logger">The logger for error messages.</param>
 		/// <param name="validator">The validator used for input data.</param>
 		/// <param name="databaseService">Access to the user database.</param>
+		/// <param name="applicationService">Service for accessing the known applications.</param>
 		public UserService(
 			ILogger logger,
 			IEntryValidator<CreateUserEntry, UpdateUserEntry, string> validator,
-			IDatabaseService<UserEntry, string> databaseService)
+			IDatabaseService<UserEntry, string> databaseService,
+			IApplicationService applicationService)
 			: base(logger, validator, databaseService)
 		{
+			this.applicationService = applicationService ?? throw new ArgumentNullException(nameof(applicationService));
 		}
 
 		/// <summary>

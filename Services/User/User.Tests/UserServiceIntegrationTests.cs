@@ -189,7 +189,7 @@
 				.Build();
 
 			var mongoDbConfiguration = config.GetSection("MongoDb").Get<MongoDbConfiguration>();
-			userService = new UserService(new LoggerMock(), mongoDbConfiguration);
+			userService = new UserService(new LoggerMock(), mongoDbConfiguration, new ApplicationServiceMock());
 
 			return userService;
 		}
