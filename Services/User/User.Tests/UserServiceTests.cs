@@ -23,6 +23,7 @@
 		{
 			var createUser = new CreateUserEntry
 			{
+				ApplicationId = Guid.NewGuid().ToString(),
 				Name = Guid.NewGuid().ToString()
 			};
 
@@ -84,6 +85,7 @@
 			var updateEntry = new UpdateUserEntry
 			{
 				Id = id,
+				ApplicationId = Guid.NewGuid().ToString(),
 				Name = "name"
 			};
 
@@ -101,6 +103,7 @@
 
 			var createUser = new CreateUserEntry
 			{
+				ApplicationId = Guid.NewGuid().ToString(),
 				Name = "Name"
 			};
 			var createResult = await service.Create(createUser);
@@ -109,6 +112,7 @@
 			var updateUser = new UpdateUserEntry
 			{
 				Id = createResult.Entry.Id,
+				ApplicationId = createResult.Entry.ApplicationId,
 				Name = createResult.Entry.Name + "2"
 			};
 			var updateResult = await service.Update(updateUser);

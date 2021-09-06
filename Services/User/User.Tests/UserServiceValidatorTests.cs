@@ -20,6 +20,7 @@
 				await new UserServiceValidator().ValidateCreateEntry(
 					new CreateUserEntry
 					{
+						ApplicationId = Guid.NewGuid().ToString(),
 						Name = Guid.NewGuid().ToString()
 					}));
 		}
@@ -37,19 +38,67 @@
 		}
 
 		[Theory]
-		[InlineData(null, "name", false)]
-		[InlineData("44de1638-3e90-4093-8e20-64d09572cbec", null, false)]
-		[InlineData("", "name", false)]
-		[InlineData("44de1638-3e90-4093-8e20-64d09572cbec", "", false)]
-		[InlineData("invalid", "name", false)]
-		[InlineData("44de1638-3e90-4093-8e20-64d09572cbec", "name", true)]
-		[InlineData("549f40dd-65a2-4015-9e91-86a374c7a14c", "name", true)]
-		public async void ValidateUpdateEntry(string userId, string name, bool expectedResult)
+		[InlineData(
+			null,
+			"44de1638-3e90-4093-8e20-64d09572cbec",
+			"name",
+			false)]
+		[InlineData(
+			"44de1638-3e90-4093-8e20-64d09572cbec",
+			"44de1638-3e90-4093-8e20-64d09572cbec",
+			null,
+			false)]
+		[InlineData(
+			"",
+			"44de1638-3e90-4093-8e20-64d09572cbec",
+			"name",
+			false)]
+		[InlineData(
+			"44de1638-3e90-4093-8e20-64d09572cbec",
+			"44de1638-3e90-4093-8e20-64d09572cbec",
+			"",
+			false)]
+		[InlineData(
+			"invalid",
+			"44de1638-3e90-4093-8e20-64d09572cbec",
+			"name",
+			false)]
+		[InlineData(
+			"44de1638-3e90-4093-8e20-64d09572cbec",
+			"44de1638-3e90-4093-8e20-64d09572cbec",
+			"name",
+			true)]
+		[InlineData(
+			"549f40dd-65a2-4015-9e91-86a374c7a14c",
+			"44de1638-3e90-4093-8e20-64d09572cbec",
+			"name",
+			true)]
+		[InlineData(
+			"549f40dd-65a2-4015-9e91-86a374c7a14c",
+			null,
+			"name",
+			false)]
+		[InlineData(
+			"549f40dd-65a2-4015-9e91-86a374c7a14c",
+			"",
+			"name",
+			false)]
+		[InlineData(
+			"549f40dd-65a2-4015-9e91-86a374c7a14c",
+			"invalid",
+			"name",
+			false)]
+		public async void ValidateUpdateEntry(
+			string userId,
+			string applicationId,
+			string name,
+			bool expectedResult)
 		{
 			var validator = new UserServiceValidator();
 			var entry = new UpdateUserEntry
 			{
 				Id = userId,
+				ApplicationId = applicationId,
 				Name = name
 			};
 

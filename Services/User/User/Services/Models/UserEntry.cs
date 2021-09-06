@@ -22,6 +22,7 @@
 		public UserEntry(CreateUserEntry createUserEntry)
 		{
 			this.Id = Guid.NewGuid().ToString();
+			this.ApplicationId = createUserEntry.ApplicationId;
 			this.Name = createUserEntry.Name;
 		}
 
@@ -32,6 +33,7 @@
 		public UserEntry(UpdateUserEntry updateUserEntry)
 		{
 			this.Id = updateUserEntry.Id;
+			this.ApplicationId = updateUserEntry.ApplicationId;
 			this.Name = updateUserEntry.Name;
 		}
 

@@ -15,9 +15,9 @@
 		/// </summary>
 		/// <param name="entry">The input data.</param>
 		/// <returns>A <see cref="Task" /> whose result is true if the data is valid and false otherwise.</returns>
-		public Task<bool> ValidateCreateEntry(CreateUserEntry entry)
+		public async Task<bool> ValidateCreateEntry(CreateUserEntry entry)
 		{
-			return Task.FromResult(entry != null && !string.IsNullOrWhiteSpace(entry.Name));
+			return entry != null && await this.ValidateEntry(entry);
 		}
 
 		/// <summary>
@@ -40,8 +40,18 @@
 		/// <returns>A <see cref="Task" /> whose result is true if the data is valid and false otherwise.</returns>
 		public async Task<bool> ValidateUpdateEntry(UpdateUserEntry entry)
 		{
-			var result = entry != null && await this.ValidateEntryId(entry.Id) && !string.IsNullOrWhiteSpace(entry.Name);
+			var result = entry != null && await this.ValidateEntryId(entry.Id) && await this.ValidateEntry(entry);
 			return result;
+		}
+
+		/// <summary>
+		///   Validate the data of the <see cref="BaseUser" />.
+		/// </summary>
+		/// <param name="baseUser">The user to be validated.</param>
+		/// <returns>A <see cref="Task" /> whose result is a bool.</returns>
+		private async Task<bool> ValidateEntry(BaseUser baseUser)
+		{
+			return await this.ValidateEntryId(baseUser.ApplicationId) && !string.IsNullOrWhiteSpace(baseUser.Name);
 		}
 	}
 }
