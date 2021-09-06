@@ -2,7 +2,6 @@
 {
 	using System.Threading.Tasks;
 	using Application.Contracts;
-	using Application.Services.Models;
 	using MongoDatabase.Contracts;
 	using MongoDatabase.Services;
 	using Service.Sdk.Contracts;

@@ -1,4 +1,4 @@
-﻿namespace Application.Services.Models
+﻿namespace Application.Contracts
 {
 	using Service.Sdk.Contracts;
 

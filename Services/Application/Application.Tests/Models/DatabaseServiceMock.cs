@@ -2,7 +2,7 @@
 {
 	using System.Linq;
 	using System.Threading.Tasks;
-	using Application.Services.Models;
+	using Application.Contracts;
 	using Service.Sdk.Contracts;
 	using Service.Sdk.Services;
 

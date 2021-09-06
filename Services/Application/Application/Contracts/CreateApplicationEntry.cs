@@ -1,4 +1,4 @@
-﻿namespace Application.Services.Models
+﻿namespace Application.Contracts
 {
 	/// <summary>
 	///   Describes the data for creating an application.

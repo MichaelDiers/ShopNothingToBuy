@@ -1,6 +1,5 @@
 ﻿namespace Application.Contracts
 {
-	using Application.Services.Models;
 	using Service.Sdk.Contracts;
 
 	/// <summary>

@@ -3,7 +3,6 @@
 	using System;
 	using Application.Contracts;
 	using Application.Services;
-	using Application.Services.Models;
 	using Application.Tests.Models;
 	using Service.Sdk.Contracts;
 	using Xunit;

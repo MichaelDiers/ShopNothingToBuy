@@ -2,7 +2,6 @@
 {
 	using Application.Contracts;
 	using Application.Services;
-	using Application.Services.Models;
 	using Application.Tests.Models;
 	using Microsoft.Extensions.Configuration;
 	using MongoDatabase.Models;
