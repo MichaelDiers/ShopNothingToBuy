@@ -10,4 +10,8 @@
 		<RepositoryUrl>https://github.com/MichaelDiers/ShopNothingToBuy</RepositoryUrl>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
 </Project>

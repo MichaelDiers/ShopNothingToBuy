@@ -21,7 +21,7 @@
 		protected override Task<IOperationResult<StringEntry, string, CreateResult>> CreateEntry(CreateEntry entry)
 		{
 			var result = new OperationResult<StringEntry, string, CreateResult>(CreateResult.Created, new StringEntry(entry));
-			return Task.FromResult(result as IOperationResult<StringEntry, string, CreateResult>);
+			return Task.FromResult<IOperationResult<StringEntry, string, CreateResult>>(result);
 		}
 
 		protected override Task<IOperationResult<StringEntry, string, DeleteResult>> DeleteEntry(string entryId)
@@ -29,7 +29,7 @@
 			var result = new OperationResult<StringEntry, string, DeleteResult>(
 				DeleteResult.Deleted,
 				new StringEntry(entryId, Guid.NewGuid().ToString()));
-			return Task.FromResult(result as IOperationResult<StringEntry, string, DeleteResult>);
+			return Task.FromResult<IOperationResult<StringEntry, string, DeleteResult>>(result);
 		}
 
 		protected override Task<ExistsResult> ExistsEntry(string entryId)
@@ -46,7 +46,7 @@
 					Guid.NewGuid().ToString(),
 					Guid.NewGuid().ToString()
 				});
-			return Task.FromResult(result as IOperationListResult<string, ListResult>);
+			return Task.FromResult<IOperationListResult<string, ListResult>>(result);
 		}
 
 		protected override Task<IOperationResult<StringEntry, string, ReadResult>> ReadEntry(string entryId)
@@ -54,13 +54,13 @@
 			var result = new OperationResult<StringEntry, string, ReadResult>(
 				ReadResult.Read,
 				new StringEntry(entryId, Guid.NewGuid().ToString()));
-			return Task.FromResult(result as IOperationResult<StringEntry, string, ReadResult>);
+			return Task.FromResult<IOperationResult<StringEntry, string, ReadResult>>(result);
 		}
 
 		protected override Task<IOperationResult<StringEntry, string, UpdateResult>> UpdateEntry(UpdateEntry entry)
 		{
 			var result = new OperationResult<StringEntry, string, UpdateResult>(UpdateResult.Updated, new StringEntry(entry));
-			return Task.FromResult(result as IOperationResult<StringEntry, string, UpdateResult>);
+			return Task.FromResult<IOperationResult<StringEntry, string, UpdateResult>>(result);
 		}
 	}
 }
