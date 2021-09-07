@@ -89,7 +89,7 @@
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
 		///   that contains the <see cref="DeleteResult" />.
 		/// </returns>
-		public async Task<IOperationResult<TEntry, TEntryId, DeleteResult>> Delete(TEntryId entryId)
+		public virtual async Task<IOperationResult<TEntry, TEntryId, DeleteResult>> Delete(TEntryId entryId)
 		{
 			try
 			{
@@ -114,7 +114,7 @@
 		/// <returns>
 		///   A <see cref="Task" /> whose result is a <see cref="ExistsResult" />.
 		/// </returns>
-		public async Task<ExistsResult> Exists(TEntryId entryId)
+		public virtual async Task<ExistsResult> Exists(TEntryId entryId)
 		{
 			try
 			{
@@ -160,7 +160,7 @@
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
 		///   that contains the <see cref="ReadResult" />.
 		/// </returns>
-		public async Task<IOperationResult<TEntry, TEntryId, ReadResult>> Read(TEntryId entryId)
+		public virtual async Task<IOperationResult<TEntry, TEntryId, ReadResult>> Read(TEntryId entryId)
 		{
 			try
 			{
