@@ -1,5 +1,6 @@
 ﻿namespace User.Tests
 {
+	using System;
 	using Microsoft.Extensions.Configuration;
 	using MongoDatabase.Models;
 	using Service.Sdk.Contracts;
@@ -11,7 +12,10 @@
 
 	public class UserServiceIntegrationTests
 	{
+		private const string Name = nameof(Name);
 		private const bool Skip = true;
+
+		private static readonly string ApplicationId = Guid.NewGuid().ToString();
 
 		private static IUserService userService;
 
@@ -39,16 +43,12 @@
 				return;
 			}
 
-			const string name = "my name";
-			var result = await InitUserService().Create(
-				new CreateUserEntry
-				{
-					Name = name
-				});
+			var result = await InitUserService().Create(NewCreateUserEntry());
 			Assert.Equal(CreateResult.Created, result.Result);
 			Assert.NotNull(result.Entry);
 			Assert.NotNull(result.Entry.Id);
-			Assert.Equal(name, result.Entry.Name);
+			Assert.Equal(Name, result.Entry.Name);
+			Assert.Equal(ApplicationId, result.Entry.ApplicationId);
 		}
 
 		[Fact]
@@ -59,12 +59,7 @@
 				return;
 			}
 
-			const string name = "my name delete";
-			var createResult = await InitUserService().Create(
-				new CreateUserEntry
-				{
-					Name = name
-				});
+			var createResult = await InitUserService().Create(NewCreateUserEntry());
 			Assert.Equal(CreateResult.Created, createResult.Result);
 			Assert.NotNull(createResult.Entry);
 			Assert.NotNull(createResult.Entry.Id);
@@ -73,7 +68,8 @@
 
 			Assert.Equal(DeleteResult.Deleted, deleteResult.Result);
 			Assert.Equal(createResult.Entry.Id, deleteResult.Entry.Id);
-			Assert.Equal(name, deleteResult.Entry.Name);
+			Assert.Equal(Name, deleteResult.Entry.Name);
+			Assert.Equal(ApplicationId, deleteResult.Entry.ApplicationId);
 		}
 
 		[Fact]
@@ -84,11 +80,7 @@
 				return;
 			}
 
-			var createResult = await InitUserService().Create(
-				new CreateUserEntry
-				{
-					Name = "name"
-				});
+			var createResult = await InitUserService().Create(NewCreateUserEntry());
 			Assert.Equal(CreateResult.Created, createResult.Result);
 			Assert.NotNull(createResult.Entry);
 			Assert.NotNull(createResult.Entry.Id);
@@ -105,12 +97,7 @@
 				return;
 			}
 
-			const string name = "my name list";
-			var createResult = await InitUserService().Create(
-				new CreateUserEntry
-				{
-					Name = name
-				});
+			var createResult = await InitUserService().Create(NewCreateUserEntry());
 			Assert.Equal(CreateResult.Created, createResult.Result);
 			Assert.NotNull(createResult.Entry);
 			Assert.NotNull(createResult.Entry.Id);
@@ -129,12 +116,7 @@
 				return;
 			}
 
-			const string name = "my name read";
-			var createResult = await InitUserService().Create(
-				new CreateUserEntry
-				{
-					Name = name
-				});
+			var createResult = await InitUserService().Create(NewCreateUserEntry());
 			Assert.Equal(CreateResult.Created, createResult.Result);
 			Assert.NotNull(createResult.Entry);
 			Assert.NotNull(createResult.Entry.Id);
@@ -143,7 +125,8 @@
 
 			Assert.Equal(ReadResult.Read, readResult.Result);
 			Assert.Equal(createResult.Entry.Id, readResult.Entry.Id);
-			Assert.Equal(name, readResult.Entry.Name);
+			Assert.Equal(Name, readResult.Entry.Name);
+			Assert.Equal(ApplicationId, readResult.Entry.ApplicationId);
 		}
 
 		[Fact]
@@ -154,22 +137,18 @@
 				return;
 			}
 
-			const string name = "my name update";
-			var createResult = await InitUserService().Create(
-				new CreateUserEntry
-				{
-					Name = name
-				});
+			var createResult = await InitUserService().Create(NewCreateUserEntry());
 			Assert.Equal(CreateResult.Created, createResult.Result);
 			Assert.NotNull(createResult.Entry);
 			Assert.NotNull(createResult.Entry.Id);
 
-			const string newName = name + "2";
+			const string newName = Name + "2";
 			var updateResult = await InitUserService().Update(
 				new UpdateUserEntry
 				{
 					Id = createResult.Entry.Id,
-					Name = newName
+					Name = newName,
+					ApplicationId = createResult.Entry.ApplicationId
 				});
 
 			Assert.Equal(UpdateResult.Updated, updateResult.Result);
@@ -192,6 +171,15 @@
 			userService = new UserService(new LoggerMock(), mongoDbConfiguration, new ApplicationServiceMock());
 
 			return userService;
+		}
+
+		private static CreateUserEntry NewCreateUserEntry()
+		{
+			return new CreateUserEntry
+			{
+				Name = Name,
+				ApplicationId = ApplicationId
+			};
 		}
 	}
 }
