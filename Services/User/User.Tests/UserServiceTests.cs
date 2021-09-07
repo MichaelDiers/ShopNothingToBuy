@@ -11,15 +11,141 @@
 	public class UserServiceTests
 	{
 		[Fact]
-		public async void Clear_ShouldSucceed()
+		public async void Clear()
 		{
 			var service = InitUserService();
 			var result = await service.Clear();
 			Assert.Equal(ClearResult.Cleared, result);
 		}
 
+		[Theory]
+		[InlineData(null, "applicationId", CreateResult.InvalidData)]
+		[InlineData("", "applicationId", CreateResult.InvalidData)]
+		[InlineData("a", "applicationId", CreateResult.InvalidData)]
+		[InlineData("userId", "applicationId", CreateResult.Created)]
+		public async void Create(string userId, string applicationId, CreateResult expectedResult)
+		{
+			var createUser = new CreateUserEntry
+			{
+				ApplicationId = applicationId,
+				Id = userId
+			};
+
+			var service = InitUserService();
+			var result = await service.Create(createUser);
+			Assert.Equal(expectedResult, result.Result);
+			if (expectedResult == CreateResult.Created)
+			{
+				Assert.NotNull(result.Entry);
+				Assert.Equal(userId.ToUpper(), result.Entry.Id);
+				Assert.Equal(applicationId, result.Entry.ApplicationId);
+			}
+			else
+			{
+				Assert.Null(result.Entry);
+			}
+		}
+
+		[Theory]
+		[InlineData(
+			"DeleteUser",
+			"DELETEUSER",
+			"ApplicationId",
+			DeleteResult.Deleted)]
+		[InlineData(
+			"DeleteUser",
+			"DeleteUser",
+			"ApplicationId",
+			DeleteResult.Deleted)]
+		[InlineData(
+			"DeleteUser",
+			null,
+			"ApplicationId",
+			DeleteResult.InvalidData)]
+		[InlineData(
+			"DeleteUser",
+			"",
+			"ApplicationId",
+			DeleteResult.InvalidData)]
+		[InlineData(
+			"DeleteUser",
+			"zzzzzzzzzz",
+			"ApplicationId",
+			DeleteResult.NotFound)]
+		public async void Delete(
+			string userId,
+			string requestId,
+			string applicationId,
+			DeleteResult expectedDeleteResult)
+		{
+			var createUser = new CreateUserEntry
+			{
+				ApplicationId = applicationId,
+				Id = userId
+			};
+
+			var service = InitUserService();
+			await service.Clear();
+			await service.Create(createUser);
+
+			var deleteResult = await service.Delete(requestId);
+			Assert.Equal(expectedDeleteResult, deleteResult.Result);
+
+			if (expectedDeleteResult == DeleteResult.Deleted)
+			{
+				Assert.NotNull(deleteResult.Entry);
+				Assert.Equal(userId?.ToUpper(), deleteResult.Entry.Id);
+				Assert.Equal(userId, deleteResult.Entry.OriginalId);
+				Assert.Equal(applicationId, deleteResult.Entry.ApplicationId);
+			}
+			else
+			{
+				Assert.Null(deleteResult.Entry);
+			}
+		}
+
+		[Theory]
+		[InlineData(
+			"userId",
+			null,
+			"applicationId",
+			ExistsResult.InvalidData)]
+		[InlineData(
+			"userId",
+			"",
+			"applicationId",
+			ExistsResult.InvalidData)]
+		[InlineData(
+			"userId",
+			"a",
+			"applicationId",
+			ExistsResult.InvalidData)]
+		[InlineData(
+			"userId",
+			"USERID",
+			"applicationId",
+			ExistsResult.Exists)]
+		public async void Exists(
+			string userId,
+			string requestId,
+			string applicationId,
+			ExistsResult expectedResult)
+		{
+			var createUser = new CreateUserEntry
+			{
+				ApplicationId = applicationId,
+				Id = userId
+			};
+
+			var service = InitUserService();
+			var _ = await service.Create(createUser);
+
+			var result = await service.Exists(requestId);
+			Assert.Equal(expectedResult, result);
+		}
+
 		[Fact]
-		public async void Create_ShouldSucceed()
+		public async void List()
 		{
 			var createUser = new CreateUserEntry
 			{
@@ -28,68 +154,157 @@
 			};
 
 			var service = InitUserService();
-			var result = await service.Create(createUser);
-			Assert.Equal(CreateResult.Created, result.Result);
-			Assert.NotNull(result.Entry);
-			Assert.Equal(createUser.ApplicationId, result.Entry.ApplicationId);
-			Assert.Equal(createUser.Id, result.Entry.Id);
-		}
+			var _ = await service.Create(createUser);
 
-		[Fact]
-		public async void Delete_ShouldSucceed()
-		{
-			var id = Guid.NewGuid().ToString()[..20];
-			var service = InitUserService();
-			var result = await service.Delete(id);
-			Assert.Equal(DeleteResult.Deleted, result.Result);
-			Assert.NotNull(result.Entry);
-			Assert.Equal(id, result.Entry.Id);
-		}
-
-		[Fact]
-		public async void Exists_ShouldSucceed()
-		{
-			var id = Guid.NewGuid().ToString()[..20];
-			var service = InitUserService();
-			var result = await service.Exists(id);
-			Assert.Equal(ExistsResult.Exists, result);
-		}
-
-		[Fact]
-		public async void List_ShouldSucceed()
-		{
-			var service = InitUserService();
 			var result = await service.List();
 			Assert.Equal(ListResult.Completed, result.Result);
 			Assert.NotNull(result.Entries);
-			Assert.Empty(result.Entries);
+			Assert.Contains(createUser.Id.ToUpper(), result.Entries);
 		}
 
-		[Fact]
-		public async void Read_ShouldSucceed()
+		[Theory]
+		[InlineData(
+			"userid",
+			null,
+			"applicationId",
+			ReadResult.InvalidData)]
+		[InlineData(
+			"userid",
+			"",
+			"applicationId",
+			ReadResult.InvalidData)]
+		[InlineData(
+			"userid",
+			"u",
+			"applicationId",
+			ReadResult.InvalidData)]
+		[InlineData(
+			"userid",
+			"userid",
+			"applicationId",
+			ReadResult.Read)]
+		[InlineData(
+			"userid",
+			"USERID",
+			"applicationId",
+			ReadResult.Read)]
+		public async void Read(
+			string userId,
+			string requestId,
+			string applicationId,
+			ReadResult expectedResult)
 		{
-			var id = Guid.NewGuid().ToString()[..20];
-			var service = InitUserService();
-			var result = await service.Read(id);
-			Assert.Equal(ReadResult.Read, result.Result);
-			Assert.NotNull(result.Entry);
-			Assert.Equal(id, result.Entry.Id);
-		}
-
-		[Fact]
-		public async void Update_ShouldSucceed()
-		{
-			var updateEntry = new UpdateUserEntry
+			var createUser = new CreateUserEntry
 			{
-				ApplicationId = Guid.NewGuid().ToString(),
-				Id = "name"
+				ApplicationId = applicationId,
+				Id = userId
 			};
 
 			var service = InitUserService();
+			var _ = await service.Create(createUser);
+
+			var result = await service.Read(requestId);
+
+			Assert.Equal(expectedResult, result.Result);
+			if (expectedResult == ReadResult.Read)
+			{
+				Assert.NotNull(result.Entry);
+				Assert.Equal(userId.ToUpper(), result.Entry.Id);
+				Assert.Equal(applicationId, result.Entry.ApplicationId);
+			}
+			else
+			{
+				Assert.Null(result.Entry);
+			}
+		}
+
+		[Theory]
+		[InlineData(
+			"userId",
+			"applicationId",
+			null,
+			"applicationId",
+			"userId",
+			UpdateResult.InvalidData)]
+		[InlineData(
+			"userId",
+			"applicationId",
+			"",
+			"applicationId",
+			"userId",
+			UpdateResult.InvalidData)]
+		[InlineData(
+			"userId",
+			"applicationId",
+			"a",
+			"applicationId",
+			"userId",
+			UpdateResult.InvalidData)]
+		[InlineData(
+			"userId",
+			"applicationId",
+			"USERID",
+			"applicationId",
+			"userId",
+			UpdateResult.Updated)]
+		[InlineData(
+			"userId",
+			"applicationId",
+			"userid",
+			"applicationId",
+			"userId",
+			UpdateResult.Updated)]
+		[InlineData(
+			"userId",
+			"applicationId",
+			"userid",
+			null,
+			"userId",
+			UpdateResult.InvalidData)]
+		[InlineData(
+			"userId",
+			"applicationId",
+			"userid",
+			"",
+			"userId",
+			UpdateResult.InvalidData)]
+		public async void Update(
+			string userId,
+			string applicationId,
+			string updateUserId,
+			string updateApplicationId,
+			string updateOriginalId,
+			UpdateResult expectedResult)
+		{
+			var createUser = new CreateUserEntry
+			{
+				ApplicationId = applicationId,
+				Id = userId
+			};
+
+			var service = InitUserService();
+			var _ = await service.Create(createUser);
+
+			var updateEntry = new UpdateUserEntry
+			{
+				ApplicationId = updateApplicationId,
+				Id = updateUserId,
+				OriginalId = updateOriginalId
+			};
+
 			var result = await service.Update(updateEntry);
-			Assert.Equal(UpdateResult.Updated, result.Result);
-			Assert.NotNull(result.Entry);
-			Assert.Equal(updateEntry.Id, result.Entry.Id);
+			Assert.Equal(expectedResult, result.Result);
+			if (expectedResult == UpdateResult.Updated)
+			{
+				Assert.NotNull(result.Entry);
+				Assert.Equal(userId.ToUpper(), result.Entry.Id);
+				Assert.Equal(updateApplicationId, result.Entry.ApplicationId);
+				Assert.Equal(updateOriginalId, result.Entry.OriginalId);
+			}
+			else
+			{
+				Assert.Null(result.Entry);
+			}
 		}
 
 		[Fact]

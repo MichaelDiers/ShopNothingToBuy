@@ -59,6 +59,44 @@
 		}
 
 		/// <summary>
+		///   Delete an entry by its id.
+		/// </summary>
+		/// <param name="entryId">The id of the entry.</param>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
+		///   that contains the <see cref="DeleteResult" />.
+		/// </returns>
+		public override Task<IOperationResult<UserEntry, string, DeleteResult>> Delete(string entryId)
+		{
+			return base.Delete(entryId?.ToUpper());
+		}
+
+		/// <summary>
+		///   Check if an entry exists.
+		/// </summary>
+		/// <param name="entryId">The id of the entry.</param>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is a <see cref="ExistsResult" />.
+		/// </returns>
+		public override Task<ExistsResult> Exists(string entryId)
+		{
+			return base.Exists(entryId?.ToUpper());
+		}
+
+		/// <summary>
+		///   Read an entry by its id.
+		/// </summary>
+		/// <param name="entryId">The id of the entry.</param>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
+		///   that contains the <see cref="ReadResult" />.
+		/// </returns>
+		public override Task<IOperationResult<UserEntry, string, ReadResult>> Read(string entryId)
+		{
+			return base.Read(entryId?.ToUpper());
+		}
+
+		/// <summary>
 		///   Create a new entry.
 		/// </summary>
 		/// <param name="entry">The entry to be created.</param>
@@ -69,6 +107,11 @@
 		protected override async Task<IOperationResult<UserEntry, string, CreateResult>> CreateEntry(CreateUserEntry entry)
 		{
 			var userEntry = new UserEntry(entry);
+			if (await this.applicationService.Exists(entry.ApplicationId) != ExistsResult.Exists)
+			{
+				return new OperationResult<UserEntry, string, CreateResult>(CreateResult.InvalidData);
+			}
+
 			return await this.DatabaseService.Create(userEntry);
 		}
 
@@ -83,6 +126,11 @@
 		protected override async Task<IOperationResult<UserEntry, string, UpdateResult>> UpdateEntry(UpdateUserEntry entry)
 		{
 			var userEntry = new UserEntry(entry);
+			if (await this.applicationService.Exists(entry.ApplicationId) != ExistsResult.Exists)
+			{
+				return new OperationResult<UserEntry, string, UpdateResult>(UpdateResult.InvalidData);
+			}
+
 			return await this.DatabaseService.Update(userEntry);
 		}
 	}

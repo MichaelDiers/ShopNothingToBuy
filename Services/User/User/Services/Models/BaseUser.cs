@@ -30,7 +30,7 @@
 		public string ApplicationId { get; set; }
 
 		/// <summary>
-		///   Gets or sets the name of the user.
+		///   Gets or sets the user id.
 		/// </summary>
 		public string Id { get; set; }
 	}

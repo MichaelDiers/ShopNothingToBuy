@@ -19,9 +19,9 @@
 		/// </summary>
 		/// <param name="createUserEntry">Data is initialized from the given entry.</param>
 		public UserEntry(CreateUserEntry createUserEntry)
+			: base(createUserEntry?.Id.ToUpper(), createUserEntry?.ApplicationId)
 		{
-			this.Id = createUserEntry.Id;
-			this.ApplicationId = createUserEntry.ApplicationId;
+			this.OriginalId = createUserEntry?.Id;
 		}
 
 		/// <summary>
@@ -29,9 +29,14 @@
 		/// </summary>
 		/// <param name="updateUserEntry">Data is initialized from the given entry.</param>
 		public UserEntry(UpdateUserEntry updateUserEntry)
+			: base(updateUserEntry?.Id?.ToUpper(), updateUserEntry?.ApplicationId)
 		{
-			this.Id = updateUserEntry.Id;
-			this.ApplicationId = updateUserEntry.ApplicationId;
+			this.OriginalId = updateUserEntry?.OriginalId;
 		}
+
+		/// <summary>
+		///   Gets or sets the original requested id at creation time.
+		/// </summary>
+		public string OriginalId { get; set; }
 	}
 }
