@@ -1,6 +1,5 @@
 ﻿namespace User.Services.Models
 {
-	using System;
 	using Service.Sdk.Contracts;
 
 	/// <summary>
@@ -21,9 +20,8 @@
 		/// <param name="createUserEntry">Data is initialized from the given entry.</param>
 		public UserEntry(CreateUserEntry createUserEntry)
 		{
-			this.Id = Guid.NewGuid().ToString();
+			this.Id = createUserEntry.Id;
 			this.ApplicationId = createUserEntry.ApplicationId;
-			this.Name = createUserEntry.Name;
 		}
 
 		/// <summary>
@@ -34,12 +32,6 @@
 		{
 			this.Id = updateUserEntry.Id;
 			this.ApplicationId = updateUserEntry.ApplicationId;
-			this.Name = updateUserEntry.Name;
 		}
-
-		/// <summary>
-		///   Gets or sets the id of the user.
-		/// </summary>
-		public string Id { get; set; }
 	}
 }

@@ -24,23 +24,21 @@
 			var createUser = new CreateUserEntry
 			{
 				ApplicationId = Guid.NewGuid().ToString(),
-				Name = Guid.NewGuid().ToString()
+				Id = Guid.NewGuid().ToString()[..20]
 			};
 
 			var service = InitUserService();
 			var result = await service.Create(createUser);
 			Assert.Equal(CreateResult.Created, result.Result);
 			Assert.NotNull(result.Entry);
-			Assert.True(
-				!string.IsNullOrWhiteSpace(result.Entry.Id)
-				&& Guid.TryParse(result.Entry.Id, out var guid)
-				&& guid != Guid.Empty);
+			Assert.Equal(createUser.ApplicationId, result.Entry.ApplicationId);
+			Assert.Equal(createUser.Id, result.Entry.Id);
 		}
 
 		[Fact]
 		public async void Delete_ShouldSucceed()
 		{
-			var id = Guid.NewGuid().ToString();
+			var id = Guid.NewGuid().ToString()[..20];
 			var service = InitUserService();
 			var result = await service.Delete(id);
 			Assert.Equal(DeleteResult.Deleted, result.Result);
@@ -51,7 +49,7 @@
 		[Fact]
 		public async void Exists_ShouldSucceed()
 		{
-			var id = Guid.NewGuid().ToString();
+			var id = Guid.NewGuid().ToString()[..20];
 			var service = InitUserService();
 			var result = await service.Exists(id);
 			Assert.Equal(ExistsResult.Exists, result);
@@ -70,7 +68,7 @@
 		[Fact]
 		public async void Read_ShouldSucceed()
 		{
-			var id = Guid.NewGuid().ToString();
+			var id = Guid.NewGuid().ToString()[..20];
 			var service = InitUserService();
 			var result = await service.Read(id);
 			Assert.Equal(ReadResult.Read, result.Result);
@@ -81,19 +79,17 @@
 		[Fact]
 		public async void Update_ShouldSucceed()
 		{
-			var id = Guid.NewGuid().ToString();
 			var updateEntry = new UpdateUserEntry
 			{
-				Id = id,
 				ApplicationId = Guid.NewGuid().ToString(),
-				Name = "name"
+				Id = "name"
 			};
 
 			var service = InitUserService();
 			var result = await service.Update(updateEntry);
 			Assert.Equal(UpdateResult.Updated, result.Result);
 			Assert.NotNull(result.Entry);
-			Assert.Equal(id, result.Entry.Id);
+			Assert.Equal(updateEntry.Id, result.Entry.Id);
 		}
 
 		[Fact]
@@ -104,7 +100,7 @@
 			var createUser = new CreateUserEntry
 			{
 				ApplicationId = Guid.NewGuid().ToString(),
-				Name = "Name"
+				Id = "Name"
 			};
 			var createResult = await service.Create(createUser);
 			Assert.Equal(CreateResult.Created, createResult.Result);
@@ -112,8 +108,7 @@
 			var updateUser = new UpdateUserEntry
 			{
 				Id = createResult.Entry.Id,
-				ApplicationId = createResult.Entry.ApplicationId,
-				Name = createResult.Entry.Name + "2"
+				ApplicationId = createResult.Entry.ApplicationId + "Z"
 			};
 			var updateResult = await service.Update(updateUser);
 			Assert.Equal(UpdateResult.Updated, updateResult.Result);

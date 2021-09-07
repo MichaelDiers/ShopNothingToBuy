@@ -7,9 +7,5 @@
 	/// </summary>
 	public class UpdateUserEntry : BaseUser, IEntry<string>
 	{
-		/// <summary>
-		///   Gets or sets the id of the user.
-		/// </summary>
-		public string Id { get; set; }
 	}
 }

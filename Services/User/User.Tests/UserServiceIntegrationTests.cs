@@ -12,7 +12,6 @@
 
 	public class UserServiceIntegrationTests
 	{
-		private const string Name = nameof(Name);
 		private const bool Skip = true;
 
 		private static readonly string ApplicationId = Guid.NewGuid().ToString();
@@ -43,12 +42,13 @@
 				return;
 			}
 
-			var result = await InitUserService().Create(NewCreateUserEntry());
+			var createEntry = NewCreateUserEntry();
+			var result = await InitUserService().Create(createEntry);
 			Assert.Equal(CreateResult.Created, result.Result);
 			Assert.NotNull(result.Entry);
 			Assert.NotNull(result.Entry.Id);
-			Assert.Equal(Name, result.Entry.Name);
-			Assert.Equal(ApplicationId, result.Entry.ApplicationId);
+			Assert.Equal(createEntry.ApplicationId, result.Entry.ApplicationId);
+			Assert.Equal(createEntry.Id, result.Entry.Id);
 		}
 
 		[Fact]
@@ -59,7 +59,8 @@
 				return;
 			}
 
-			var createResult = await InitUserService().Create(NewCreateUserEntry());
+			var createEntry = NewCreateUserEntry();
+			var createResult = await InitUserService().Create(createEntry);
 			Assert.Equal(CreateResult.Created, createResult.Result);
 			Assert.NotNull(createResult.Entry);
 			Assert.NotNull(createResult.Entry.Id);
@@ -67,9 +68,8 @@
 			var deleteResult = await InitUserService().Delete(createResult.Entry.Id);
 
 			Assert.Equal(DeleteResult.Deleted, deleteResult.Result);
-			Assert.Equal(createResult.Entry.Id, deleteResult.Entry.Id);
-			Assert.Equal(Name, deleteResult.Entry.Name);
-			Assert.Equal(ApplicationId, deleteResult.Entry.ApplicationId);
+			Assert.Equal(createEntry.Id, deleteResult.Entry.Id);
+			Assert.Equal(createEntry.ApplicationId, deleteResult.Entry.ApplicationId);
 		}
 
 		[Fact]
@@ -80,7 +80,8 @@
 				return;
 			}
 
-			var createResult = await InitUserService().Create(NewCreateUserEntry());
+			var createEntry = NewCreateUserEntry();
+			var createResult = await InitUserService().Create(createEntry);
 			Assert.Equal(CreateResult.Created, createResult.Result);
 			Assert.NotNull(createResult.Entry);
 			Assert.NotNull(createResult.Entry.Id);
@@ -97,7 +98,8 @@
 				return;
 			}
 
-			var createResult = await InitUserService().Create(NewCreateUserEntry());
+			var createEntry = NewCreateUserEntry();
+			var createResult = await InitUserService().Create(createEntry);
 			Assert.Equal(CreateResult.Created, createResult.Result);
 			Assert.NotNull(createResult.Entry);
 			Assert.NotNull(createResult.Entry.Id);
@@ -116,7 +118,8 @@
 				return;
 			}
 
-			var createResult = await InitUserService().Create(NewCreateUserEntry());
+			var createEntry = NewCreateUserEntry();
+			var createResult = await InitUserService().Create(createEntry);
 			Assert.Equal(CreateResult.Created, createResult.Result);
 			Assert.NotNull(createResult.Entry);
 			Assert.NotNull(createResult.Entry.Id);
@@ -124,9 +127,8 @@
 			var readResult = await InitUserService().Read(createResult.Entry.Id);
 
 			Assert.Equal(ReadResult.Read, readResult.Result);
-			Assert.Equal(createResult.Entry.Id, readResult.Entry.Id);
-			Assert.Equal(Name, readResult.Entry.Name);
-			Assert.Equal(ApplicationId, readResult.Entry.ApplicationId);
+			Assert.Equal(createEntry.Id, readResult.Entry.Id);
+			Assert.Equal(createEntry.ApplicationId, readResult.Entry.ApplicationId);
 		}
 
 		[Fact]
@@ -142,18 +144,17 @@
 			Assert.NotNull(createResult.Entry);
 			Assert.NotNull(createResult.Entry.Id);
 
-			const string newName = Name + "2";
+			var newApplicationId = createResult.Entry.ApplicationId + "Z";
 			var updateResult = await InitUserService().Update(
 				new UpdateUserEntry
 				{
 					Id = createResult.Entry.Id,
-					Name = newName,
-					ApplicationId = createResult.Entry.ApplicationId
+					ApplicationId = newApplicationId
 				});
 
 			Assert.Equal(UpdateResult.Updated, updateResult.Result);
 			Assert.Equal(createResult.Entry.Id, updateResult.Entry.Id);
-			Assert.Equal(newName, updateResult.Entry.Name);
+			Assert.Equal(newApplicationId, updateResult.Entry.ApplicationId);
 		}
 
 		private static IUserService InitUserService()
@@ -177,7 +178,7 @@
 		{
 			return new CreateUserEntry
 			{
-				Name = Name,
+				Id = Guid.NewGuid().ToString().Substring(0, 20),
 				ApplicationId = ApplicationId
 			};
 		}

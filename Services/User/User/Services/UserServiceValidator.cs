@@ -1,6 +1,5 @@
 ﻿namespace User.Services
 {
-	using System;
 	using System.Threading.Tasks;
 	using Service.Sdk.Contracts;
 	using User.Services.Models;
@@ -10,6 +9,16 @@
 	/// </summary>
 	public class UserServiceValidator : IEntryValidator<CreateUserEntry, UpdateUserEntry, string>
 	{
+		/// <summary>
+		///   Max length of the id.
+		/// </summary>
+		private const int EntryIdMaxLength = 20;
+
+		/// <summary>
+		///   Min length of the id.
+		/// </summary>
+		private const int EntryIdMinLength = 3;
+
 		/// <summary>
 		///   Validates input data for create operations.
 		/// </summary>
@@ -21,13 +30,15 @@
 		}
 
 		/// <summary>
-		///   The <paramref name="entryId" /> is accepted if is a valid <see cref="Guid" />.
+		///   Validates the id of the user entry.
 		/// </summary>
 		/// <param name="entryId">The id of an entry.</param>
 		/// <returns>A <see cref="Task" /> whose result is true if the <paramref name="entryId" /> is valid and false otherwise.</returns>
 		public Task<bool> ValidateEntryId(string entryId)
 		{
-			var result = !string.IsNullOrWhiteSpace(entryId) && Guid.TryParse(entryId, out var guid) && guid != Guid.Empty;
+			var result = !string.IsNullOrWhiteSpace(entryId)
+			             && entryId.Length >= EntryIdMinLength
+			             && entryId.Length <= EntryIdMaxLength;
 			return Task.FromResult(result);
 		}
 
@@ -40,8 +51,7 @@
 		/// <returns>A <see cref="Task" /> whose result is true if the data is valid and false otherwise.</returns>
 		public async Task<bool> ValidateUpdateEntry(UpdateUserEntry entry)
 		{
-			var result = entry != null && await this.ValidateEntryId(entry.Id) && await this.ValidateEntry(entry);
-			return result;
+			return entry != null && await this.ValidateEntry(entry);
 		}
 
 		/// <summary>
@@ -51,7 +61,9 @@
 		/// <returns>A <see cref="Task" /> whose result is a bool.</returns>
 		private async Task<bool> ValidateEntry(BaseUser baseUser)
 		{
-			return await this.ValidateEntryId(baseUser.ApplicationId) && !string.IsNullOrWhiteSpace(baseUser.Name);
+			return baseUser != null
+			       && await this.ValidateEntryId(baseUser.Id)
+			       && !string.IsNullOrWhiteSpace(baseUser.ApplicationId);
 		}
 	}
 }

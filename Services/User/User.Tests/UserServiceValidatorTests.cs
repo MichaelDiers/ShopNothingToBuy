@@ -1,112 +1,79 @@
 ﻿namespace User.Tests
 {
-	using System;
 	using User.Services;
 	using User.Services.Models;
 	using Xunit;
 
 	public class UserServiceValidatorTests
 	{
+		[Theory]
+		[InlineData(null, null, false)]
+		[InlineData("", "a", false)]
+		[InlineData("a", "a", false)]
+		[InlineData("aa", "a", false)]
+		[InlineData("aaa", "a", true)]
+		[InlineData("aaaaaaaaaaaaaaaaaaaa", "a", true)]
+		[InlineData("aaaaaaaaaaaaaaaaaaaaa", "a", false)]
+		[InlineData("aaaaaaaaaaaaaaaaaaaa", "", false)]
+		public async void ValidateCreateEntry(string id, string applicationId, bool expectedResult)
+		{
+			Assert.Equal(
+				await new UserServiceValidator().ValidateCreateEntry(
+					new CreateUserEntry
+					{
+						Id = id,
+						ApplicationId = applicationId
+					}),
+				expectedResult);
+		}
+
 		[Fact]
 		public async void ValidateCreateEntry_ShouldReturnFalseIfUserIsNull()
 		{
 			Assert.False(await new UserServiceValidator().ValidateCreateEntry(null));
 		}
 
-		[Fact]
-		public async void ValidateCreateEntry_ShouldSucceed()
-		{
-			Assert.True(
-				await new UserServiceValidator().ValidateCreateEntry(
-					new CreateUserEntry
-					{
-						ApplicationId = Guid.NewGuid().ToString(),
-						Name = Guid.NewGuid().ToString()
-					}));
-		}
-
 		[Theory]
 		[InlineData(null, false)]
 		[InlineData("", false)]
-		[InlineData("invalid", false)]
-		[InlineData("44de1638-3e90-4093-8e20-64d09572cbec", true)]
-		[InlineData("549f40dd-65a2-4015-9e91-86a374c7a14c", true)]
-		public async void ValidateEntryId_ShouldAcceptOnlyAGuid(string userId, bool expectedResult)
+		[InlineData("a", false)]
+		[InlineData("aa", false)]
+		[InlineData("aaa", true)]
+		[InlineData("aaaa", true)]
+		[InlineData("aaaaaaaaaaaaaaaaaaaa", true)]
+		[InlineData("aaaaaaaaaaaaaaaaaaaaa", false)]
+		public async void ValidateEntryId(string id, bool expectedResult)
 		{
 			var validator = new UserServiceValidator();
-			Assert.Equal(await validator.ValidateEntryId(userId), expectedResult);
+			Assert.Equal(await validator.ValidateEntryId(id), expectedResult);
 		}
 
 		[Theory]
-		[InlineData(
-			null,
-			"44de1638-3e90-4093-8e20-64d09572cbec",
-			"name",
-			false)]
-		[InlineData(
-			"44de1638-3e90-4093-8e20-64d09572cbec",
-			"44de1638-3e90-4093-8e20-64d09572cbec",
-			null,
-			false)]
-		[InlineData(
-			"",
-			"44de1638-3e90-4093-8e20-64d09572cbec",
-			"name",
-			false)]
-		[InlineData(
-			"44de1638-3e90-4093-8e20-64d09572cbec",
-			"44de1638-3e90-4093-8e20-64d09572cbec",
-			"",
-			false)]
-		[InlineData(
-			"invalid",
-			"44de1638-3e90-4093-8e20-64d09572cbec",
-			"name",
-			false)]
-		[InlineData(
-			"44de1638-3e90-4093-8e20-64d09572cbec",
-			"44de1638-3e90-4093-8e20-64d09572cbec",
-			"name",
-			true)]
-		[InlineData(
-			"549f40dd-65a2-4015-9e91-86a374c7a14c",
-			"44de1638-3e90-4093-8e20-64d09572cbec",
-			"name",
-			true)]
-		[InlineData(
-			"549f40dd-65a2-4015-9e91-86a374c7a14c",
-			null,
-			"name",
-			false)]
-		[InlineData(
-			"549f40dd-65a2-4015-9e91-86a374c7a14c",
-			"",
-			"name",
-			false)]
-		[InlineData(
-			"549f40dd-65a2-4015-9e91-86a374c7a14c",
-			"invalid",
-			"name",
-			false)]
+		[InlineData(null, null, false)]
+		[InlineData("", "a", false)]
+		[InlineData("a", "a", false)]
+		[InlineData("aa", "a", false)]
+		[InlineData("aaa", "a", true)]
+		[InlineData("aaaaaaaaaaaaaaaaaaaa", "a", true)]
+		[InlineData("aaaaaaaaaaaaaaaaaaaaa", "a", false)]
+		[InlineData("aaaaaaaaaaaaaaaaaaaa", "", false)]
 		public async void ValidateUpdateEntry(
-			string userId,
+			string id,
 			string applicationId,
-			string name,
 			bool expectedResult)
 		{
 			var validator = new UserServiceValidator();
 			var entry = new UpdateUserEntry
 			{
-				Id = userId,
-				ApplicationId = applicationId,
-				Name = name
+				Id = id,
+				ApplicationId = applicationId
 			};
 
 			Assert.Equal(await validator.ValidateUpdateEntry(entry), expectedResult);
 		}
 
 		[Fact]
-		public async void ValidateUpdateEntry_ShouldIfUpdateUserIsNull()
+		public async void ValidateUpdateEntry_ShouldFailIfUpdateUserIsNull()
 		{
 			Assert.False(await new UserServiceValidator().ValidateUpdateEntry(null));
 		}

@@ -4,24 +4,24 @@
 	///   User data that is used in <see cref="UserEntry" />, <see cref="CreateUserEntry" /> and <see cref="UpdateUserEntry" />
 	///   .
 	/// </summary>
-	public class BaseUser
+	public abstract class BaseUser
 	{
 		/// <summary>
 		///   Creates a new instance of <see cref="BaseUser" />.
 		/// </summary>
-		public BaseUser()
+		protected BaseUser()
 		{
 		}
 
 		/// <summary>
 		///   Creates a new instance of <see cref="BaseUser" />.
 		/// </summary>
-		/// <param name="name"></param>
+		/// <param name="id">The id of the user.</param>
 		/// <param name="applicationId">The id of the application the user is created for.</param>
-		public BaseUser(string name, string applicationId)
+		protected BaseUser(string id, string applicationId)
 		{
 			this.ApplicationId = applicationId;
-			this.Name = name;
+			this.Id = id;
 		}
 
 		/// <summary>
@@ -32,6 +32,6 @@
 		/// <summary>
 		///   Gets or sets the name of the user.
 		/// </summary>
-		public string Name { get; set; }
+		public string Id { get; set; }
 	}
 }
