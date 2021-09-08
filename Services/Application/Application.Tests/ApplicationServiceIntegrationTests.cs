@@ -257,6 +257,11 @@
 			string originalIdUpdate,
 			UpdateResult expectedResult)
 		{
+			if (Skip)
+			{
+				return;
+			}
+
 			var entry = new CreateApplicationEntry
 			{
 				Id = idCreate
