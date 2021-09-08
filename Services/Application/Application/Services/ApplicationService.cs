@@ -46,6 +46,44 @@
 		}
 
 		/// <summary>
+		///   Delete an entry by its id.
+		/// </summary>
+		/// <param name="entryId">The id of the entry.</param>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
+		///   that contains the <see cref="DeleteResult" />.
+		/// </returns>
+		public override async Task<IOperationResult<ApplicationEntry, string, DeleteResult>> Delete(string entryId)
+		{
+			return await base.Delete(entryId?.ToUpper());
+		}
+
+		/// <summary>
+		///   Check if an entry exists.
+		/// </summary>
+		/// <param name="entryId">The id of the entry.</param>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is a <see cref="ExistsResult" />.
+		/// </returns>
+		public override async Task<ExistsResult> Exists(string entryId)
+		{
+			return await base.Exists(entryId?.ToUpper());
+		}
+
+		/// <summary>
+		///   Read an entry by its id.
+		/// </summary>
+		/// <param name="entryId">The id of the entry.</param>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
+		///   that contains the <see cref="ReadResult" />.
+		/// </returns>
+		public override async Task<IOperationResult<ApplicationEntry, string, ReadResult>> Read(string entryId)
+		{
+			return await base.Read(entryId?.ToUpper());
+		}
+
+		/// <summary>
 		///   Create a new entry.
 		/// </summary>
 		/// <param name="entry">The entry to be created.</param>

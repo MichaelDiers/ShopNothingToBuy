@@ -8,8 +8,8 @@
 	public class UpdateApplicationEntry : BaseApplicationEntry, IEntry<string>
 	{
 		/// <summary>
-		///   Gets or sets the id of the application.
+		///   Gets or sets the original requested id at creation time.
 		/// </summary>
-		public string Id { get; set; }
+		public string OriginalId { get; set; }
 	}
 }

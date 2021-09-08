@@ -13,8 +13,8 @@
 		}
 
 		/// <summary>
-		///   Gets or sets the name of the application.
+		///   Gets or sets the id of the application.
 		/// </summary>
-		public string Name { get; set; }
+		public string Id { get; set; }
 	}
 }

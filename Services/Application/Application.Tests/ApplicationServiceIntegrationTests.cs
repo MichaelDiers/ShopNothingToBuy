@@ -39,15 +39,10 @@
 			}
 
 			const string name = "my name";
-			var result = await InitService().Create(
-				new CreateApplicationEntry
-				{
-					Name = name
-				});
+			var result = await InitService().Create(new CreateApplicationEntry());
 			Assert.Equal(CreateResult.Created, result.Result);
 			Assert.NotNull(result.Entry);
 			Assert.NotNull(result.Entry.Id);
-			Assert.Equal(name, result.Entry.Name);
 		}
 
 		[Fact]
@@ -59,11 +54,7 @@
 			}
 
 			const string name = "my name delete";
-			var createResult = await InitService().Create(
-				new CreateApplicationEntry
-				{
-					Name = name
-				});
+			var createResult = await InitService().Create(new CreateApplicationEntry());
 			Assert.Equal(CreateResult.Created, createResult.Result);
 			Assert.NotNull(createResult.Entry);
 			Assert.NotNull(createResult.Entry.Id);
@@ -72,7 +63,6 @@
 
 			Assert.Equal(DeleteResult.Deleted, deleteResult.Result);
 			Assert.Equal(createResult.Entry.Id, deleteResult.Entry.Id);
-			Assert.Equal(name, deleteResult.Entry.Name);
 		}
 
 		[Fact]
@@ -83,11 +73,7 @@
 				return;
 			}
 
-			var createResult = await InitService().Create(
-				new CreateApplicationEntry
-				{
-					Name = "name"
-				});
+			var createResult = await InitService().Create(new CreateApplicationEntry());
 			Assert.Equal(CreateResult.Created, createResult.Result);
 			Assert.NotNull(createResult.Entry);
 			Assert.NotNull(createResult.Entry.Id);
@@ -105,11 +91,7 @@
 			}
 
 			const string name = "my name list";
-			var createResult = await InitService().Create(
-				new CreateApplicationEntry
-				{
-					Name = name
-				});
+			var createResult = await InitService().Create(new CreateApplicationEntry());
 			Assert.Equal(CreateResult.Created, createResult.Result);
 			Assert.NotNull(createResult.Entry);
 			Assert.NotNull(createResult.Entry.Id);
@@ -129,11 +111,7 @@
 			}
 
 			const string name = "my name read";
-			var createResult = await InitService().Create(
-				new CreateApplicationEntry
-				{
-					Name = name
-				});
+			var createResult = await InitService().Create(new CreateApplicationEntry());
 			Assert.Equal(CreateResult.Created, createResult.Result);
 			Assert.NotNull(createResult.Entry);
 			Assert.NotNull(createResult.Entry.Id);
@@ -142,7 +120,6 @@
 
 			Assert.Equal(ReadResult.Read, readResult.Result);
 			Assert.Equal(createResult.Entry.Id, readResult.Entry.Id);
-			Assert.Equal(name, readResult.Entry.Name);
 		}
 
 		[Fact]
@@ -154,11 +131,7 @@
 			}
 
 			const string name = "my name update";
-			var createResult = await InitService().Create(
-				new CreateApplicationEntry
-				{
-					Name = name
-				});
+			var createResult = await InitService().Create(new CreateApplicationEntry());
 			Assert.Equal(CreateResult.Created, createResult.Result);
 			Assert.NotNull(createResult.Entry);
 			Assert.NotNull(createResult.Entry.Id);
@@ -167,13 +140,11 @@
 			var updateResult = await InitService().Update(
 				new UpdateApplicationEntry
 				{
-					Id = createResult.Entry.Id,
-					Name = newName
+					Id = createResult.Entry.Id
 				});
 
 			Assert.Equal(UpdateResult.Updated, updateResult.Result);
 			Assert.Equal(createResult.Entry.Id, updateResult.Entry.Id);
-			Assert.Equal(newName, updateResult.Entry.Name);
 		}
 
 		private static IApplicationService InitService()

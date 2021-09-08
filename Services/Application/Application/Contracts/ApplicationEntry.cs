@@ -1,6 +1,5 @@
 ﻿namespace Application.Contracts
 {
-	using System;
 	using Service.Sdk.Contracts;
 
 	/// <summary>
@@ -19,21 +18,11 @@
 		///   Creates a new instance of <see cref="ApplicationEntry" />.
 		/// </summary>
 		/// <param name="id">The id of the application.</param>
-		/// <param name="name">The name of the application.</param>
-		public ApplicationEntry(string id, string name)
+		/// <param name="originalId">The original requested id at creation time.</param>
+		public ApplicationEntry(string id, string originalId)
 		{
-			if (string.IsNullOrWhiteSpace(id))
-			{
-				throw new ArgumentException("Value cannot be null or whitespace.", nameof(id));
-			}
-
-			if (string.IsNullOrWhiteSpace(name))
-			{
-				throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
-			}
-
 			this.Id = id;
-			this.Name = name;
+			this.OriginalId = originalId;
 		}
 
 		/// <summary>
@@ -41,7 +30,7 @@
 		/// </summary>
 		/// <param name="createApplicationEntry">Data is initialized from the given entry.</param>
 		public ApplicationEntry(CreateApplicationEntry createApplicationEntry)
-			: this(Guid.NewGuid().ToString(), createApplicationEntry.Name)
+			: this(createApplicationEntry?.Id?.ToUpper(), createApplicationEntry?.Id)
 		{
 		}
 
@@ -50,13 +39,13 @@
 		/// </summary>
 		/// <param name="updateApplicationEntry">Data is initialized from the given entry.</param>
 		public ApplicationEntry(UpdateApplicationEntry updateApplicationEntry)
-			: this(updateApplicationEntry.Id, updateApplicationEntry.Name)
+			: this(updateApplicationEntry?.Id?.ToUpper(), updateApplicationEntry?.OriginalId)
 		{
 		}
 
 		/// <summary>
-		///   Gets or sets the id of the application.
+		///   Gets or sets the original requested id at creation time.
 		/// </summary>
-		public string Id { get; set; }
+		public string OriginalId { get; set; }
 	}
 }
