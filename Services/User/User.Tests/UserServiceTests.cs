@@ -24,32 +24,44 @@
 			null,
 			"applicationId",
 			Roles.Admin,
-			CreateResult.InvalidData)]
+			CreateResult.InvalidData,
+			Roles.All)]
 		[InlineData(
 			"",
 			"applicationId",
 			Roles.Admin,
-			CreateResult.InvalidData)]
+			CreateResult.InvalidData,
+			Roles.All)]
 		[InlineData(
 			"a",
 			"applicationId",
 			Roles.Admin,
-			CreateResult.InvalidData)]
+			CreateResult.InvalidData,
+			Roles.All)]
 		[InlineData(
 			"userId",
 			"applicationId",
 			Roles.Admin,
-			CreateResult.Created)]
+			CreateResult.Created,
+			Roles.All)]
 		[InlineData(
 			"userId",
 			"applicationId",
 			Roles.None,
-			CreateResult.InvalidData)]
+			CreateResult.InvalidData,
+			Roles.All)]
+		[InlineData(
+			"userId",
+			"applicationId",
+			Roles.Admin,
+			CreateResult.InvalidData,
+			Roles.Reader)]
 		public async void Create(
 			string userId,
 			string applicationId,
 			Roles roles,
-			CreateResult expectedResult)
+			CreateResult expectedResult,
+			Roles applicationRoles)
 		{
 			var createUser = new CreateUserEntry
 			{
@@ -58,7 +70,7 @@
 				Roles = roles
 			};
 
-			var service = InitUserService();
+			var service = InitUserService(applicationRoles);
 			var result = await service.Create(createUser);
 			Assert.Equal(expectedResult, result.Result);
 			if (expectedResult == CreateResult.Created)
@@ -261,7 +273,8 @@
 			"userId",
 			Roles.Reader,
 			Roles.Writer,
-			UpdateResult.InvalidData)]
+			UpdateResult.InvalidData,
+			Roles.All)]
 		[InlineData(
 			"userId",
 			"applicationId",
@@ -270,7 +283,8 @@
 			"userId",
 			Roles.Reader,
 			Roles.Writer,
-			UpdateResult.InvalidData)]
+			UpdateResult.InvalidData,
+			Roles.All)]
 		[InlineData(
 			"userId",
 			"applicationId",
@@ -279,7 +293,8 @@
 			"userId",
 			Roles.Reader,
 			Roles.Writer,
-			UpdateResult.InvalidData)]
+			UpdateResult.InvalidData,
+			Roles.All)]
 		[InlineData(
 			"userId",
 			"applicationId",
@@ -288,7 +303,8 @@
 			"userId",
 			Roles.Reader,
 			Roles.Writer,
-			UpdateResult.Updated)]
+			UpdateResult.Updated,
+			Roles.All)]
 		[InlineData(
 			"userId",
 			"applicationId",
@@ -297,7 +313,18 @@
 			"userId",
 			Roles.Reader,
 			Roles.Writer,
-			UpdateResult.Updated)]
+			UpdateResult.Updated,
+			Roles.All)]
+		[InlineData(
+			"userId",
+			"applicationId",
+			"userid",
+			"applicationId",
+			"userId",
+			Roles.Reader,
+			Roles.Writer,
+			UpdateResult.InvalidData,
+			Roles.Reader)]
 		[InlineData(
 			"userId",
 			"applicationId",
@@ -306,7 +333,8 @@
 			"userId",
 			Roles.Reader,
 			Roles.Writer,
-			UpdateResult.InvalidData)]
+			UpdateResult.InvalidData,
+			Roles.All)]
 		[InlineData(
 			"userId",
 			"applicationId",
@@ -315,7 +343,8 @@
 			"userId",
 			Roles.Reader,
 			Roles.Writer,
-			UpdateResult.InvalidData)]
+			UpdateResult.InvalidData,
+			Roles.All)]
 		[InlineData(
 			"userId",
 			"applicationId",
@@ -324,7 +353,8 @@
 			"userId",
 			Roles.Reader,
 			Roles.None,
-			UpdateResult.InvalidData)]
+			UpdateResult.InvalidData,
+			Roles.All)]
 		public async void Update(
 			string userId,
 			string applicationId,
@@ -333,7 +363,8 @@
 			string updateOriginalId,
 			Roles rolesCreate,
 			Roles rolesUpdate,
-			UpdateResult expectedResult)
+			UpdateResult expectedResult,
+			Roles applicationReadResult)
 		{
 			var createUser = new CreateUserEntry
 			{
@@ -342,7 +373,7 @@
 				Roles = rolesCreate
 			};
 
-			var service = InitUserService();
+			var service = InitUserService(applicationReadResult);
 			var _ = await service.Create(createUser);
 
 			var updateEntry = new UpdateUserEntry
@@ -402,11 +433,16 @@
 
 		private static IUserService InitUserService()
 		{
+			return InitUserService(Roles.All);
+		}
+
+		private static IUserService InitUserService(Roles applicationReadResultRoles)
+		{
 			return new UserService(
 				new LoggerMock(),
 				new UserServiceValidator(),
 				new DatabaseServiceMock(),
-				new ApplicationServiceMock());
+				new ApplicationServiceMock(applicationReadResultRoles));
 		}
 	}
 }

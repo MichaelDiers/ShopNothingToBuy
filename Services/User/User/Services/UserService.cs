@@ -107,12 +107,14 @@
 		protected override async Task<IOperationResult<UserEntry, string, CreateResult>> CreateEntry(CreateUserEntry entry)
 		{
 			var userEntry = new UserEntry(entry);
-			if (await this.applicationService.Exists(entry.ApplicationId) != ExistsResult.Exists)
+			var applcationReadResult = await this.applicationService.Read(entry.ApplicationId);
+			if (applcationReadResult.Result == ReadResult.Read
+			    && (applcationReadResult.Entry.Roles & entry.Roles) == entry.Roles)
 			{
-				return new OperationResult<UserEntry, string, CreateResult>(CreateResult.InvalidData);
+				return await this.DatabaseService.Create(userEntry);
 			}
 
-			return await this.DatabaseService.Create(userEntry);
+			return new OperationResult<UserEntry, string, CreateResult>(CreateResult.InvalidData);
 		}
 
 		/// <summary>
@@ -126,12 +128,14 @@
 		protected override async Task<IOperationResult<UserEntry, string, UpdateResult>> UpdateEntry(UpdateUserEntry entry)
 		{
 			var userEntry = new UserEntry(entry);
-			if (await this.applicationService.Exists(entry.ApplicationId) != ExistsResult.Exists)
+			var applcationReadResult = await this.applicationService.Read(entry.ApplicationId);
+			if (applcationReadResult.Result == ReadResult.Read
+			    && (applcationReadResult.Entry.Roles & entry.Roles) == entry.Roles)
 			{
-				return new OperationResult<UserEntry, string, UpdateResult>(UpdateResult.InvalidData);
+				return await this.DatabaseService.Update(userEntry);
 			}
 
-			return await this.DatabaseService.Update(userEntry);
+			return new OperationResult<UserEntry, string, UpdateResult>(UpdateResult.InvalidData);
 		}
 	}
 }

@@ -8,6 +8,18 @@
 
 	internal class ApplicationServiceMock : IApplicationService
 	{
+		private readonly Roles readResultRoles;
+
+		public ApplicationServiceMock()
+			: this(Roles.All)
+		{
+		}
+
+		public ApplicationServiceMock(Roles readResultRoles)
+		{
+			this.readResultRoles = readResultRoles;
+		}
+
 		public Task<ClearResult> Clear()
 		{
 			return Task.FromResult(ClearResult.Cleared);
@@ -43,7 +55,7 @@
 			return Task.FromResult<IOperationResult<ApplicationEntry, string, ReadResult>>(
 				new OperationResult<ApplicationEntry, string, ReadResult>(
 					ReadResult.Read,
-					new ApplicationEntry(entryId, "my app name", Roles.All)));
+					new ApplicationEntry(entryId, "my app name", this.readResultRoles)));
 		}
 
 		public Task<IOperationResult<ApplicationEntry, string, UpdateResult>> Update(UpdateApplicationEntry entry)

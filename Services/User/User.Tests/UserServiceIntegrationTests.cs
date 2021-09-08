@@ -14,6 +14,7 @@
 	public class UserServiceIntegrationTests
 	{
 		private const Roles CreateUserRole = Roles.Admin;
+
 		private const bool Skip = true;
 
 		private static readonly string ApplicationId = Guid.NewGuid().ToString();
