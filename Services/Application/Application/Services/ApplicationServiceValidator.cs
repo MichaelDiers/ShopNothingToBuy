@@ -67,7 +67,8 @@
 			var result = baseApplicationEntry != null
 			             && !string.IsNullOrWhiteSpace(baseApplicationEntry.Id)
 			             && baseApplicationEntry.Id.Length >= IdMinLength
-			             && baseApplicationEntry.Id.Length <= IdMaxLength;
+			             && baseApplicationEntry.Id.Length <= IdMaxLength
+			             && baseApplicationEntry.Roles != Roles.None;
 			return Task.FromResult(result);
 		}
 	}

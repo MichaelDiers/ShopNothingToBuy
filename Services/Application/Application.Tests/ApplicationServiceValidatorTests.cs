@@ -7,20 +7,22 @@
 	public class ApplicationServiceValidatorTests
 	{
 		[Theory]
-		[InlineData(null, false)]
-		[InlineData("", false)]
-		[InlineData("a", false)]
-		[InlineData("aa", false)]
-		[InlineData("aaa", true)]
-		[InlineData("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", true)]
-		[InlineData("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", false)]
-		public async void ValidateCreateEntry(string applicationId, bool expectedResult)
+		[InlineData(null, Roles.Admin, false)]
+		[InlineData("", Roles.Admin, false)]
+		[InlineData("a", Roles.Admin, false)]
+		[InlineData("aa", Roles.Admin, false)]
+		[InlineData("aaa", Roles.Admin, true)]
+		[InlineData("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", Roles.Admin, true)]
+		[InlineData("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", Roles.Admin, false)]
+		[InlineData("aaa", Roles.None, false)]
+		public async void ValidateCreateEntry(string applicationId, Roles roles, bool expectedResult)
 		{
 			Assert.Equal(
 				await new ApplicationServiceValidator().ValidateCreateEntry(
 					new CreateApplicationEntry
 					{
-						Id = applicationId
+						Id = applicationId,
+						Roles = roles
 					}),
 				expectedResult);
 		}
@@ -48,20 +50,46 @@
 		}
 
 		[Theory]
-		[InlineData(null, "originalid", false)]
-		[InlineData("", "", false)]
-		[InlineData("A", "a", false)]
-		[InlineData("AA", "aa", false)]
-		[InlineData("AAA", "aaa", true)]
+		[InlineData(
+			null,
+			Roles.Admin,
+			"originalid",
+			false)]
+		[InlineData(
+			"",
+			Roles.Admin,
+			"",
+			false)]
+		[InlineData(
+			"A",
+			Roles.Admin,
+			"a",
+			false)]
+		[InlineData(
+			"AA",
+			Roles.Admin,
+			"aa",
+			false)]
+		[InlineData(
+			"AAA",
+			Roles.Admin,
+			"aaa",
+			true)]
 		[InlineData(
 			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+			Roles.Admin,
 			"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
 			true)]
 		[InlineData(
 			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+			Roles.Admin,
 			"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
 			false)]
-		public async void ValidateUpdateEntry(string id, string originalId, bool expectedResult)
+		public async void ValidateUpdateEntry(
+			string id,
+			Roles roles,
+			string originalId,
+			bool expectedResult)
 		{
 			Assert.Equal(
 				expectedResult,
@@ -69,12 +97,13 @@
 					new UpdateApplicationEntry
 					{
 						Id = id,
-						OriginalId = originalId
+						OriginalId = originalId,
+						Roles = roles
 					}));
 		}
 
 		[Fact]
-		public async void ValidateUpdateEntry_ShouldIfUpdateEntryIsNull()
+		public async void ValidateUpdateEntry_ShouldFailIfUpdateEntryIsNull()
 		{
 			Assert.False(await new ApplicationServiceValidator().ValidateUpdateEntry(null));
 		}

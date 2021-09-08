@@ -31,17 +31,11 @@
 		}
 
 		[Theory]
-		[InlineData(null, CreateResult.InvalidData)]
-		[InlineData("", CreateResult.InvalidData)]
-		[InlineData("a", CreateResult.InvalidData)]
-		[InlineData("aa", CreateResult.InvalidData)]
-		[InlineData("aaa", CreateResult.Created)]
-		[InlineData("AAA", CreateResult.Created)]
-		[InlineData("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", CreateResult.Created)]
-		[InlineData("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", CreateResult.Created)]
-		[InlineData("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", CreateResult.InvalidData)]
-		[InlineData("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", CreateResult.InvalidData)]
-		public async void Create(string id, CreateResult expectedResult)
+		[InlineData("aaa", Roles.Admin, CreateResult.Created)]
+		[InlineData("AAA", Roles.Admin, CreateResult.Created)]
+		[InlineData("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", Roles.Admin, CreateResult.Created)]
+		[InlineData("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", Roles.Admin, CreateResult.Created)]
+		public async void Create(string id, Roles roles, CreateResult expectedResult)
 		{
 			if (Skip)
 			{
@@ -53,7 +47,8 @@
 
 			var entry = new CreateApplicationEntry
 			{
-				Id = id
+				Id = id,
+				Roles = roles
 			};
 
 			var result = await applicationService.Create(entry);
@@ -64,6 +59,7 @@
 				Assert.NotNull(result.Entry);
 				Assert.Equal(id.ToUpper(), result.Entry.Id);
 				Assert.Equal(id, result.Entry.OriginalId);
+				Assert.Equal(roles, result.Entry.Roles);
 			}
 			else
 			{
@@ -89,10 +85,12 @@
 
 			var entry = new CreateApplicationEntry
 			{
-				Id = id
+				Id = id,
+				Roles = Roles.Admin
 			};
 
 			var applicationService = InitService();
+			await applicationService.Clear();
 			await applicationService.Create(entry);
 
 			var result = await applicationService.Delete(requestId);
@@ -101,6 +99,7 @@
 			{
 				Assert.NotNull(result.Entry);
 				Assert.Equal(id.ToUpper(), result.Entry.Id);
+				Assert.Equal(Roles.Admin, result.Entry.Roles);
 			}
 			else
 			{
@@ -126,7 +125,8 @@
 
 			var entry = new CreateApplicationEntry
 			{
-				Id = id
+				Id = id,
+				Roles = Roles.Admin
 			};
 
 			var applicationService = InitService();
@@ -149,7 +149,8 @@
 			const string id = "applicationId";
 			var entry = new CreateApplicationEntry
 			{
-				Id = id
+				Id = id,
+				Roles = Roles.Admin
 			};
 
 			var applicationService = InitService();
@@ -181,7 +182,8 @@
 
 			var entry = new CreateApplicationEntry
 			{
-				Id = id
+				Id = id,
+				Roles = Roles.All
 			};
 
 			var applicationService = InitService();
@@ -193,6 +195,7 @@
 			{
 				Assert.NotNull(result.Entry);
 				Assert.Equal(id.ToUpper(), result.Entry.Id);
+				Assert.Equal(Roles.All, result.Entry.Roles);
 			}
 			else
 			{
@@ -205,56 +208,85 @@
 			"applicationId",
 			"applicationId",
 			"applicationId",
+			Roles.Admin,
+			Roles.Admin,
 			UpdateResult.Updated)]
 		[InlineData(
 			"applicationId",
 			"applicationId",
 			"applicationID",
+			Roles.Admin,
+			Roles.Admin,
 			UpdateResult.Updated)]
 		[InlineData(
 			"applicationId",
 			"applicationId",
 			"APPLICATIONID",
+			Roles.Admin,
+			Roles.Admin,
 			UpdateResult.Updated)]
 		[InlineData(
 			"applicationId",
+			"applicationId",
+			"APPLICATIONID",
+			Roles.Admin,
+			Roles.None,
+			UpdateResult.InvalidData)]
+		[InlineData(
+			"applicationId",
 			null,
 			null,
+			Roles.Admin,
+			Roles.Admin,
 			UpdateResult.InvalidData)]
 		[InlineData(
 			"applicationId",
 			"",
 			"",
+			Roles.Admin,
+			Roles.Admin,
 			UpdateResult.InvalidData)]
 		[InlineData(
 			"applicationId",
 			"aa",
 			"aa",
+			Roles.Admin,
+			Roles.Admin,
 			UpdateResult.InvalidData)]
 		[InlineData(
 			"applicationId",
 			"aaa",
 			"aaa",
+			Roles.Admin,
+			Roles.Admin,
 			UpdateResult.NotFound)]
 		[InlineData(
 			"applicationId",
 			"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
 			"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+			Roles.Admin,
+			Roles.Admin,
 			UpdateResult.NotFound)]
 		[InlineData(
 			"applicationId",
 			"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
 			"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+			Roles.Admin,
+			Roles.Admin,
 			UpdateResult.InvalidData)]
 		[InlineData(
 			"applicationId",
 			"applicationId",
 			"application",
+			Roles.Admin,
+			Roles.Admin,
 			UpdateResult.InvalidData)]
 		public async void Update(
 			string idCreate,
 			string idUpdate,
 			string originalIdUpdate,
+			Roles rolesCreate,
+			Roles rolesUpdate,
 			UpdateResult expectedResult)
 		{
 			if (Skip)
@@ -264,7 +296,8 @@
 
 			var entry = new CreateApplicationEntry
 			{
-				Id = idCreate
+				Id = idCreate,
+				Roles = rolesCreate
 			};
 
 			var applicationService = InitService();
@@ -273,7 +306,8 @@
 			var updateEntry = new UpdateApplicationEntry
 			{
 				Id = idUpdate,
-				OriginalId = originalIdUpdate
+				OriginalId = originalIdUpdate,
+				Roles = rolesUpdate
 			};
 
 			var result = await applicationService.Update(updateEntry);
@@ -283,6 +317,7 @@
 				Assert.NotNull(result.Entry);
 				Assert.Equal(idCreate.ToUpper(), result.Entry.Id);
 				Assert.Equal(originalIdUpdate, result.Entry.OriginalId);
+				Assert.Equal(rolesUpdate, result.Entry.Roles);
 			}
 			else
 			{

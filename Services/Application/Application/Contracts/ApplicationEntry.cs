@@ -19,9 +19,10 @@
 		/// </summary>
 		/// <param name="id">The id of the application.</param>
 		/// <param name="originalId">The original requested id at creation time.</param>
-		public ApplicationEntry(string id, string originalId)
+		/// <param name="roles">The available roles of the application.</param>
+		public ApplicationEntry(string id, string originalId, Roles roles)
+			: base(id, roles)
 		{
-			this.Id = id;
 			this.OriginalId = originalId;
 		}
 
@@ -30,7 +31,10 @@
 		/// </summary>
 		/// <param name="createApplicationEntry">Data is initialized from the given entry.</param>
 		public ApplicationEntry(CreateApplicationEntry createApplicationEntry)
-			: this(createApplicationEntry?.Id?.ToUpper(), createApplicationEntry?.Id)
+			: this(
+				createApplicationEntry?.Id?.ToUpper(),
+				createApplicationEntry?.Id,
+				createApplicationEntry?.Roles ?? Roles.None)
 		{
 		}
 
@@ -39,7 +43,10 @@
 		/// </summary>
 		/// <param name="updateApplicationEntry">Data is initialized from the given entry.</param>
 		public ApplicationEntry(UpdateApplicationEntry updateApplicationEntry)
-			: this(updateApplicationEntry?.Id?.ToUpper(), updateApplicationEntry?.OriginalId)
+			: this(
+				updateApplicationEntry?.Id?.ToUpper(),
+				updateApplicationEntry?.OriginalId,
+				updateApplicationEntry?.Roles ?? Roles.None)
 		{
 		}
 
