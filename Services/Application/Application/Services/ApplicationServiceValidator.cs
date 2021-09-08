@@ -27,7 +27,7 @@
 		/// <returns>A <see cref="Task" /> whose result is true if the data is valid and false otherwise.</returns>
 		public async Task<bool> ValidateCreateEntry(CreateApplicationEntry entry)
 		{
-			return entry != null && await this.ValidateEntry(entry);
+			return entry != null && await ValidateEntry(entry);
 		}
 
 		/// <summary>
@@ -52,7 +52,7 @@
 		public async Task<bool> ValidateUpdateEntry(UpdateApplicationEntry entry)
 		{
 			return entry != null
-			       && await this.ValidateEntry(entry)
+			       && await ValidateEntry(entry)
 			       && !string.IsNullOrWhiteSpace(entry.OriginalId)
 			       && string.Equals(entry.Id, entry.OriginalId, StringComparison.InvariantCultureIgnoreCase);
 		}
@@ -62,7 +62,7 @@
 		/// </summary>
 		/// <param name="baseApplicationEntry">The entry to be validated.</param>
 		/// <returns>True if the entry is valid and false otherwise.</returns>
-		private Task<bool> ValidateEntry(BaseApplicationEntry baseApplicationEntry)
+		private static Task<bool> ValidateEntry(BaseApplicationEntry baseApplicationEntry)
 		{
 			var result = baseApplicationEntry != null
 			             && !string.IsNullOrWhiteSpace(baseApplicationEntry.Id)
