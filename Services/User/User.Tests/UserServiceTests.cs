@@ -1,6 +1,7 @@
 ﻿namespace User.Tests
 {
 	using System;
+	using Application.Contracts;
 	using Service.Sdk.Contracts;
 	using User.Contracts;
 	using User.Services;
@@ -19,16 +20,42 @@
 		}
 
 		[Theory]
-		[InlineData(null, "applicationId", CreateResult.InvalidData)]
-		[InlineData("", "applicationId", CreateResult.InvalidData)]
-		[InlineData("a", "applicationId", CreateResult.InvalidData)]
-		[InlineData("userId", "applicationId", CreateResult.Created)]
-		public async void Create(string userId, string applicationId, CreateResult expectedResult)
+		[InlineData(
+			null,
+			"applicationId",
+			Roles.Admin,
+			CreateResult.InvalidData)]
+		[InlineData(
+			"",
+			"applicationId",
+			Roles.Admin,
+			CreateResult.InvalidData)]
+		[InlineData(
+			"a",
+			"applicationId",
+			Roles.Admin,
+			CreateResult.InvalidData)]
+		[InlineData(
+			"userId",
+			"applicationId",
+			Roles.Admin,
+			CreateResult.Created)]
+		[InlineData(
+			"userId",
+			"applicationId",
+			Roles.None,
+			CreateResult.InvalidData)]
+		public async void Create(
+			string userId,
+			string applicationId,
+			Roles roles,
+			CreateResult expectedResult)
 		{
 			var createUser = new CreateUserEntry
 			{
 				ApplicationId = applicationId,
-				Id = userId
+				Id = userId,
+				Roles = roles
 			};
 
 			var service = InitUserService();
@@ -39,6 +66,7 @@
 				Assert.NotNull(result.Entry);
 				Assert.Equal(userId.ToUpper(), result.Entry.Id);
 				Assert.Equal(applicationId, result.Entry.ApplicationId);
+				Assert.Equal(roles, result.Entry.Roles);
 			}
 			else
 			{
@@ -81,7 +109,8 @@
 			var createUser = new CreateUserEntry
 			{
 				ApplicationId = applicationId,
-				Id = userId
+				Id = userId,
+				Roles = Roles.Admin
 			};
 
 			var service = InitUserService();
@@ -97,6 +126,7 @@
 				Assert.Equal(userId?.ToUpper(), deleteResult.Entry.Id);
 				Assert.Equal(userId, deleteResult.Entry.OriginalId);
 				Assert.Equal(applicationId, deleteResult.Entry.ApplicationId);
+				Assert.Equal(Roles.Admin, deleteResult.Entry.Roles);
 			}
 			else
 			{
@@ -134,7 +164,8 @@
 			var createUser = new CreateUserEntry
 			{
 				ApplicationId = applicationId,
-				Id = userId
+				Id = userId,
+				Roles = Roles.Admin
 			};
 
 			var service = InitUserService();
@@ -150,7 +181,8 @@
 			var createUser = new CreateUserEntry
 			{
 				ApplicationId = Guid.NewGuid().ToString(),
-				Id = Guid.NewGuid().ToString()[..20]
+				Id = Guid.NewGuid().ToString()[..20],
+				Roles = Roles.Admin
 			};
 
 			var service = InitUserService();
@@ -197,7 +229,8 @@
 			var createUser = new CreateUserEntry
 			{
 				ApplicationId = applicationId,
-				Id = userId
+				Id = userId,
+				Roles = Roles.Reader
 			};
 
 			var service = InitUserService();
@@ -211,6 +244,7 @@
 				Assert.NotNull(result.Entry);
 				Assert.Equal(userId.ToUpper(), result.Entry.Id);
 				Assert.Equal(applicationId, result.Entry.ApplicationId);
+				Assert.Equal(Roles.Reader, result.Entry.Roles);
 			}
 			else
 			{
@@ -225,6 +259,8 @@
 			null,
 			"applicationId",
 			"userId",
+			Roles.Reader,
+			Roles.Writer,
 			UpdateResult.InvalidData)]
 		[InlineData(
 			"userId",
@@ -232,6 +268,8 @@
 			"",
 			"applicationId",
 			"userId",
+			Roles.Reader,
+			Roles.Writer,
 			UpdateResult.InvalidData)]
 		[InlineData(
 			"userId",
@@ -239,6 +277,8 @@
 			"a",
 			"applicationId",
 			"userId",
+			Roles.Reader,
+			Roles.Writer,
 			UpdateResult.InvalidData)]
 		[InlineData(
 			"userId",
@@ -246,6 +286,8 @@
 			"USERID",
 			"applicationId",
 			"userId",
+			Roles.Reader,
+			Roles.Writer,
 			UpdateResult.Updated)]
 		[InlineData(
 			"userId",
@@ -253,6 +295,8 @@
 			"userid",
 			"applicationId",
 			"userId",
+			Roles.Reader,
+			Roles.Writer,
 			UpdateResult.Updated)]
 		[InlineData(
 			"userId",
@@ -260,6 +304,8 @@
 			"userid",
 			null,
 			"userId",
+			Roles.Reader,
+			Roles.Writer,
 			UpdateResult.InvalidData)]
 		[InlineData(
 			"userId",
@@ -267,6 +313,17 @@
 			"userid",
 			"",
 			"userId",
+			Roles.Reader,
+			Roles.Writer,
+			UpdateResult.InvalidData)]
+		[InlineData(
+			"userId",
+			"applicationId",
+			"userid",
+			"applicationId",
+			"userId",
+			Roles.Reader,
+			Roles.None,
 			UpdateResult.InvalidData)]
 		public async void Update(
 			string userId,
@@ -274,12 +331,15 @@
 			string updateUserId,
 			string updateApplicationId,
 			string updateOriginalId,
+			Roles rolesCreate,
+			Roles rolesUpdate,
 			UpdateResult expectedResult)
 		{
 			var createUser = new CreateUserEntry
 			{
 				ApplicationId = applicationId,
-				Id = userId
+				Id = userId,
+				Roles = rolesCreate
 			};
 
 			var service = InitUserService();
@@ -289,7 +349,8 @@
 			{
 				ApplicationId = updateApplicationId,
 				Id = updateUserId,
-				OriginalId = updateOriginalId
+				OriginalId = updateOriginalId,
+				Roles = rolesUpdate
 			};
 
 			var result = await service.Update(updateEntry);
@@ -300,6 +361,7 @@
 				Assert.Equal(userId.ToUpper(), result.Entry.Id);
 				Assert.Equal(updateApplicationId, result.Entry.ApplicationId);
 				Assert.Equal(updateOriginalId, result.Entry.OriginalId);
+				Assert.Equal(rolesUpdate, result.Entry.Roles);
 			}
 			else
 			{
@@ -315,7 +377,8 @@
 			var createUser = new CreateUserEntry
 			{
 				ApplicationId = Guid.NewGuid().ToString(),
-				Id = "Name"
+				Id = "Name",
+				Roles = Roles.Admin
 			};
 			var createResult = await service.Create(createUser);
 			Assert.Equal(CreateResult.Created, createResult.Result);
@@ -323,15 +386,18 @@
 			var updateUser = new UpdateUserEntry
 			{
 				Id = createResult.Entry.Id,
-				ApplicationId = createResult.Entry.ApplicationId + "Z"
+				ApplicationId = createResult.Entry.ApplicationId + "Z",
+				Roles = Roles.Reader
 			};
 			var updateResult = await service.Update(updateUser);
 			Assert.Equal(UpdateResult.Updated, updateResult.Result);
 			Assert.Equal(createResult.Entry.Id, updateResult.Entry.Id);
+			Assert.Equal(Roles.Reader, updateResult.Entry.Roles);
 
 			var deleteResult = await service.Delete(createResult.Entry.Id);
 			Assert.Equal(DeleteResult.Deleted, deleteResult.Result);
 			Assert.Equal(createResult.Entry.Id, deleteResult.Entry.Id);
+			Assert.Equal(Roles.Reader, deleteResult.Entry.Roles);
 		}
 
 		private static IUserService InitUserService()

@@ -1,6 +1,7 @@
 ﻿namespace User.Tests
 {
 	using System;
+	using Application.Contracts;
 	using Microsoft.Extensions.Configuration;
 	using MongoDatabase.Models;
 	using Service.Sdk.Contracts;
@@ -12,6 +13,7 @@
 
 	public class UserServiceIntegrationTests
 	{
+		private const Roles CreateUserRole = Roles.Admin;
 		private const bool Skip = true;
 
 		private static readonly string ApplicationId = Guid.NewGuid().ToString();
@@ -48,7 +50,8 @@
 			Assert.NotNull(result.Entry);
 			Assert.NotNull(result.Entry.Id);
 			Assert.Equal(createEntry.ApplicationId, result.Entry.ApplicationId);
-			Assert.Equal(createEntry.Id, result.Entry.Id);
+			Assert.Equal(createEntry.Id.ToUpper(), result.Entry.Id);
+			Assert.Equal(CreateUserRole, result.Entry.Roles);
 		}
 
 		[Fact]
@@ -68,8 +71,9 @@
 			var deleteResult = await InitUserService().Delete(createResult.Entry.Id);
 
 			Assert.Equal(DeleteResult.Deleted, deleteResult.Result);
-			Assert.Equal(createEntry.Id, deleteResult.Entry.Id);
+			Assert.Equal(createEntry.Id.ToUpper(), deleteResult.Entry.Id);
 			Assert.Equal(createEntry.ApplicationId, deleteResult.Entry.ApplicationId);
+			Assert.Equal(createEntry.Roles, deleteResult.Entry.Roles);
 		}
 
 		[Fact]
@@ -127,8 +131,9 @@
 			var readResult = await InitUserService().Read(createResult.Entry.Id);
 
 			Assert.Equal(ReadResult.Read, readResult.Result);
-			Assert.Equal(createEntry.Id, readResult.Entry.Id);
+			Assert.Equal(createEntry.Id.ToUpper(), readResult.Entry.Id);
 			Assert.Equal(createEntry.ApplicationId, readResult.Entry.ApplicationId);
+			Assert.Equal(createEntry.Roles, readResult.Entry.Roles);
 		}
 
 		[Fact]
@@ -149,12 +154,14 @@
 				new UpdateUserEntry
 				{
 					Id = createResult.Entry.Id,
-					ApplicationId = newApplicationId
+					ApplicationId = newApplicationId,
+					Roles = createResult.Entry.Roles
 				});
 
 			Assert.Equal(UpdateResult.Updated, updateResult.Result);
 			Assert.Equal(createResult.Entry.Id, updateResult.Entry.Id);
 			Assert.Equal(newApplicationId, updateResult.Entry.ApplicationId);
+			Assert.Equal(createResult.Entry.Roles, updateResult.Entry.Roles);
 		}
 
 		private static IUserService InitUserService()
@@ -179,7 +186,8 @@
 			return new CreateUserEntry
 			{
 				Id = Guid.NewGuid().ToString().Substring(0, 20),
-				ApplicationId = ApplicationId
+				ApplicationId = ApplicationId,
+				Roles = CreateUserRole
 			};
 		}
 	}

@@ -1,6 +1,7 @@
 ﻿namespace User.Services
 {
 	using System.Threading.Tasks;
+	using Application.Contracts;
 	using Service.Sdk.Contracts;
 	using User.Services.Models;
 
@@ -63,7 +64,8 @@
 		{
 			return baseUser != null
 			       && await this.ValidateEntryId(baseUser.Id)
-			       && !string.IsNullOrWhiteSpace(baseUser.ApplicationId);
+			       && !string.IsNullOrWhiteSpace(baseUser.ApplicationId)
+			       && baseUser.Roles != Roles.None;
 		}
 	}
 }

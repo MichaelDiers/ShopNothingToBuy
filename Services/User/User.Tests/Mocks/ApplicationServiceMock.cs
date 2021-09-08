@@ -24,7 +24,7 @@
 			return Task.FromResult<IOperationResult<ApplicationEntry, string, DeleteResult>>(
 				new OperationResult<ApplicationEntry, string, DeleteResult>(
 					DeleteResult.Deleted,
-					new ApplicationEntry(entryId, "my app name")));
+					new ApplicationEntry(entryId, "my app name", Roles.All)));
 		}
 
 		public Task<ExistsResult> Exists(string entryId)
@@ -43,7 +43,7 @@
 			return Task.FromResult<IOperationResult<ApplicationEntry, string, ReadResult>>(
 				new OperationResult<ApplicationEntry, string, ReadResult>(
 					ReadResult.Read,
-					new ApplicationEntry(entryId, "my app name")));
+					new ApplicationEntry(entryId, "my app name", Roles.All)));
 		}
 
 		public Task<IOperationResult<ApplicationEntry, string, UpdateResult>> Update(UpdateApplicationEntry entry)

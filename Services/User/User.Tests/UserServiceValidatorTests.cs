@@ -1,5 +1,6 @@
 ﻿namespace User.Tests
 {
+	using Application.Contracts;
 	using User.Services;
 	using User.Services.Models;
 	using Xunit;
@@ -7,22 +8,64 @@
 	public class UserServiceValidatorTests
 	{
 		[Theory]
-		[InlineData(null, null, false)]
-		[InlineData("", "a", false)]
-		[InlineData("a", "a", false)]
-		[InlineData("aa", "a", false)]
-		[InlineData("aaa", "a", true)]
-		[InlineData("aaaaaaaaaaaaaaaaaaaa", "a", true)]
-		[InlineData("aaaaaaaaaaaaaaaaaaaaa", "a", false)]
-		[InlineData("aaaaaaaaaaaaaaaaaaaa", "", false)]
-		public async void ValidateCreateEntry(string id, string applicationId, bool expectedResult)
+		[InlineData(
+			null,
+			null,
+			Roles.Admin,
+			false)]
+		[InlineData(
+			"",
+			"a",
+			Roles.Admin,
+			false)]
+		[InlineData(
+			"a",
+			"a",
+			Roles.Admin,
+			false)]
+		[InlineData(
+			"aa",
+			"a",
+			Roles.Admin,
+			false)]
+		[InlineData(
+			"aaa",
+			"a",
+			Roles.Admin,
+			true)]
+		[InlineData(
+			"aaa",
+			"a",
+			Roles.None,
+			false)]
+		[InlineData(
+			"aaaaaaaaaaaaaaaaaaaa",
+			"a",
+			Roles.Admin,
+			true)]
+		[InlineData(
+			"aaaaaaaaaaaaaaaaaaaaa",
+			"a",
+			Roles.Admin,
+			false)]
+		[InlineData(
+			"aaaaaaaaaaaaaaaaaaaa",
+			"",
+			Roles.Admin,
+			false)]
+		public async void ValidateCreateEntry(
+			string id,
+			string applicationId,
+			Roles roles,
+			bool expectedResult)
 		{
 			Assert.Equal(
 				await new UserServiceValidator().ValidateCreateEntry(
 					new CreateUserEntry
 					{
 						Id = id,
-						ApplicationId = applicationId
+						ApplicationId = applicationId,
+						Roles = roles
 					}),
 				expectedResult);
 		}
@@ -49,24 +92,58 @@
 		}
 
 		[Theory]
-		[InlineData(null, null, false)]
-		[InlineData("", "a", false)]
-		[InlineData("a", "a", false)]
-		[InlineData("aa", "a", false)]
-		[InlineData("aaa", "a", true)]
-		[InlineData("aaaaaaaaaaaaaaaaaaaa", "a", true)]
-		[InlineData("aaaaaaaaaaaaaaaaaaaaa", "a", false)]
-		[InlineData("aaaaaaaaaaaaaaaaaaaa", "", false)]
+		[InlineData(
+			null,
+			null,
+			Roles.Admin,
+			false)]
+		[InlineData(
+			"",
+			"a",
+			Roles.Admin,
+			false)]
+		[InlineData(
+			"a",
+			"a",
+			Roles.Admin,
+			false)]
+		[InlineData(
+			"aa",
+			"a",
+			Roles.Admin,
+			false)]
+		[InlineData(
+			"aaa",
+			"a",
+			Roles.Admin,
+			true)]
+		[InlineData(
+			"aaaaaaaaaaaaaaaaaaaa",
+			"a",
+			Roles.Admin,
+			true)]
+		[InlineData(
+			"aaaaaaaaaaaaaaaaaaaaa",
+			"a",
+			Roles.Admin,
+			false)]
+		[InlineData(
+			"aaaaaaaaaaaaaaaaaaaa",
+			"",
+			Roles.Admin,
+			false)]
 		public async void ValidateUpdateEntry(
 			string id,
 			string applicationId,
+			Roles roles,
 			bool expectedResult)
 		{
 			var validator = new UserServiceValidator();
 			var entry = new UpdateUserEntry
 			{
 				Id = id,
-				ApplicationId = applicationId
+				ApplicationId = applicationId,
+				Roles = roles
 			};
 
 			Assert.Equal(await validator.ValidateUpdateEntry(entry), expectedResult);

@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ApplicationService" Version="1.1.2" />
+    <PackageReference Include="ApplicationService" Version="1.1.6" />
     <PackageReference Include="MongoDatabase" Version="1.1.12" />
     <PackageReference Include="Service.Sdk" Version="1.1.14" />
   </ItemGroup>
