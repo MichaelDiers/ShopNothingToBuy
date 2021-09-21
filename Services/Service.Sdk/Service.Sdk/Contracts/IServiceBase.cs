@@ -1,5 +1,6 @@
 ﻿namespace Service.Sdk.Contracts
 {
+	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
 	/// <summary>
@@ -57,6 +58,13 @@
 		///   that contains the <see cref="ListResult" />.
 		/// </returns>
 		Task<IOperationListResult<TEntryId, ListResult>> List();
+
+		/// <summary>
+		///   Read entries by its id.
+		/// </summary>
+		/// <param name="entryIds">The ids to be read.</param>
+		/// <returns>A Task whose result contains the read results.</returns>
+		Task<IEnumerable<IOperationResult<TEntry, TEntryId, ReadResult>>> Read(IEnumerable<TEntryId> entryIds);
 
 		/// <summary>
 		///   Read an entry by its id.

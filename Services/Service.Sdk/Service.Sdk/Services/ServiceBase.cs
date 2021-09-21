@@ -1,6 +1,8 @@
 ﻿namespace Service.Sdk.Services
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
 	using Service.Sdk.Contracts;
 
@@ -179,6 +181,61 @@
 		}
 
 		/// <summary>
+		///   Read entries by its id.
+		/// </summary>
+		/// <param name="entryIds">The ids to be read.</param>
+		/// <returns>A Task whose result contains the read results.</returns>
+		public virtual async Task<IEnumerable<IOperationResult<TEntry, TEntryId, ReadResult>>> Read(
+			IEnumerable<TEntryId> entryIds)
+		{
+			try
+			{
+				// check of no elements are requested
+				var entryIdsToValidate = entryIds?.ToArray();
+				if (entryIdsToValidate == null || entryIdsToValidate.Length == 0)
+				{
+					return Enumerable.Empty<IOperationResult<TEntry, TEntryId, ReadResult>>();
+				}
+
+				// validate the ids
+				var validateResult = entryIdsToValidate.Select(this.validator.ValidateEntryId).ToArray();
+				await Task.WhenAll(validateResult);
+
+				// reduce to valid ids
+				var entryIdsToRead = entryIdsToValidate.Zip(validateResult).Where(tuple => tuple.Second.Result)
+					.Select(tuple => tuple.First).ToArray();
+
+				// execute read for valid ids
+				var readResults = (await this.ReadEntries(entryIdsToRead)).ToArray();
+
+				// collect results
+				var results = new List<IOperationResult<TEntry, TEntryId, ReadResult>>();
+				foreach (var entryId in entryIdsToValidate)
+				{
+					var indexOf = Array.IndexOf(entryIdsToRead, entryId);
+					if (indexOf == -1)
+					{
+						results.Add(new OperationResult<TEntry, TEntryId, ReadResult>(ReadResult.InvalidData));
+					}
+					else
+					{
+						results.Add(readResults[indexOf]);
+					}
+				}
+
+				return results;
+			}
+			catch (Exception ex)
+			{
+				await this.LogError("Error executing read for multiple entries.", ex);
+				return new[]
+				{
+					new OperationResult<TEntry, TEntryId, ReadResult>(ReadResult.InternalError)
+				};
+			}
+		}
+
+		/// <summary>
 		///   Update an entry.
 		/// </summary>
 		/// <param name="entry">The new values of the entry.</param>
@@ -274,6 +331,19 @@
 			{
 				// cannot handle logging errors
 			}
+		}
+
+		/// <summary>
+		///   Read entries by its id.
+		/// </summary>
+		/// <param name="entryIds">The ids to be read.</param>
+		/// <returns>A Task whose result contains the read results.</returns>
+		protected virtual async Task<IEnumerable<IOperationResult<TEntry, TEntryId, ReadResult>>> ReadEntries(
+			IEnumerable<TEntryId> entryIds)
+		{
+			var tasks = entryIds.Select(this.ReadEntry).ToArray();
+			await Task.WhenAll(tasks);
+			return tasks.Select(task => task.Result).ToArray();
 		}
 
 		/// <summary>

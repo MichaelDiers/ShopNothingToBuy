@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Net;
 	using System.Net.Http;
 	using System.Threading.Tasks;
@@ -173,6 +174,19 @@
 					result.StatusCode,
 					"Unhandled result code.")
 			};
+		}
+
+		/// <summary>
+		///   Read entries by its id.
+		/// </summary>
+		/// <param name="entryIds">The ids to be read.</param>
+		/// <returns>A Task whose result contains the read results.</returns>
+		public async Task<IEnumerable<IOperationResult<TEntry, TEntryId, ReadResult>>> Read(IEnumerable<TEntryId> entryIds)
+		{
+			// Todo: refactor
+			var result = entryIds.Select(this.Read).ToArray();
+			await Task.WhenAll(result);
+			return result.Select(task => task.Result).ToArray();
 		}
 
 		/// <summary>
