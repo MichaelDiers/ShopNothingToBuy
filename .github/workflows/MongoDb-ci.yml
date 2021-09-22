@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - 'Services/MongoDatabase/**'
+      - 'Services/Crud/MongoDatabase/**'
   workflow_dispatch:
 jobs:
   MongoDatabaseNuget:
@@ -13,6 +13,7 @@ jobs:
       CONFIG: Release
       PACKAGE_VERSION: "1.1"
       CSPROJ_FOLDER: MongoDatabase
+      CSPROJ_FOLDER_TESTS: MongoDatabase.Tests
       CSPROJ_NAME: MongoDatabase
     steps:
       - name: checkout
@@ -23,12 +24,11 @@ jobs:
           dotnet-version: 3.1.x
       - name: copy and edit nuget config to MongoDatabase
         run: |
-          cp ../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER/nuget.config
+          cp ../../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER/nuget.config
           echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" $CSPROJ_FOLDER/nuget.config) >$CSPROJ_FOLDER/nuget.config
-      - name: copy and edit nuget config to MongoDatabase.Tests
+      - name: copy nuget config to MongoDatabase.Tests
         run: |
-          cp ../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER.Tests/nuget.config
-          echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" $CSPROJ_FOLDER.Tests/nuget.config) >$CSPROJ_FOLDER.Tests/nuget.config
+          cp $CSPROJ_FOLDER/nuget.config $CSPROJ_FOLDER_TESTS/nuget.config          
       - name: build
         run: dotnet build --configuration "$CONFIG"
       - name: test
@@ -41,4 +41,4 @@ jobs:
           SNTB_TOKEN: ${{ secrets.SNTB_NUGET_CI_TOKEN}}          
 defaults:
   run:
-    working-directory: 'Services/MongoDatabase'
+    working-directory: 'Services/Crud/MongoDatabase'

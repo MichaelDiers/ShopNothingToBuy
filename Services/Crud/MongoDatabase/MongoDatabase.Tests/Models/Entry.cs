@@ -1,6 +1,6 @@
 ﻿namespace MongoDatabase.Tests.Models
 {
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Crud.Base;
 
 	internal class Entry : IEntry<string>
 	{

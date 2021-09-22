@@ -2,11 +2,13 @@
 {
 	using System;
 	using Microsoft.Extensions.Configuration;
-	using MongoDatabase.Models;
 	using MongoDatabase.Services;
 	using MongoDatabase.Tests.Mocks;
 	using MongoDatabase.Tests.Models;
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Crud.Base;
+	using Service.Contracts.Crud.Database;
+	using Service.Models.Crud.Database;
+	using Service.Tests.Mocks;
 	using Xunit;
 
 	public class MongoDbServiceTests

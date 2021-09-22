@@ -3,13 +3,15 @@
 	using System;
 	using System.Linq;
 	using System.Threading.Tasks;
-	using MongoDatabase.Contracts;
 	using MongoDB.Bson;
 	using MongoDB.Driver;
+	using Service.Contracts.Business.Log;
+	using Service.Contracts.Crud.Base;
+	using Service.Contracts.Crud.Database;
 	using Service.Sdk.Contracts;
 	using Service.Sdk.Services;
-	using DeleteResult = Service.Sdk.Contracts.DeleteResult;
-	using UpdateResult = Service.Sdk.Contracts.UpdateResult;
+	using DeleteResult = Service.Contracts.Crud.Base.DeleteResult;
+	using UpdateResult = Service.Contracts.Crud.Base.UpdateResult;
 
 	/// <summary>
 	///   MongoDb implementation as a <see cref="DatabaseService{TEntry,TEntryId}" />.
@@ -79,7 +81,7 @@
 		/// <param name="entryId">The id of the entry.</param>
 		/// <returns>
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
-		///   that contains the <see cref="DeleteResult" />.
+		///   that contains the <see cref="MongoDB.Driver.DeleteResult" />.
 		/// </returns>
 		protected override async Task<IOperationResult<TEntry, TEntryId, DeleteResult>> DeleteExistingEntry(
 			TEntryId entryId)
@@ -146,7 +148,7 @@
 		/// <param name="entry">The new values of the entry.</param>
 		/// <returns>
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
-		///   that contains the <see cref="UpdateResult" />.
+		///   that contains the <see cref="MongoDB.Driver.UpdateResult" />.
 		/// </returns>
 		protected override async Task<IOperationResult<TEntry, TEntryId, UpdateResult>> UpdateExistingEntry(TEntry entry)
 		{
