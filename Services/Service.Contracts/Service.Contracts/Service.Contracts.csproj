@@ -10,8 +10,4 @@
 	  <RepositoryUrl>https://github.com/MichaelDiers/ShopNothingToBuy</RepositoryUrl>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Crud\User\" />
-  </ItemGroup>
-
 </Project>
