@@ -1,7 +1,7 @@
 ﻿namespace Service.Sdk.Tests.Mocks
 {
 	using System.Threading.Tasks;
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Crud.Base;
 	using Service.Sdk.Tests.Models;
 
 	internal class DatabaseValidatorMock : IEntryValidator<StringEntry, StringEntry, string>
