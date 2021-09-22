@@ -13,6 +13,7 @@ jobs:
       CONFIG: Release
       PACKAGE_VERSION: "1.1"
       CSPROJ_FOLDER: Service.Sdk
+      CSPROJ_FOLDER_TESTS: Service.Sdk.Tests
       CSPROJ_NAME: Service.Sdk
     steps:
       - name: checkout
@@ -25,6 +26,9 @@ jobs:
         run: |
           cp ../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER/nuget.config
           echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" $CSPROJ_FOLDER/nuget.config) >$CSPROJ_FOLDER/nuget.config
+      - name: copy nuget config to test project folder
+        run: |
+          cp $CSPROJ_FOLDER/nuget.config $CSPROJ_FOLDER_TESTS/nuget.config
       - name: build
         run: dotnet build --configuration "$CONFIG"
       - name: test
