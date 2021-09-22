@@ -1,6 +1,7 @@
 ﻿namespace Service.Contracts.Crud.Application
 {
 	using System;
+	using Service.Contracts.Crud.Base;
 
 	/// <summary>
 	///   Specifies the roles of an application.
@@ -17,7 +18,8 @@
 		///   Role for reading data.
 		/// </summary>
 		/// <see cref="Base.IServiceBase{TEntry,TEntryId,TCreateEntry,TUpdateEntry}.Exists" />
-		/// <see cref="Base.IServiceBase{TEntry,TEntryId,TCreateEntry,TUpdateEntry}.Read" />
+		/// <see
+		///   cref="IServiceBase{TEntry,TEntryId,TCreateEntry,TUpdateEntry}.Read(System.Collections.Generic.IEnumerable{TEntryId})" />
 		Reader = 1 << 0,
 
 		/// <summary>

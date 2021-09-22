@@ -3,7 +3,8 @@
 	/// <summary>
 	///   The result of a read operation.
 	/// </summary>
-	/// <see cref="IServiceBase{TEntry,TEntryId,TCreateEntry,TUpdateEntry}.Read" />
+	/// <see
+	///   cref="IServiceBase{TEntry,TEntryId,TCreateEntry,TUpdateEntry}.Read(System.Collections.Generic.IEnumerable{TEntryId})" />
 	public enum ReadResult
 	{
 		/// <summary>
