@@ -2,7 +2,7 @@
 {
 	using System;
 	using System.Threading.Tasks;
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Business.Log;
 
 	internal class LoggerMock : ILogger
 	{

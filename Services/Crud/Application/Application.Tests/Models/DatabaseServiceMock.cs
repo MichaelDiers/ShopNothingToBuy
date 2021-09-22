@@ -4,7 +4,8 @@
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 	using Application.Contracts;
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Crud.Base;
+	using Service.Contracts.Crud.Database;
 	using Service.Sdk.Services;
 
 	internal class DatabaseServiceMock : IDatabaseService<ApplicationEntry, string>
@@ -72,6 +73,11 @@
 		{
 			var result = new OperationListResult<string, ListResult>(ListResult.Completed, this.database.Keys);
 			return Task.FromResult<IOperationListResult<string, ListResult>>(result);
+		}
+
+		public Task<IEnumerable<IOperationResult<ApplicationEntry, string, ReadResult>>> Read(IEnumerable<string> entryIds)
+		{
+			throw new NotImplementedException();
 		}
 
 		public Task<IOperationResult<ApplicationEntry, string, ReadResult>> Read(string entryId)

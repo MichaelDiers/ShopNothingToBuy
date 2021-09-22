@@ -3,7 +3,8 @@
 	using Application.Contracts;
 	using Application.Services;
 	using Application.Tests.Models;
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Crud.Application;
+	using Service.Contracts.Crud.Base;
 	using Xunit;
 
 	public class ApplicationServiceTests

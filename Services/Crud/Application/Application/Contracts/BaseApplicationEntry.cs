@@ -1,5 +1,7 @@
 ﻿namespace Application.Contracts
 {
+	using Service.Contracts.Crud.Application;
+
 	/// <summary>
 	///   Describes the base data of the application.
 	/// </summary>

@@ -4,8 +4,9 @@
 	using Application.Services;
 	using Application.Tests.Models;
 	using Microsoft.Extensions.Configuration;
-	using MongoDatabase.Models;
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Crud.Application;
+	using Service.Contracts.Crud.Base;
+	using Service.Models.Crud.Database;
 	using Xunit;
 
 	public class ApplicationServiceIntegrationTests
@@ -187,7 +188,12 @@
 			};
 
 			var applicationService = InitService();
-			await applicationService.Create(entry);
+
+			var clearResult = await applicationService.Clear();
+			Assert.Equal(ClearResult.Cleared, clearResult);
+
+			var createResult = await applicationService.Create(entry);
+			Assert.Equal(CreateResult.Created, createResult.Result);
 
 			var result = await applicationService.Read(requestId);
 			Assert.Equal(expectedResult, result.Result);
@@ -209,7 +215,7 @@
 			"applicationId",
 			"applicationId",
 			Roles.Admin,
-			Roles.Admin,
+			Roles.All,
 			UpdateResult.Updated)]
 		[InlineData(
 			"applicationId",
@@ -301,7 +307,12 @@
 			};
 
 			var applicationService = InitService();
-			await applicationService.Create(entry);
+
+			var clearResult = await applicationService.Clear();
+			Assert.Equal(ClearResult.Cleared, clearResult);
+
+			var createResult = await applicationService.Create(entry);
+			Assert.Equal(CreateResult.Created, createResult.Result);
 
 			var updateEntry = new UpdateApplicationEntry
 			{

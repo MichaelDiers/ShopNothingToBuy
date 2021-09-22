@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - 'Services/Application/**'
+      - 'Services/Crud/Application/**'
   workflow_dispatch:
 jobs:
   ApplicationServiceNuget:
@@ -24,7 +24,7 @@ jobs:
           dotnet-version: 3.1.x
       - name: copy and edit nuget config to project folder
         run: |
-          cp ../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER/nuget.config
+          cp ../../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER/nuget.config
           echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" $CSPROJ_FOLDER/nuget.config) >$CSPROJ_FOLDER/nuget.config
       - name: copy and edit nuget config to test project folder
         run: |
@@ -42,4 +42,4 @@ jobs:
           SNTB_TOKEN: ${{ secrets.SNTB_NUGET_CI_TOKEN}}          
 defaults:
   run:
-    working-directory: 'Services/Application'
+    working-directory: 'Services/Crud/Application'

@@ -1,13 +1,13 @@
 ﻿namespace Application.Clients
 {
-	using Application.Contracts;
+	using Service.Contracts.Business.Log;
+	using Service.Contracts.Crud.Application;
 	using Service.Sdk.Clients;
-	using Service.Sdk.Contracts;
 
 	/// <summary>
 	///   Client for the <see cref="IApplicationService" />.
 	/// </summary>
-	public class ApplicationClient : Client<ApplicationEntry, string, CreateApplicationEntry, UpdateApplicationEntry>,
+	public class ApplicationClient : Client<IApplicationEntry, string, ICreateApplicationEntry, IUpdateApplicationEntry>,
 		IApplicationService
 	{
 		/// <summary>

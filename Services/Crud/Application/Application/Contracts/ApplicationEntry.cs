@@ -1,11 +1,12 @@
 ﻿namespace Application.Contracts
 {
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Crud.Application;
+	using Service.Contracts.Crud.Base;
 
 	/// <summary>
 	///   Describes an application.
 	/// </summary>
-	public class ApplicationEntry : BaseApplicationEntry, IEntry<string>
+	public class ApplicationEntry : BaseApplicationEntry, IApplicationEntry, IEntry<string>
 	{
 		/// <summary>
 		///   Creates an instance of <see cref="ApplicationEntry" />.
@@ -30,7 +31,7 @@
 		///   Creates an instance of <see cref="ApplicationEntry" />.
 		/// </summary>
 		/// <param name="createApplicationEntry">Data is initialized from the given entry.</param>
-		public ApplicationEntry(CreateApplicationEntry createApplicationEntry)
+		public ApplicationEntry(ICreateApplicationEntry createApplicationEntry)
 			: this(
 				createApplicationEntry?.Id?.ToUpper(),
 				createApplicationEntry?.Id,
@@ -42,7 +43,7 @@
 		///   Creates an instance of <see cref="ApplicationEntry" />.
 		/// </summary>
 		/// <param name="updateApplicationEntry">Data is initialized from the given entry.</param>
-		public ApplicationEntry(UpdateApplicationEntry updateApplicationEntry)
+		public ApplicationEntry(IUpdateApplicationEntry updateApplicationEntry)
 			: this(
 				updateApplicationEntry?.Id?.ToUpper(),
 				updateApplicationEntry?.OriginalId,
