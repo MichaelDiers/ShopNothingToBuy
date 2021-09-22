@@ -3,9 +3,9 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
-	using Application.Contracts;
 	using Service.Contracts.Crud.Base;
 	using Service.Contracts.Crud.Database;
+	using Service.Models.Crud.Application;
 	using Service.Sdk.Services;
 
 	internal class DatabaseServiceMock : IDatabaseService<ApplicationEntry, string>

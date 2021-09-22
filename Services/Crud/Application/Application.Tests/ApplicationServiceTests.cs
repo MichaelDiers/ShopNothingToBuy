@@ -1,10 +1,10 @@
 ﻿namespace Application.Tests
 {
-	using Application.Contracts;
 	using Application.Services;
 	using Application.Tests.Models;
 	using Service.Contracts.Crud.Application;
 	using Service.Contracts.Crud.Base;
+	using Service.Models.Crud.Application;
 	using Xunit;
 
 	public class ApplicationServiceTests

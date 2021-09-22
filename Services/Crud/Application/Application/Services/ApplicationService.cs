@@ -1,12 +1,12 @@
 ﻿namespace Application.Services
 {
 	using System.Threading.Tasks;
-	using Application.Contracts;
 	using MongoDatabase.Services;
 	using Service.Contracts.Business.Log;
 	using Service.Contracts.Crud.Application;
 	using Service.Contracts.Crud.Base;
 	using Service.Contracts.Crud.Database;
+	using Service.Models.Crud.Application;
 	using Service.Sdk.Contracts;
 	using Service.Sdk.Services;
 
@@ -98,7 +98,7 @@
 		protected override async Task<IOperationResult<IApplicationEntry, string, CreateResult>> CreateEntry(
 			ICreateApplicationEntry entry)
 		{
-			var applicationEntry = new ApplicationEntry(entry);
+			var applicationEntry = new ApplicationEntry(entry?.Id?.ToUpper(), entry?.Id, entry?.Roles ?? Roles.None);
 			return await this.DatabaseService.Create(applicationEntry);
 		}
 
@@ -113,7 +113,7 @@
 		protected override async Task<IOperationResult<IApplicationEntry, string, UpdateResult>> UpdateEntry(
 			IUpdateApplicationEntry entry)
 		{
-			var applicationEntry = new ApplicationEntry(entry);
+			var applicationEntry = new ApplicationEntry(entry?.Id?.ToUpper(), entry?.OriginalId, entry?.Roles ?? Roles.None);
 			return await this.DatabaseService.Update(applicationEntry);
 		}
 	}
