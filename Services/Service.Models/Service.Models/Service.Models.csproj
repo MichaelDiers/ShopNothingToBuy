@@ -11,7 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Service.Contracts" Version="1.1.1" />
+    <PackageReference Include="Service.Contracts" Version="1.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Crud\Application\" />
   </ItemGroup>
 
 </Project>
