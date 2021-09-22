@@ -12,6 +12,7 @@ jobs:
     env:
       CONFIG: Release
       CSPROJ_FOLDER: Authentication
+      CSPROJ_FOLDER_TESTS: Authentication.Tests
       PACKAGE_ID: AuthenticationService
     steps:
       - name: checkout
@@ -26,7 +27,7 @@ jobs:
           echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" $CSPROJ_FOLDER/nuget.config) >$CSPROJ_FOLDER/nuget.config
       - name: copy nuget config to test project folder
         run: |
-          cp $CSPROJ_FOLDER/nuget.config $CSPROJ_FOLDER.Test/nuget.config
+          cp $CSPROJ_FOLDER/nuget.config $CSPROJ_FOLDER_TESTS/nuget.config
       - name: build
         run: dotnet build --configuration "$CONFIG"
       - name: test
