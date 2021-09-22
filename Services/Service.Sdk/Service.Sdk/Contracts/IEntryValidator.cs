@@ -1,6 +1,7 @@
 ﻿namespace Service.Sdk.Contracts
 {
 	using System.Threading.Tasks;
+	using Service.Contracts.Crud.Base;
 
 	/// <summary>
 	///   Validator for service input data.

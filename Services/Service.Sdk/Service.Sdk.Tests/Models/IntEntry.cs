@@ -1,6 +1,6 @@
 ﻿namespace Service.Sdk.Tests.Models
 {
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Crud.Base;
 
 	internal class IntEntry : IEntry<int>
 	{

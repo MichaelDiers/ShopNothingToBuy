@@ -1,6 +1,6 @@
 ﻿namespace Service.Sdk.Services
 {
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Crud.Base;
 
 	/// <summary>
 	///   Describes the result of a service operation.

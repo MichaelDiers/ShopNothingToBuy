@@ -4,6 +4,8 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
+	using Service.Contracts.Business.Log;
+	using Service.Contracts.Crud.Base;
 	using Service.Sdk.Contracts;
 
 	/// <summary>

@@ -2,6 +2,8 @@
 {
 	using System;
 	using System.Threading.Tasks;
+	using Service.Contracts.Business.Log;
+	using Service.Contracts.Crud.Base;
 	using Service.Sdk.Contracts;
 	using Service.Sdk.Services;
 	using Service.Sdk.Tests.Models;

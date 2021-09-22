@@ -1,7 +1,7 @@
 ﻿namespace Service.Sdk.Tests.Models
 {
 	using System;
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Crud.Base;
 
 	internal class StringEntry : IEntry<string>
 	{

@@ -1,11 +1,11 @@
 ﻿namespace Service.Sdk.Services
 {
 	using System.Collections.Generic;
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Crud.Base;
 
 	/// <summary>
 	///   Describes the result of a service list operation, e.g.:
-	///   <see cref="IServiceBase{TEntry,TEntryId,TCreateEntry,TUpdateEntry}.List" />.
+	///   <see cref="List{T}" />.
 	/// </summary>
 	/// <typeparam name="T">The type of the listed entries.</typeparam>
 	/// <typeparam name="TOperationResult">The type of the operation list result, e.g.: <see cref="ListResult" />.</typeparam>

@@ -1,6 +1,6 @@
 ﻿namespace Service.Sdk.Tests
 {
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Crud.Base;
 	using Service.Sdk.Services;
 	using Service.Sdk.Tests.Models;
 	using Xunit;

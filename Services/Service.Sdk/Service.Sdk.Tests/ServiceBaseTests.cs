@@ -1,7 +1,7 @@
 ﻿namespace Service.Sdk.Tests
 {
 	using System;
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Crud.Base;
 	using Service.Sdk.Services;
 	using Service.Sdk.Tests.Mocks;
 	using Service.Sdk.Tests.Models;

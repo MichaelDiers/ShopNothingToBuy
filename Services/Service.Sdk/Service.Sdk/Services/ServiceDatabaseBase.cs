@@ -2,6 +2,9 @@
 {
 	using System;
 	using System.Threading.Tasks;
+	using Service.Contracts.Business.Log;
+	using Service.Contracts.Crud.Base;
+	using Service.Contracts.Crud.Database;
 	using Service.Sdk.Contracts;
 
 	/// <summary>

@@ -1,6 +1,7 @@
 ﻿namespace Service.Sdk.Services
 {
 	using System.Threading.Tasks;
+	using Service.Contracts.Crud.Base;
 	using Service.Sdk.Contracts;
 
 	/// <summary>

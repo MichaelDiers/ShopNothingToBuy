@@ -6,7 +6,8 @@
 	using System.Net;
 	using System.Net.Http;
 	using System.Threading.Tasks;
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Business.Log;
+	using Service.Contracts.Crud.Base;
 	using Service.Sdk.Services;
 
 	/// <summary>
