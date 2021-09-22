@@ -14,6 +14,7 @@ jobs:
       PACKAGE_VERSION: "1.1"
       PACKAGE_NAME: ApplicationService
       CSPROJ_FOLDER: Application
+      CSPROJ_FOLDER_TESTS: Application.Tests
       CSPROJ_NAME: Application
     steps:
       - name: checkout
@@ -26,10 +27,9 @@ jobs:
         run: |
           cp ../../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER/nuget.config
           echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" $CSPROJ_FOLDER/nuget.config) >$CSPROJ_FOLDER/nuget.config
-      - name: copy and edit nuget config to test project folder
+      - name: copy nuget config to test project folder
         run: |
-          cp ../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER.Tests/nuget.config
-          echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" $CSPROJ_FOLDER.Tests/nuget.config) >$CSPROJ_FOLDER.Tests/nuget.config
+          cp $CSPROJ_FOLDER/nuget.config $CSPROJ_FOLDER_TESTS/nuget.config        
       - name: build
         run: dotnet build --configuration "$CONFIG"
       - name: test
