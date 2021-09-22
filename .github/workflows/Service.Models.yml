@@ -1,0 +1,33 @@
+name: Service.Models CI
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Services/Service.Models/**'
+  workflow_dispatch:
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    env:
+      CONFIG: Release
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: use .net core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+      - name: build
+        run: dotnet build --configuration "$CONFIG"
+      - name: test
+        run: dotnet test --configuration "$CONFIG" --no-build
+      - name: pack
+        run: dotnet pack Service.Models/Service.Models.csproj -c "$CONFIG" -p:PackageVersion=1.1.$GITHUB_RUN_NUMBER --no-build
+      - name: publish
+        run: dotnet nuget push "Service.Models/bin/$CONFIG/Service.Models.1.1.$GITHUB_RUN_NUMBER.nupkg"  --api-key "$SNTB_TOKEN" --source "https://nuget.pkg.github.com/MichaelDiers/index.json"
+        env:
+          SNTB_TOKEN: ${{ secrets.SNTB_NUGET_CI_TOKEN}}          
+defaults:
+  run:
+    working-directory: 'Services/Service.Models'
