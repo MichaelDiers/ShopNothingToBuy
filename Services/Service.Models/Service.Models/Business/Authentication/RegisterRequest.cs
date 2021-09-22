@@ -5,7 +5,7 @@
 	/// <summary>
 	///   Describes a registration request.
 	/// </summary>
-	public class RegisterRequest : IRegisterRequest
+	public class RegisterRequest : AuthenticationBase, IRegisterRequest
 	{
 	}
 }
