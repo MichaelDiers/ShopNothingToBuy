@@ -1,9 +1,9 @@
 ﻿namespace Service.Business.Authentication
 {
-	using System;
 	using System.Threading.Tasks;
 	using Service.Contracts.Base;
 	using Service.Contracts.Business.Authentication;
+	using Service.Models.Base;
 
 	/// <summary>
 	///   Describes the operations of the authentication service.
@@ -20,7 +20,14 @@
 		/// </returns>
 		public Task<IServiceResponse<AuthenticationResult, string>> Authenticate(IAuthenticationRequest request)
 		{
-			throw new NotImplementedException();
+			var serviceResponse = new ServiceResponse<AuthenticationResult, string>
+			{
+				Result = AuthenticationResult.Authorized,
+				Response = string.Empty
+			};
+
+			var response = (IServiceResponse<AuthenticationResult, string>) serviceResponse;
+			return Task.FromResult(response);
 		}
 
 		/// <summary>
@@ -33,7 +40,14 @@
 		/// </returns>
 		public Task<IServiceResponse<RegisterResult, string>> Register(IRegisterRequest request)
 		{
-			throw new NotImplementedException();
+			var serviceResponse = new ServiceResponse<RegisterResult, string>
+			{
+				Result = RegisterResult.Registered,
+				Response = string.Empty
+			};
+
+			var response = (IServiceResponse<RegisterResult, string>) serviceResponse;
+			return Task.FromResult(response);
 		}
 	}
 }

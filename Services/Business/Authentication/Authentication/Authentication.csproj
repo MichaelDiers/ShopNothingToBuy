@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="Service.Contracts" Version="1.1.1" />
+    <PackageReference Include="Service.Models" Version="1.1.4" />
   </ItemGroup>
 
 </Project>
