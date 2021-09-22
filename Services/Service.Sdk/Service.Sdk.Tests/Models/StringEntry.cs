@@ -3,7 +3,7 @@
 	using System;
 	using Service.Contracts.Crud.Base;
 
-	internal class StringEntry : IEntry<string>
+	internal class StringEntry : IEntry<string>, IStringEntry
 	{
 		public StringEntry(CreateEntry entry)
 			: this(Guid.NewGuid().ToString(), entry.Value.ToString())
@@ -21,7 +21,8 @@
 			this.Value = value;
 		}
 
-		public string Value { get; }
 		public string Id { get; }
+
+		public string Value { get; }
 	}
 }

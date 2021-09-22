@@ -9,7 +9,8 @@
 	using Service.Sdk.Services;
 	using Service.Sdk.Tests.Models;
 
-	internal class ServiceDatabaseBaseMock : ServiceDatabaseBase<StringEntry, string, CreateEntry, UpdateEntry>
+	internal class
+		ServiceDatabaseBaseMock : ServiceDatabaseBase<StringEntry, IStringEntry, string, CreateEntry, UpdateEntry>
 	{
 		private readonly bool succeed;
 		private readonly bool throwException;
@@ -26,7 +27,7 @@
 			this.throwException = throwException;
 		}
 
-		protected override Task<IOperationResult<StringEntry, string, CreateResult>> CreateEntry(CreateEntry entry)
+		protected override Task<IOperationResult<IStringEntry, string, CreateResult>> CreateEntry(CreateEntry entry)
 		{
 			if (this.throwException)
 			{
@@ -36,10 +37,10 @@
 			var result = this.succeed
 				? new OperationResult<StringEntry, string, CreateResult>(CreateResult.Created, new StringEntry(entry))
 				: new OperationResult<StringEntry, string, CreateResult>(CreateResult.AlreadyExists);
-			return Task.FromResult<IOperationResult<StringEntry, string, CreateResult>>(result);
+			return Task.FromResult<IOperationResult<IStringEntry, string, CreateResult>>(result);
 		}
 
-		protected override Task<IOperationResult<StringEntry, string, UpdateResult>> UpdateEntry(UpdateEntry entry)
+		protected override Task<IOperationResult<IStringEntry, string, UpdateResult>> UpdateEntry(UpdateEntry entry)
 		{
 			if (this.throwException)
 			{
@@ -49,7 +50,7 @@
 			var result = this.succeed
 				? new OperationResult<StringEntry, string, UpdateResult>(UpdateResult.Updated, new StringEntry(entry))
 				: new OperationResult<StringEntry, string, UpdateResult>(UpdateResult.NotFound);
-			return Task.FromResult<IOperationResult<StringEntry, string, UpdateResult>>(result);
+			return Task.FromResult<IOperationResult<IStringEntry, string, UpdateResult>>(result);
 		}
 	}
 }
