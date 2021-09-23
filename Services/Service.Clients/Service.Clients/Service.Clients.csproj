@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+	  <PackageId>Service.Clients</PackageId>
+	  <IsPackable>True</IsPackable>
+	  <OutputType>Library</OutputType>
+	  <Authors>MichaelDiers</Authors>
+	  <PackageDescription>Client implementation for services.</PackageDescription>
+	  <RepositoryUrl>https://github.com/MichaelDiers/ShopNothingToBuy</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Service.Contracts" Version="1.1.9" />
+    <PackageReference Include="Service.Models" Version="1.1.8" />
+    <PackageReference Include="Service.Sdk" Version="1.1.22" />
+  </ItemGroup>
+
+</Project>
