@@ -10,21 +10,18 @@
 	///   Base class for services using a database.
 	/// </summary>
 	/// <typeparam name="TEntry">The type of the object to process.</typeparam>
-	/// <typeparam name="TIEntry">Interface type for <typeparamref name="TEntry" />.</typeparam>
 	/// <typeparam name="TEntryId">The type of the id of an entry.</typeparam>
 	/// <typeparam name="TCreateEntry">The type of an entry in create operation context.</typeparam>
 	/// <typeparam name="TUpdateEntry">The type of an entry in update operation context.</typeparam>
 	public abstract class
-		ServiceDatabaseBase<TEntry, TIEntry, TEntryId, TCreateEntry, TUpdateEntry> : ServiceBase<TIEntry, TEntryId,
-			TCreateEntry,
-			TUpdateEntry>
-		where TEntry : class, TIEntry, IEntry<TEntryId>
-		where TIEntry : class, IEntry<TEntryId>
+		ServiceDatabaseBase<TEntry, TEntryId, TCreateEntry, TUpdateEntry>
+		: ServiceBase<TEntry, TEntryId, TCreateEntry, TUpdateEntry>
+		where TEntry : class, IEntry<TEntryId>
 		where TCreateEntry : class
 		where TUpdateEntry : class, IEntry<TEntryId>
 	{
 		/// <summary>
-		///   Create a new instance of <see cref="ServiceDatabaseBase{TEntry,TIEntry,TEntryId,TCreateEntry,TUpdateEntry}" />.
+		///   Create a new instance of <see cref="ServiceDatabaseBase{TEntry,TEntryId,TCreateEntry,TUpdateEntry}" />.
 		/// </summary>
 		/// <param name="logger">The error logger of the application.</param>
 		/// <param name="validator">The validator for input data of the application.</param>
@@ -60,7 +57,7 @@
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
 		///   that contains the <see cref="DeleteResult" />.
 		/// </returns>
-		protected override async Task<IOperationResult<TIEntry, TEntryId, DeleteResult>> DeleteEntry(TEntryId entryId)
+		protected override async Task<IOperationResult<TEntry, TEntryId, DeleteResult>> DeleteEntry(TEntryId entryId)
 		{
 			return await this.DatabaseService.Delete(entryId);
 		}
@@ -97,7 +94,7 @@
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
 		///   that contains the <see cref="ReadResult" />.
 		/// </returns>
-		protected override async Task<IOperationResult<TIEntry, TEntryId, ReadResult>> ReadEntry(TEntryId entryId)
+		protected override async Task<IOperationResult<TEntry, TEntryId, ReadResult>> ReadEntry(TEntryId entryId)
 		{
 			return await this.DatabaseService.Read(entryId);
 		}
