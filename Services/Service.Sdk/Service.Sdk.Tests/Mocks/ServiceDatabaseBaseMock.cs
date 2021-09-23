@@ -5,7 +5,6 @@
 	using Service.Contracts.Business.Log;
 	using Service.Contracts.Crud.Base;
 	using Service.Contracts.Crud.Database;
-	using Service.Sdk.Contracts;
 	using Service.Sdk.Services;
 	using Service.Sdk.Tests.Models;
 

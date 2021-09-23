@@ -7,7 +7,7 @@
 	using System.Threading.Tasks;
 	using Newtonsoft.Json;
 	using Service.Contracts.Business.Log;
-	using Service.Sdk.Contracts;
+	using Service.Contracts.Client;
 
 	/// <summary>
 	///   Base class for client implementations.

@@ -5,7 +5,6 @@
 	using Service.Contracts.Business.Log;
 	using Service.Contracts.Crud.Base;
 	using Service.Contracts.Crud.Database;
-	using Service.Sdk.Contracts;
 
 	/// <summary>
 	///   Base class for database services.
