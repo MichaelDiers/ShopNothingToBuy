@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
+	using Newtonsoft.Json;
 	using Service.Contracts.Business.Log;
 	using Service.Contracts.Crud.Base;
 
@@ -80,6 +81,32 @@
 			catch (Exception ex)
 			{
 				await this.LogError("Error executing create entry.", ex);
+				return new OperationResult<TEntry, TEntryId, CreateResult>(CreateResult.InternalError);
+			}
+		}
+
+		/// <summary>
+		///   Create a new entry.
+		/// </summary>
+		/// <param name="json">A json serialized <typeparamref name="TCreateEntry" />.</param>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
+		///   that contains the <see cref="CreateResult" />.
+		/// </returns>
+		public async Task<IOperationResult<TEntry, TEntryId, CreateResult>> Create(string json)
+		{
+			try
+			{
+				if (this.TryDeserializeObject<TCreateEntry>(json, out var createEntry))
+				{
+					return await this.Create(createEntry);
+				}
+
+				return new OperationResult<TEntry, TEntryId, CreateResult>(CreateResult.InvalidData);
+			}
+			catch (Exception ex)
+			{
+				await this.LogError("Error executing create entry from json.", ex);
 				return new OperationResult<TEntry, TEntryId, CreateResult>(CreateResult.InternalError);
 			}
 		}
@@ -366,5 +393,19 @@
 		///   that contains the <see cref="UpdateResult" />.
 		/// </returns>
 		protected abstract Task<IOperationResult<TEntry, TEntryId, UpdateResult>> UpdateEntry(TUpdateEntry entry);
+
+		private bool TryDeserializeObject<T>(string json, out T result)
+		{
+			try
+			{
+				result = JsonConvert.DeserializeObject<T>(json);
+				return true;
+			}
+			catch
+			{
+				result = default;
+				return false;
+			}
+		}
 	}
 }

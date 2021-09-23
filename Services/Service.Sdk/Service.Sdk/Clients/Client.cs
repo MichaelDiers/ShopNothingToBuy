@@ -6,6 +6,7 @@
 	using System.Net;
 	using System.Net.Http;
 	using System.Threading.Tasks;
+	using Newtonsoft.Json;
 	using Service.Contracts.Business.Log;
 	using Service.Contracts.Crud.Base;
 	using Service.Sdk.Services;
@@ -101,6 +102,19 @@
 					result.StatusCode,
 					"Unhandled result code.")
 			};
+		}
+
+		/// <summary>
+		///   Create a new entry.
+		/// </summary>
+		/// <param name="json">A json serialized <typeparamref name="TCreateEntry" />.</param>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
+		///   that contains the <see cref="CreateResult" />.
+		/// </returns>
+		public async Task<IOperationResult<TEntry, TEntryId, CreateResult>> Create(string json)
+		{
+			return await this.Create(JsonConvert.DeserializeObject<TCreateEntry>(json));
 		}
 
 		/// <summary>
