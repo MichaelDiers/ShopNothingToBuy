@@ -5,7 +5,6 @@
 	using Microsoft.Extensions.Configuration;
 	using Service.Contracts.Crud.Application;
 	using Service.Contracts.Crud.Base;
-	using Service.Models.Crud.Application;
 	using Service.Models.Crud.Database;
 	using Xunit;
 

@@ -7,7 +7,7 @@
 	/// <summary>
 	///   Client for the <see cref="IApplicationService" />.
 	/// </summary>
-	public class ApplicationClient : Client<IApplicationEntry, string, ICreateApplicationEntry, IUpdateApplicationEntry>,
+	public class ApplicationClient : Client<ApplicationEntry, string, CreateApplicationEntry, UpdateApplicationEntry>,
 		IApplicationService
 	{
 		/// <summary>

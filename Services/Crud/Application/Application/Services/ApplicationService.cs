@@ -6,16 +6,14 @@
 	using Service.Contracts.Crud.Application;
 	using Service.Contracts.Crud.Base;
 	using Service.Contracts.Crud.Database;
-	using Service.Models.Crud.Application;
-	using Service.Sdk.Contracts;
 	using Service.Sdk.Services;
 
 	/// <summary>
 	///   Service for creating, reading, updating and deleting application data.
 	/// </summary>
-	public class ApplicationService : ServiceDatabaseBase<ApplicationEntry, IApplicationEntry, string,
-		ICreateApplicationEntry,
-		IUpdateApplicationEntry>, IApplicationService
+	public class ApplicationService : ServiceDatabaseBase<ApplicationEntry, string,
+		CreateApplicationEntry,
+		UpdateApplicationEntry>, IApplicationService
 	{
 		/// <summary>
 		///   Creates a new instance of <see cref="ApplicationService" />.
@@ -43,7 +41,7 @@
 		/// <param name="databaseService">The service for accessing the application database.</param>
 		public ApplicationService(
 			ILogger logger,
-			IEntryValidator<ICreateApplicationEntry, IUpdateApplicationEntry, string> validator,
+			IEntryValidator<CreateApplicationEntry, UpdateApplicationEntry, string> validator,
 			IDatabaseService<ApplicationEntry, string> databaseService)
 			: base(logger, validator, databaseService)
 		{
@@ -57,7 +55,7 @@
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
 		///   that contains the <see cref="DeleteResult" />.
 		/// </returns>
-		public override async Task<IOperationResult<IApplicationEntry, string, DeleteResult>> Delete(string entryId)
+		public override async Task<IOperationResult<ApplicationEntry, string, DeleteResult>> Delete(string entryId)
 		{
 			return await base.Delete(entryId?.ToUpper());
 		}
@@ -82,7 +80,7 @@
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
 		///   that contains the <see cref="ReadResult" />.
 		/// </returns>
-		public override async Task<IOperationResult<IApplicationEntry, string, ReadResult>> Read(string entryId)
+		public override async Task<IOperationResult<ApplicationEntry, string, ReadResult>> Read(string entryId)
 		{
 			return await base.Read(entryId?.ToUpper());
 		}
@@ -95,8 +93,8 @@
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
 		///   that contains the <see cref="CreateResult" />.
 		/// </returns>
-		protected override async Task<IOperationResult<IApplicationEntry, string, CreateResult>> CreateEntry(
-			ICreateApplicationEntry entry)
+		protected override async Task<IOperationResult<ApplicationEntry, string, CreateResult>> CreateEntry(
+			CreateApplicationEntry entry)
 		{
 			var applicationEntry = new ApplicationEntry(entry?.Id?.ToUpper(), entry?.Id, entry?.Roles ?? Roles.None);
 			return await this.DatabaseService.Create(applicationEntry);
@@ -110,8 +108,8 @@
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
 		///   that contains the <see cref="UpdateResult" />.
 		/// </returns>
-		protected override async Task<IOperationResult<IApplicationEntry, string, UpdateResult>> UpdateEntry(
-			IUpdateApplicationEntry entry)
+		protected override async Task<IOperationResult<ApplicationEntry, string, UpdateResult>> UpdateEntry(
+			UpdateApplicationEntry entry)
 		{
 			var applicationEntry = new ApplicationEntry(entry?.Id?.ToUpper(), entry?.OriginalId, entry?.Roles ?? Roles.None);
 			return await this.DatabaseService.Update(applicationEntry);

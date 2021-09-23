@@ -8,7 +8,7 @@
 	/// <summary>
 	///   Validator for <see cref="ApplicationService" /> input data.
 	/// </summary>
-	public class ApplicationServiceValidator : IEntryValidator<ICreateApplicationEntry, IUpdateApplicationEntry, string>
+	public class ApplicationServiceValidator : IEntryValidator<CreateApplicationEntry, UpdateApplicationEntry, string>
 	{
 		/// <summary>
 		///   The max length to application ids.
@@ -25,7 +25,7 @@
 		/// </summary>
 		/// <param name="entry">The input data.</param>
 		/// <returns>A <see cref="Task" /> whose result is true if the data is valid and false otherwise.</returns>
-		public async Task<bool> ValidateCreateEntry(ICreateApplicationEntry entry)
+		public async Task<bool> ValidateCreateEntry(CreateApplicationEntry entry)
 		{
 			return entry != null && await ValidateEntry(entry);
 		}
@@ -49,7 +49,7 @@
 		/// </summary>
 		/// <param name="entry">The input data.</param>
 		/// <returns>A <see cref="Task" /> whose result is true if the data is valid and false otherwise.</returns>
-		public async Task<bool> ValidateUpdateEntry(IUpdateApplicationEntry entry)
+		public async Task<bool> ValidateUpdateEntry(UpdateApplicationEntry entry)
 		{
 			return entry != null
 			       && await ValidateEntry(entry)
@@ -62,7 +62,7 @@
 		/// </summary>
 		/// <param name="baseApplicationEntry">The entry to be validated.</param>
 		/// <returns>True if the entry is valid and false otherwise.</returns>
-		private static Task<bool> ValidateEntry(IBaseApplicationEntry baseApplicationEntry)
+		private static Task<bool> ValidateEntry(BaseApplicationEntry baseApplicationEntry)
 		{
 			var result = baseApplicationEntry != null
 			             && !string.IsNullOrWhiteSpace(baseApplicationEntry.Id)
