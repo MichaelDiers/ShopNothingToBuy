@@ -3,7 +3,7 @@
 	/// <summary>
 	///   Describes the data for creating an application.
 	/// </summary>
-	public interface ICreateApplicationEntry : IBaseApplicationEntry
+	public class CreateApplicationEntry : BaseApplicationEntry
 	{
 	}
 }

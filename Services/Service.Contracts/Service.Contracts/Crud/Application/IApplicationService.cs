@@ -3,10 +3,10 @@
 	using Service.Contracts.Crud.Base;
 
 	/// <summary>
-	///   Describes operations on <see cref="IApplicationEntry" /> instances.
+	///   Describes operations on <see cref="ApplicationEntry" /> instances.
 	/// </summary>
 	public interface
-		IApplicationService : IServiceBase<IApplicationEntry, string, ICreateApplicationEntry, IUpdateApplicationEntry>
+		IApplicationService : IServiceBase<ApplicationEntry, string, CreateApplicationEntry, UpdateApplicationEntry>
 	{
 	}
 }

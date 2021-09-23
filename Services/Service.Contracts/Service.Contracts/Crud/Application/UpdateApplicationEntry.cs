@@ -3,11 +3,11 @@
 	/// <summary>
 	///   Describes the data for updating an application.
 	/// </summary>
-	public interface IUpdateApplicationEntry : IBaseApplicationEntry
+	public class UpdateApplicationEntry : BaseApplicationEntry
 	{
 		/// <summary>
-		///   Gets the original requested id at creation time.
+		///   Gets or sets the original requested id at creation time.
 		/// </summary>
-		string OriginalId { get; }
+		public string OriginalId { get; set; }
 	}
 }
