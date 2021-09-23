@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
+	using Newtonsoft.Json;
 	using Service.Contracts.Crud.Application;
 	using Service.Contracts.Crud.Base;
 	using Service.Contracts.Crud.Database;
@@ -37,6 +38,11 @@
 			}
 
 			return Task.FromResult(result);
+		}
+
+		public async Task<IOperationResult<ApplicationEntry, string, CreateResult>> Create(string json)
+		{
+			return await this.Create(JsonConvert.DeserializeObject<ApplicationEntry>(json));
 		}
 
 		public Task<IOperationResult<ApplicationEntry, string, DeleteResult>> Delete(string entryId)

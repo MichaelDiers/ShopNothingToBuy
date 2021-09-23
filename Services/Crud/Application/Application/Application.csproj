@@ -11,10 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDatabase" Version="1.1.16" />
-    <PackageReference Include="Service.Contracts" Version="1.1.10" />
+    <PackageReference Include="MongoDatabase" Version="1.1.17" />
+    <PackageReference Include="Service.Contracts" Version="1.1.11" />
     <PackageReference Include="Service.Models" Version="1.1.9" />
-    <PackageReference Include="Service.Sdk" Version="1.1.24" />
+    <PackageReference Include="Service.Sdk" Version="1.1.25" />
   </ItemGroup>
 
 </Project>
