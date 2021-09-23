@@ -14,14 +14,12 @@
 	///   Base class for for clients calling a service.
 	/// </summary>
 	/// <typeparam name="TEntry">The type of the object to process.</typeparam>
-	/// <typeparam name="TIEntry">Interface type for <typeparamref name="TEntry" />.</typeparam>
 	/// <typeparam name="TEntryId">The type of the id of an entry.</typeparam>
 	/// <typeparam name="TCreateEntry">The type of an entry in create operation context.</typeparam>
 	/// <typeparam name="TUpdateEntry">The type of an entry in update operation context.</typeparam>
-	public class Client<TEntry, TIEntry, TEntryId, TCreateEntry, TUpdateEntry> : ClientBase,
-		IServiceBase<TIEntry, TEntryId, TCreateEntry, TUpdateEntry>
-		where TEntry : class, TIEntry, IEntry<TEntryId>
-		where TIEntry : class, IEntry<TEntryId>
+	public class Client<TEntry, TEntryId, TCreateEntry, TUpdateEntry> : ClientBase,
+		IServiceBase<TEntry, TEntryId, TCreateEntry, TUpdateEntry>
+		where TEntry : class, IEntry<TEntryId>
 		where TCreateEntry : class
 		where TUpdateEntry : class, IEntry<TEntryId>
 	{
@@ -31,7 +29,7 @@
 		private readonly string requestUrl;
 
 		/// <summary>
-		///   Creates a new instance of <see cref="Client{TEntry,TIEntry,TEntryId,TCreateEntry,TUpdateEntry}" />.
+		///   Creates a new instance of <see cref="Client{TEntry,TEntryId,TCreateEntry,TUpdateEntry}" />.
 		/// </summary>
 		/// <param name="logger">A logger for error messages.</param>
 		/// <param name="requestUrl">The url of the service.</param>
@@ -41,7 +39,7 @@
 		}
 
 		/// <summary>
-		///   Creates a new instance of <see cref="Client{TEntry,TIEntry,TEntryId,TCreateEntry,TUpdateEntry}" />.
+		///   Creates a new instance of <see cref="Client{TEntry,TEntryId,TCreateEntry,TUpdateEntry}" />.
 		/// </summary>
 		/// <param name="logger">A logger for error messages.</param>
 		/// <param name="apiKey">The api key used in the service call.</param>
@@ -84,7 +82,7 @@
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
 		///   that contains the <see cref="CreateResult" />.
 		/// </returns>
-		public async Task<IOperationResult<TIEntry, TEntryId, CreateResult>> Create(TCreateEntry entry)
+		public async Task<IOperationResult<TEntry, TEntryId, CreateResult>> Create(TCreateEntry entry)
 		{
 			var result =
 				await this.ServiceCallWithResult<TCreateEntry, TEntry>(this.requestUrl, HttpMethod.Post.Method, entry);
@@ -113,7 +111,7 @@
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
 		///   that contains the <see cref="DeleteResult" />.
 		/// </returns>
-		public async Task<IOperationResult<TIEntry, TEntryId, DeleteResult>> Delete(TEntryId entryId)
+		public async Task<IOperationResult<TEntry, TEntryId, DeleteResult>> Delete(TEntryId entryId)
 		{
 			var result = await this.ServiceCallWithResult<TEntry>($"{this.requestUrl}/{entryId}", HttpMethod.Delete.Method);
 			return result.StatusCode switch
@@ -184,7 +182,7 @@
 		/// </summary>
 		/// <param name="entryIds">The ids to be read.</param>
 		/// <returns>A Task whose result contains the read results.</returns>
-		public async Task<IEnumerable<IOperationResult<TIEntry, TEntryId, ReadResult>>> Read(IEnumerable<TEntryId> entryIds)
+		public async Task<IEnumerable<IOperationResult<TEntry, TEntryId, ReadResult>>> Read(IEnumerable<TEntryId> entryIds)
 		{
 			// Todo: refactor
 			var result = entryIds.Select(this.Read).ToArray();
@@ -200,7 +198,7 @@
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
 		///   that contains the <see cref="ReadResult" />.
 		/// </returns>
-		public async Task<IOperationResult<TIEntry, TEntryId, ReadResult>> Read(TEntryId entryId)
+		public async Task<IOperationResult<TEntry, TEntryId, ReadResult>> Read(TEntryId entryId)
 		{
 			var result = await this.ServiceCallWithResult<TEntry>($"{this.requestUrl}/{entryId}", HttpMethod.Get.Method);
 			return result.StatusCode switch
@@ -226,7 +224,7 @@
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
 		///   that contains the <see cref="UpdateResult" />.
 		/// </returns>
-		public async Task<IOperationResult<TIEntry, TEntryId, UpdateResult>> Update(TUpdateEntry entry)
+		public async Task<IOperationResult<TEntry, TEntryId, UpdateResult>> Update(TUpdateEntry entry)
 		{
 			var result =
 				await this.ServiceCallWithResult<TUpdateEntry, TEntry>(this.requestUrl, HttpMethod.Put.Method, entry);
