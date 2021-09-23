@@ -8,7 +8,6 @@
 	using Service.Contracts.Business.Log;
 	using Service.Contracts.Crud.Base;
 	using Service.Contracts.Crud.Database;
-	using Service.Sdk.Contracts;
 	using Service.Sdk.Services;
 	using DeleteResult = Service.Contracts.Crud.Base.DeleteResult;
 	using UpdateResult = Service.Contracts.Crud.Base.UpdateResult;
