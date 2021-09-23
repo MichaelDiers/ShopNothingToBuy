@@ -32,6 +32,16 @@
 		Task<IOperationResult<TEntry, TEntryId, CreateResult>> Create(TCreateEntry entry);
 
 		/// <summary>
+		///   Create a new entry.
+		/// </summary>
+		/// <param name="json">A json serialized <typeparamref name="TCreateEntry" />.</param>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
+		///   that contains the <see cref="CreateResult" />.
+		/// </returns>
+		Task<IOperationResult<TEntry, TEntryId, CreateResult>> Create(string json);
+
+		/// <summary>
 		///   Delete an entry by its id.
 		/// </summary>
 		/// <param name="entryId">The id of the entry.</param>
