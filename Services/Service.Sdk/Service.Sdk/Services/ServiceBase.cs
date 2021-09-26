@@ -290,6 +290,32 @@
 		}
 
 		/// <summary>
+		///   Update an entry.
+		/// </summary>
+		/// <param name="json">The new values of the entry in json format.</param>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
+		///   that contains the <see cref="UpdateResult" />.
+		/// </returns>
+		public async Task<IOperationResult<TEntry, TEntryId, UpdateResult>> Update(string json)
+		{
+			try
+			{
+				if (this.TryDeserializeObject<TUpdateEntry>(json, out var updateEntry))
+				{
+					return await this.Update(updateEntry);
+				}
+
+				return new OperationResult<TEntry, TEntryId, UpdateResult>(UpdateResult.InvalidData);
+			}
+			catch (Exception ex)
+			{
+				await this.LogError("Error executing update entry from json.", ex);
+				return new OperationResult<TEntry, TEntryId, UpdateResult>(UpdateResult.InternalError);
+			}
+		}
+
+		/// <summary>
 		///   Delete all known entries.
 		/// </summary>
 		/// <returns>A <see cref="Task" /> whose result is a <see cref="ClearResult" />.</returns>
