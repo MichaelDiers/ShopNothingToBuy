@@ -68,7 +68,8 @@
 			             && !string.IsNullOrWhiteSpace(baseApplicationEntry.Id)
 			             && baseApplicationEntry.Id.Length >= IdMinLength
 			             && baseApplicationEntry.Id.Length <= IdMaxLength
-			             && baseApplicationEntry.Roles != Roles.None;
+			             && baseApplicationEntry.Roles != Roles.None
+			             && Enum.IsDefined(typeof(Roles), baseApplicationEntry.Roles);
 			return Task.FromResult(result);
 		}
 	}
