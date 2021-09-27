@@ -3,7 +3,7 @@
 	/// <summary>
 	///   Base class for entries with an id.
 	/// </summary>
-	/// <typeparam name="T"></typeparam>
+	/// <typeparam name="T">The type of the id.</typeparam>
 	public class Entry<T> : IEntry<T>
 	{
 		/// <summary>
