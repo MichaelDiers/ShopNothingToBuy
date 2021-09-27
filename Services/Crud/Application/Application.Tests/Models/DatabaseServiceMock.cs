@@ -126,5 +126,10 @@
 
 			return Task.FromResult(result);
 		}
+
+		public Task<IOperationResult<ApplicationEntry, string, UpdateResult>> Update(string json)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
