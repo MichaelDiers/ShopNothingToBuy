@@ -258,5 +258,18 @@
 					"Unhandled result code.")
 			};
 		}
+
+		/// <summary>
+		///   Update an entry.
+		/// </summary>
+		/// <param name="json">A json serialized <typeparamref name="TUpdateEntry" />.</param>
+		/// <returns>
+		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
+		///   that contains the <see cref="UpdateResult" />.
+		/// </returns>
+		public async Task<IOperationResult<TEntry, TEntryId, UpdateResult>> Update(string json)
+		{
+			return await this.Update(JsonConvert.DeserializeObject<TUpdateEntry>(json));
+		}
 	}
 }

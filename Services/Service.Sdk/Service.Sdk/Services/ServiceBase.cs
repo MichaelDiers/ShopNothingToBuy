@@ -292,7 +292,7 @@
 		/// <summary>
 		///   Update an entry.
 		/// </summary>
-		/// <param name="json">The new values of the entry in json format.</param>
+		/// <param name="json">A json serialized <typeparamref name="TUpdateEntry" />.</param>
 		/// <returns>
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
 		///   that contains the <see cref="UpdateResult" />.
