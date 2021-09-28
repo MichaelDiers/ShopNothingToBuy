@@ -31,10 +31,10 @@ jobs:
       - name: trigger Service.Tests
         run: |
           curl --request POST \
-          --header 'Authorization: Bearer $WORKFLOW_DISPATCH_PAT' \
-          --header 'Accept: application/vnd.github.v3+json' \
-          --header 'content-type: application/json' \
-          --url https://api.github.com/repos/MichaelDiers/ShopNothingToBuy/actions/workflows/Service.Contracts.yml/dispatches \
+          --header "Authorization: Bearer $WORKFLOW_DISPATCH_PAT" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --header "content-type: application/json" \
+          --url https://api.github.com/repos/MichaelDiers/ShopNothingToBuy/actions/workflows/Service.Tests.yml/dispatches \
           -d '{"ref":"main"}'
         env:
           WORKFLOW_DISPATCH_PAT: ${{secrets.WorkflowDispatch_PAT}}
