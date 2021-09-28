@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ApplicationService" Version="1.1.16" />
+    <PackageReference Include="Google.Cloud.Functions.Hosting" Version="1.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Service.Contracts" Version="1.1.13" />
+    <PackageReference Include="Service.GoogleCloud.Functions" Version="1.1.1" />
+    <PackageReference Include="Service.Models" Version="1.1.10" />
+  </ItemGroup>
+
+
+</Project>
