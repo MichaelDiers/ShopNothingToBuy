@@ -27,17 +27,7 @@ jobs:
       - name: publish
         run: dotnet nuget push "Service.Contracts/bin/$CONFIG/Service.Contracts.1.1.$GITHUB_RUN_NUMBER.nupkg"  --api-key "$SNTB_TOKEN" --source "https://nuget.pkg.github.com/MichaelDiers/index.json"
         env:
-          SNTB_TOKEN: ${{ secrets.SNTB_NUGET_CI_TOKEN}}
-      - name: trigger Service.Tests
-        run: |
-          curl --request POST \
-          --header "Authorization: Bearer $WORKFLOW_DISPATCH_PAT" \
-          --header "Accept: application/vnd.github.v3+json" \
-          --header "content-type: application/json" \
-          --url https://api.github.com/repos/MichaelDiers/ShopNothingToBuy/actions/workflows/Service.Tests.yml/dispatches \
-          -d '{"ref":"main"}'
-        env:
-          WORKFLOW_DISPATCH_PAT: ${{secrets.WorkflowDispatch_PAT}}
+          SNTB_TOKEN: ${{ secrets.SNTB_NUGET_CI_TOKEN}}      
 defaults:
   run:
     working-directory: 'Services/Service.Contracts'
