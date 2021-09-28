@@ -1,5 +1,7 @@
 ﻿namespace Application.Services
 {
+	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
 	using MongoDatabase.Services;
 	using Service.Contracts.Business.Log;
@@ -83,6 +85,18 @@
 		public override async Task<IOperationResult<ApplicationEntry, string, ReadResult>> Read(string entryId)
 		{
 			return await base.Read(entryId?.ToUpper());
+		}
+
+		/// <summary>
+		///   Read entries by its id.
+		/// </summary>
+		/// <param name="entryIds">The ids to be read.</param>
+		/// <returns>A Task whose result contains the read results.</returns>
+		public override Task<IEnumerable<IOperationResult<ApplicationEntry, string, ReadResult>>> Read(
+			IEnumerable<string> entryIds)
+		{
+			var uppercaseEntryIds = entryIds?.Select(entryId => entryId?.ToUpper()).ToArray();
+			return base.Read(uppercaseEntryIds);
 		}
 
 		/// <summary>
