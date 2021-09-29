@@ -1,7 +1,5 @@
 ﻿namespace Application.Services
 {
-	using System.Collections.Generic;
-	using System.Linq;
 	using System.Threading.Tasks;
 	using MongoDatabase.Services;
 	using Service.Contracts.Business.Log;
@@ -13,7 +11,8 @@
 	/// <summary>
 	///   Service for creating, reading, updating and deleting application data.
 	/// </summary>
-	public class ApplicationService : ServiceDatabaseBase<ApplicationEntry, string,
+	public class ApplicationService : ServiceDatabaseBaseStringId<
+		ApplicationEntry,
 		CreateApplicationEntry,
 		UpdateApplicationEntry>, IApplicationService
 	{
@@ -47,56 +46,6 @@
 			IDatabaseService<ApplicationEntry, string> databaseService)
 			: base(logger, validator, databaseService)
 		{
-		}
-
-		/// <summary>
-		///   Delete an entry by its id.
-		/// </summary>
-		/// <param name="entryId">The id of the entry.</param>
-		/// <returns>
-		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
-		///   that contains the <see cref="DeleteResult" />.
-		/// </returns>
-		public override async Task<IOperationResult<ApplicationEntry, string, DeleteResult>> Delete(string entryId)
-		{
-			return await base.Delete(entryId?.ToUpper());
-		}
-
-		/// <summary>
-		///   Check if an entry exists.
-		/// </summary>
-		/// <param name="entryId">The id of the entry.</param>
-		/// <returns>
-		///   A <see cref="Task" /> whose result is a <see cref="ExistsResult" />.
-		/// </returns>
-		public override async Task<ExistsResult> Exists(string entryId)
-		{
-			return await base.Exists(entryId?.ToUpper());
-		}
-
-		/// <summary>
-		///   Read an entry by its id.
-		/// </summary>
-		/// <param name="entryId">The id of the entry.</param>
-		/// <returns>
-		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />
-		///   that contains the <see cref="ReadResult" />.
-		/// </returns>
-		public override async Task<IOperationResult<ApplicationEntry, string, ReadResult>> Read(string entryId)
-		{
-			return await base.Read(entryId?.ToUpper());
-		}
-
-		/// <summary>
-		///   Read entries by its id.
-		/// </summary>
-		/// <param name="entryIds">The ids to be read.</param>
-		/// <returns>A Task whose result contains the read results.</returns>
-		public override Task<IEnumerable<IOperationResult<ApplicationEntry, string, ReadResult>>> Read(
-			IEnumerable<string> entryIds)
-		{
-			var uppercaseEntryIds = entryIds?.Select(entryId => entryId?.ToUpper()).ToArray();
-			return base.Read(uppercaseEntryIds);
 		}
 
 		/// <summary>
