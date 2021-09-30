@@ -1,10 +1,10 @@
-name: User Service CI
+name: Services.Crud.User CI
 on:
   push:
     branches:
       - main
     paths:
-      - 'Services/Crud/User/**'
+      - 'Services/Crud/Services.Crud.User/**'
   workflow_dispatch:
 jobs:
   UserServiceNuget:
@@ -12,9 +12,9 @@ jobs:
     env:
       CONFIG: Release
       PACKAGE_VERSION: "1.1"
-      PACKAGE_NAME: UserService
-      CSPROJ_FOLDER: User
-      CSPROJ_NAME: User
+      PACKAGE_NAME: Services.Crud.User
+      CSPROJ_FOLDER: Services.Crud.User
+      CSPROJ_NAME: Services.Crud.User
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -42,4 +42,4 @@ jobs:
           SNTB_TOKEN: ${{ secrets.SNTB_NUGET_CI_TOKEN}}          
 defaults:
   run:
-    working-directory: 'Services/Crud/User'
+    working-directory: 'Services/Crud/Services.Crud.User'
