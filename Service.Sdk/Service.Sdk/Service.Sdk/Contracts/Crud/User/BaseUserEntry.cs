@@ -1,7 +1,6 @@
 ﻿namespace Service.Sdk.Contracts.Crud.User
 {
 	using System.Collections.Generic;
-	using Service.Sdk.Contracts.Crud.Application;
 
 	/// <summary>
 	///   User data that is used in <see cref="UserEntry" />, <see cref="CreateUserEntry" /> and
@@ -29,11 +28,6 @@
 		}
 
 		/// <summary>
-		///   Gets or sets the id of the application the user is created for.
-		/// </summary>
-		public string ApplicationId { get; set; }
-
-		/// <summary>
 		///   Gets or sets the applications and roles that the user can access.
 		/// </summary>
 		public IEnumerable<UserApplicationEntry> Applications { get; set; }
@@ -42,10 +36,5 @@
 		///   Gets or sets the user id.
 		/// </summary>
 		public string Id { get; set; }
-
-		/// <summary>
-		///   Gets or sets the roles of the user.
-		/// </summary>
-		public Roles Roles { get; set; }
 	}
 }

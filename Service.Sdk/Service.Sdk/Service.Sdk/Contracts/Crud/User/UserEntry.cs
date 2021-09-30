@@ -1,5 +1,6 @@
 ﻿namespace Service.Sdk.Contracts.Crud.User
 {
+	using System.Collections.Generic;
 	using Service.Sdk.Contracts.Crud.Base;
 
 	/// <summary>
@@ -17,21 +18,13 @@
 		/// <summary>
 		///   Creates a new instance of <see cref="UserEntry" />.
 		/// </summary>
-		/// <param name="createUserEntry">Data is initialized from the given entry.</param>
-		public UserEntry(CreateUserEntry createUserEntry)
-			: base(createUserEntry?.Id.ToUpper(), createUserEntry?.Applications)
+		/// <param name="id">The id of the user entry.</param>
+		/// <param name="originalId">The original id of the user entry.</param>
+		/// <param name="userApplicationEntries">The application and roles that the use has permissions for.</param>
+		public UserEntry(string id, string originalId, IEnumerable<UserApplicationEntry> userApplicationEntries)
+			: base(id, userApplicationEntries)
 		{
-			this.OriginalId = createUserEntry?.Id;
-		}
-
-		/// <summary>
-		///   Creates a new instance of <see cref="UserEntry" />.
-		/// </summary>
-		/// <param name="updateUserEntry">Data is initialized from the given entry.</param>
-		public UserEntry(UpdateUserEntry updateUserEntry)
-			: base(updateUserEntry?.Id?.ToUpper(), updateUserEntry?.Applications)
-		{
-			this.OriginalId = updateUserEntry?.OriginalId;
+			this.OriginalId = originalId;
 		}
 
 		/// <summary>

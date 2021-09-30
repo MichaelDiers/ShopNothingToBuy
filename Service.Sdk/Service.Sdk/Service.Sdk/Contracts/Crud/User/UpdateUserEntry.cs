@@ -3,7 +3,7 @@
 	using Service.Sdk.Contracts.Crud.Base;
 
 	/// <summary>
-	///   Describes the user data for the update operation of the <see cref="UserService" />.
+	///   Describes the user data for the update operation of the <see cref="IUserService" />.
 	/// </summary>
 	public class UpdateUserEntry : BaseUserEntry, IEntry<string>
 	{
