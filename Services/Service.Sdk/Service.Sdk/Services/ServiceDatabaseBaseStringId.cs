@@ -1,4 +1,4 @@
-﻿namespace Application.Services
+﻿namespace Service.Sdk.Services
 {
 	using System.Collections.Generic;
 	using System.Linq;
@@ -6,7 +6,6 @@
 	using Service.Sdk.Contracts.Business.Log;
 	using Service.Sdk.Contracts.Crud.Base;
 	using Service.Sdk.Contracts.Crud.Database;
-	using Service.Sdk.Services;
 
 	/// <summary>
 	///   Base class for services using a database with string ids.
