@@ -1,4 +1,4 @@
-﻿namespace MongoDatabase.Services
+﻿namespace Service.Sdk.Database.MongoDatabase.Services
 {
 	using System;
 	using System.Linq;
@@ -17,7 +17,7 @@
 	/// </summary>
 	/// <typeparam name="TEntry">The type of the database entries.</typeparam>
 	/// <typeparam name="TEntryId">The type of the database entry id.</typeparam>
-	public class MongoDbService<TEntry, TEntryId> : DatabaseService<TEntry, TEntryId>
+	public class MongoDbCrudService<TEntry, TEntryId> : DatabaseService<TEntry, TEntryId>
 		where TEntry : class, IEntry<TEntryId>
 	{
 		/// <summary>
@@ -36,12 +36,12 @@
 		private MongoClient mongoClient;
 
 		/// <summary>
-		///   Creates a new instance of <see cref="MongoDbService{TEntry,TEntryId}" />.
+		///   Creates a new instance of <see cref="MongoDbCrudService{TEntry,TEntryId}" />.
 		/// </summary>
 		/// <param name="logger">The logger used for error messages.</param>
 		/// <param name="validator">The validator for input data.</param>
 		/// <param name="mongoDbConfiguration">The MongoDb configuration for accessing the database.</param>
-		public MongoDbService(
+		public MongoDbCrudService(
 			ILogger logger,
 			IEntryValidator<TEntry, TEntry, TEntryId> validator,
 			IMongoDbConfiguration mongoDbConfiguration)

@@ -1,8 +1,8 @@
-﻿namespace MongoDatabase.Tests.Mocks
+﻿namespace Service.Sdk.Database.MongoDatabase.Tests.Mocks
 {
 	using System.Threading.Tasks;
-	using MongoDatabase.Tests.Models;
 	using Service.Sdk.Contracts.Crud.Base;
+	using Service.Sdk.Database.MongoDatabase.Tests.Models;
 
 	internal class EntryValidatorMock : IEntryValidator<Entry, Entry, string>
 	{

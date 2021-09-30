@@ -1,4 +1,4 @@
-name: Services.Sdk CI
+name: Service.Sdk CI
 on:
   push:
     branches:

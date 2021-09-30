@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MongoDatabase\MongoDatabase.csproj" />
+    <ProjectReference Include="..\Service.Sdk.Database.MongoDatabase\Service.Sdk.Database.MongoDatabase.csproj" />
   </ItemGroup>
 
   <ItemGroup>

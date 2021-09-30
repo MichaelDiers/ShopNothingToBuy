@@ -1,12 +1,12 @@
-﻿namespace MongoDatabase.Tests
+﻿namespace Service.Sdk.Database.MongoDatabase.Tests
 {
 	using System;
 	using Microsoft.Extensions.Configuration;
-	using MongoDatabase.Services;
-	using MongoDatabase.Tests.Mocks;
-	using MongoDatabase.Tests.Models;
 	using Service.Sdk.Contracts.Crud.Base;
 	using Service.Sdk.Contracts.Crud.Database;
+	using Service.Sdk.Database.MongoDatabase.Services;
+	using Service.Sdk.Database.MongoDatabase.Tests.Mocks;
+	using Service.Sdk.Database.MongoDatabase.Tests.Models;
 	using Service.Sdk.Models.Crud.Database;
 	using Service.Sdk.Tests.Mocks;
 	using Xunit;
@@ -182,7 +182,7 @@
 				.AddJsonFile("appsettings.test.json", false)
 				.Build();
 			var mongoDbConfiguration = config.GetSection("MongoDb").Get<MongoDbConfiguration>();
-			databaseService = new MongoDbService<Entry, string>(
+			databaseService = new MongoDbCrudService<Entry, string>(
 				new LoggerMock(),
 				new EntryValidatorMock(),
 				mongoDbConfiguration);

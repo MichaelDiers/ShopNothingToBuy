@@ -1,10 +1,10 @@
-name: MongoDatabase Service CI
+name: Service.Sdk.Database.MongoDatabase Service CI
 on:
   push:
     branches:
       - main
     paths:
-      - 'Services/Crud/MongoDatabase/**'
+      - 'Service.Sdk/Service.Sdk.Database.MongoDatabase/**'
   workflow_dispatch:
 jobs:
   MongoDatabaseNuget:
@@ -12,9 +12,9 @@ jobs:
     env:
       CONFIG: Release
       PACKAGE_VERSION: "1.1"
-      CSPROJ_FOLDER: MongoDatabase
-      CSPROJ_FOLDER_TESTS: MongoDatabase.Tests
-      CSPROJ_NAME: MongoDatabase
+      CSPROJ_FOLDER: Service.Sdk.Database.MongoDatabase
+      CSPROJ_FOLDER_TESTS: Service.Sdk.Database.MongoDatabase.Tests
+      CSPROJ_NAME: Service.Sdk.Database.MongoDatabase
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -24,7 +24,7 @@ jobs:
           dotnet-version: 3.1.x
       - name: copy and edit nuget config to MongoDatabase
         run: |
-          cp ../../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER/nuget.config
+          cp ../../.github/workflows/Generic-Nuget.config $CSPROJ_FOLDER/nuget.config
           echo $(sed -e "s/\${USERNAME}/${{ secrets.NUGET_USERNAME }}/" -e "s@\${TOKEN}@${{ secrets.GITHUB_TOKEN }}@" $CSPROJ_FOLDER/nuget.config) >$CSPROJ_FOLDER/nuget.config
       - name: copy nuget config to MongoDatabase.Tests
         run: |
@@ -41,4 +41,4 @@ jobs:
           SNTB_TOKEN: ${{ secrets.SNTB_NUGET_CI_TOKEN}}          
 defaults:
   run:
-    working-directory: 'Services/Crud/MongoDatabase'
+    working-directory: 'Service.Sdk/Service.Sdk.Database.MongoDatabase'

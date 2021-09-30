@@ -1,4 +1,4 @@
-﻿namespace MongoDatabase.Tests.Models
+﻿namespace Service.Sdk.Database.MongoDatabase.Tests.Models
 {
 	using Service.Sdk.Contracts.Crud.Base;
 
