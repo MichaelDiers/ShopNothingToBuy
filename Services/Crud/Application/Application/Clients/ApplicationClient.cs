@@ -1,8 +1,8 @@
 ﻿namespace Application.Clients
 {
-	using Service.Contracts.Business.Log;
-	using Service.Contracts.Crud.Application;
 	using Service.Sdk.Clients;
+	using Service.Sdk.Contracts.Business.Log;
+	using Service.Sdk.Contracts.Crud.Application;
 
 	/// <summary>
 	///   Client for the <see cref="IApplicationService" />.

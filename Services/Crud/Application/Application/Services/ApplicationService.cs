@@ -2,10 +2,10 @@
 {
 	using System.Threading.Tasks;
 	using MongoDatabase.Services;
-	using Service.Contracts.Business.Log;
-	using Service.Contracts.Crud.Application;
-	using Service.Contracts.Crud.Base;
-	using Service.Contracts.Crud.Database;
+	using Service.Sdk.Contracts.Business.Log;
+	using Service.Sdk.Contracts.Crud.Application;
+	using Service.Sdk.Contracts.Crud.Base;
+	using Service.Sdk.Contracts.Crud.Database;
 	using Service.Sdk.Services;
 
 	/// <summary>

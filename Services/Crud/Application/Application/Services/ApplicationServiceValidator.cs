@@ -2,8 +2,8 @@
 {
 	using System;
 	using System.Threading.Tasks;
-	using Service.Contracts.Crud.Application;
-	using Service.Contracts.Crud.Base;
+	using Service.Sdk.Contracts.Crud.Application;
+	using Service.Sdk.Contracts.Crud.Base;
 
 	/// <summary>
 	///   Validator for <see cref="ApplicationService" /> input data.

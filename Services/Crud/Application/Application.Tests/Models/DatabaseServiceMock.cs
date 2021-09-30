@@ -4,9 +4,9 @@
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 	using Newtonsoft.Json;
-	using Service.Contracts.Crud.Application;
-	using Service.Contracts.Crud.Base;
-	using Service.Contracts.Crud.Database;
+	using Service.Sdk.Contracts.Crud.Application;
+	using Service.Sdk.Contracts.Crud.Base;
+	using Service.Sdk.Contracts.Crud.Database;
 	using Service.Sdk.Services;
 
 	internal class DatabaseServiceMock : IDatabaseService<ApplicationEntry, string>

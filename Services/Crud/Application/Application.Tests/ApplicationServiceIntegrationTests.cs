@@ -3,9 +3,9 @@
 	using Application.Services;
 	using Application.Tests.Models;
 	using Microsoft.Extensions.Configuration;
-	using Service.Contracts.Crud.Application;
-	using Service.Contracts.Crud.Base;
-	using Service.Models.Crud.Database;
+	using Service.Sdk.Contracts.Crud.Application;
+	using Service.Sdk.Contracts.Crud.Base;
+	using Service.Sdk.Models.Crud.Database;
 	using Xunit;
 
 	public class ApplicationServiceIntegrationTests

@@ -1,7 +1,7 @@
 ﻿namespace Application.Tests
 {
 	using Application.Services;
-	using Service.Contracts.Crud.Application;
+	using Service.Sdk.Contracts.Crud.Application;
 	using Xunit;
 
 	public class ApplicationServiceValidatorTests
