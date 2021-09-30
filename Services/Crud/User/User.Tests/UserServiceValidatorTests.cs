@@ -64,8 +64,10 @@
 					new CreateUserEntry
 					{
 						Id = id,
-						ApplicationId = applicationId,
-						Roles = roles
+						Applications = new[]
+						{
+							new UserApplicationEntry(applicationId, roles)
+						}
 					}),
 				expectedResult);
 		}
@@ -142,8 +144,10 @@
 			var entry = new UpdateUserEntry
 			{
 				Id = id,
-				ApplicationId = applicationId,
-				Roles = roles
+				Applications = new[]
+				{
+					new UserApplicationEntry(applicationId, roles)
+				}
 			};
 
 			Assert.Equal(await validator.ValidateUpdateEntry(entry), expectedResult);

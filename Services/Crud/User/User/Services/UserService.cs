@@ -1,6 +1,8 @@
 ﻿namespace User.Services
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
 	using Application.Contracts;
 	using MongoDatabase.Contracts;
@@ -136,6 +138,18 @@
 			}
 
 			return new OperationResult<UserEntry, string, UpdateResult>(UpdateResult.InvalidData);
+		}
+
+		private async Task<bool> ValidateApplication(UserApplicationEntry application)
+		{
+			var applicationReadResult = await this.applicationService.Read(application.ApplicationId);
+			return applicationReadResult.Result == ReadResult.Read
+			       && (applicationReadResult.Entry.Roles & application.Roles) == application.Roles;
+		}
+
+		private async Task<bool> ValidateApplications(IEnumerable<UserApplicationEntry> applications)
+		{
+			return applications.All(async application => await this.ValidateApplication(application));
 		}
 	}
 }

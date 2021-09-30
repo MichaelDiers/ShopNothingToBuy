@@ -1,5 +1,6 @@
 ﻿namespace User.Services.Models
 {
+	using System.Collections.Generic;
 	using Application.Contracts;
 
 	/// <summary>
@@ -19,19 +20,22 @@
 		///   Creates a new instance of <see cref="BaseUser" />.
 		/// </summary>
 		/// <param name="id">The id of the user.</param>
-		/// <param name="applicationId">The id of the application the user is created for.</param>
-		/// <param name="roles">The roles of the user.</param>
-		protected BaseUser(string id, string applicationId, Roles roles)
+		/// <param name="applications">The applications and roles the user is allowed to access.</param>
+		protected BaseUser(string id, IEnumerable<UserApplicationEntry> applications)
 		{
-			this.ApplicationId = applicationId;
 			this.Id = id;
-			this.Roles = roles;
+			this.Applications = applications;
 		}
 
 		/// <summary>
 		///   Gets or sets the id of the application the user is created for.
 		/// </summary>
 		public string ApplicationId { get; set; }
+
+		/// <summary>
+		///   Gets or sets the applications and roles that the user can access.
+		/// </summary>
+		public IEnumerable<UserApplicationEntry> Applications { get; set; }
 
 		/// <summary>
 		///   Gets or sets the user id.

@@ -65,9 +65,11 @@
 		{
 			var createUser = new CreateUserEntry
 			{
-				ApplicationId = applicationId,
-				Id = userId,
-				Roles = roles
+				Applications = new[]
+				{
+					new UserApplicationEntry(applicationId, roles)
+				},
+				Id = userId
 			};
 
 			var service = InitUserService(applicationRoles);
@@ -77,8 +79,10 @@
 			{
 				Assert.NotNull(result.Entry);
 				Assert.Equal(userId.ToUpper(), result.Entry.Id);
-				Assert.Equal(applicationId, result.Entry.ApplicationId);
-				Assert.Equal(roles, result.Entry.Roles);
+				Assert.Contains(
+					result.Entry.Applications,
+					userApplicationEntry =>
+						userApplicationEntry.ApplicationId == applicationId && userApplicationEntry.Roles == roles);
 			}
 			else
 			{
