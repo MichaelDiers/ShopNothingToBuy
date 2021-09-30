@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CONFIG: Release
-      PACKAGE_VERSION: "1.1"
+      PACKAGE_VERSION: "1.2"
       CSPROJ_FOLDER: Service.Sdk
       CSPROJ_FOLDER_TESTS: Service.Sdk.Tests
       CSPROJ_NAME: Service.Sdk
