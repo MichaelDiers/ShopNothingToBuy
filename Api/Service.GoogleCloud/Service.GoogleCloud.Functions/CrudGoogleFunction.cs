@@ -6,7 +6,7 @@
 	using System.Threading.Tasks;
 	using Microsoft.AspNetCore.Http;
 	using Newtonsoft.Json;
-	using Service.Contracts.Crud.Base;
+	using Service.Sdk.Contracts.Crud.Base;
 
 	/// <summary>
 	///   Base class for CRUD apis using google functions.
