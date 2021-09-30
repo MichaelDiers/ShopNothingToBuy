@@ -2,7 +2,7 @@
 {
 	using System.Threading.Tasks;
 	using MongoDatabase.Tests.Models;
-	using Service.Contracts.Crud.Base;
+	using Service.Sdk.Contracts.Crud.Base;
 
 	internal class EntryValidatorMock : IEntryValidator<Entry, Entry, string>
 	{

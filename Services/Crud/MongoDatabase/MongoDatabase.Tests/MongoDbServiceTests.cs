@@ -5,10 +5,10 @@
 	using MongoDatabase.Services;
 	using MongoDatabase.Tests.Mocks;
 	using MongoDatabase.Tests.Models;
-	using Service.Contracts.Crud.Base;
-	using Service.Contracts.Crud.Database;
-	using Service.Models.Crud.Database;
-	using Service.Tests.Mocks;
+	using Service.Sdk.Contracts.Crud.Base;
+	using Service.Sdk.Contracts.Crud.Database;
+	using Service.Sdk.Models.Crud.Database;
+	using Service.Sdk.Tests.Mocks;
 	using Xunit;
 
 	public class MongoDbServiceTests

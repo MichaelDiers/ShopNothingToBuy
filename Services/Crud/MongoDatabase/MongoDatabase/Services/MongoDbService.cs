@@ -5,12 +5,12 @@
 	using System.Threading.Tasks;
 	using MongoDB.Bson;
 	using MongoDB.Driver;
-	using Service.Contracts.Business.Log;
-	using Service.Contracts.Crud.Base;
-	using Service.Contracts.Crud.Database;
+	using Service.Sdk.Contracts.Business.Log;
+	using Service.Sdk.Contracts.Crud.Base;
+	using Service.Sdk.Contracts.Crud.Database;
 	using Service.Sdk.Services;
-	using DeleteResult = Service.Contracts.Crud.Base.DeleteResult;
-	using UpdateResult = Service.Contracts.Crud.Base.UpdateResult;
+	using DeleteResult = Service.Sdk.Contracts.Crud.Base.DeleteResult;
+	using UpdateResult = Service.Sdk.Contracts.Crud.Base.UpdateResult;
 
 	/// <summary>
 	///   MongoDb implementation as a <see cref="DatabaseService{TEntry,TEntryId}" />.
