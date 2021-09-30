@@ -1,7 +1,7 @@
-﻿namespace Application.Tests
+﻿namespace Services.Crud.Application.Tests
 {
-	using Application.Services;
-	using Application.Tests.Models;
+	using global::Services.Crud.Application.Services;
+	using global::Services.Crud.Application.Tests.Models;
 	using Microsoft.Extensions.Configuration;
 	using Service.Sdk.Contracts.Crud.Application;
 	using Service.Sdk.Contracts.Crud.Base;

@@ -1,4 +1,4 @@
-﻿namespace Application.Services
+﻿namespace Services.Crud.Application.Services
 {
 	using System;
 	using System.Threading.Tasks;

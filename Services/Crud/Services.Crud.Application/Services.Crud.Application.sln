@@ -3,14 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31025.194
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{42BE6BCB-BD18-47D0-B41A-23FA68614DD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Crud.Application", "Services.Crud.Application\Services.Crud.Application.csproj", "{42BE6BCB-BD18-47D0-B41A-23FA68614DD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Tests", "Application.Tests\Application.Tests.csproj", "{B9724C99-246D-44A3-808E-7FD654254A0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Crud.Application.Tests", "Services.Crud.Application.Tests\Services.Crud.Application.Tests.csproj", "{B9724C99-246D-44A3-808E-7FD654254A0C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{23DA10F7-E300-4708-B79E-D14D73D2FB6B}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		..\..\..\.github\workflows\ApplicationService-ci.yml = ..\..\..\.github\workflows\ApplicationService-ci.yml
+		..\..\..\.github\workflows\Services.Crud.Application-ci.yml = ..\..\..\.github\workflows\Services.Crud.Application-ci.yml
 	EndProjectSection
 EndProject
 Global

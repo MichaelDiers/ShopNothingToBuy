@@ -1,4 +1,4 @@
-﻿namespace Application.Clients
+﻿namespace Services.Crud.Application.Clients
 {
 	using Service.Sdk.Clients;
 	using Service.Sdk.Contracts.Business.Log;

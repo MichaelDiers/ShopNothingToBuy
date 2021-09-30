@@ -1,6 +1,6 @@
-﻿namespace Application.Tests
+﻿namespace Services.Crud.Application.Tests
 {
-	using Application.Services;
+	using global::Services.Crud.Application.Services;
 	using Service.Sdk.Contracts.Crud.Application;
 	using Xunit;
 

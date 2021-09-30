@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-	  <PackageId>ApplicationService</PackageId>
+	  <PackageId>Services.Crud.Application</PackageId>
 	  <IsPackable>True</IsPackable>
 	  <OutputType>Library</OutputType>
 	  <Authors>MichaelDiers</Authors>
@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDatabase" Version="1.1.20" />
-    <PackageReference Include="Service.Sdk" Version="1.1.32" />
+    <PackageReference Include="Service.Sdk" Version="1.2.3" />
+    <PackageReference Include="Service.Sdk.Database.MongoDatabase" Version="1.1.2" />
   </ItemGroup>
 
 </Project>

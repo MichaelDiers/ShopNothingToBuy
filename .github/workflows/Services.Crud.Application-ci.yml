@@ -1,10 +1,10 @@
-name: Application Service CI
+name: Services.Crud.Application CI
 on:
   push:
     branches:
       - main
     paths:
-      - 'Services/Crud/Application/**'
+      - 'Services/Crud/Services.Crud.Application/**'
   workflow_dispatch:
 jobs:
   ApplicationServiceNuget:
@@ -12,10 +12,10 @@ jobs:
     env:
       CONFIG: Release
       PACKAGE_VERSION: "1.1"
-      PACKAGE_NAME: ApplicationService
-      CSPROJ_FOLDER: Application
-      CSPROJ_FOLDER_TESTS: Application.Tests
-      CSPROJ_NAME: Application
+      PACKAGE_NAME: Services.Crud.Application
+      CSPROJ_FOLDER: Services.Crud.Application
+      CSPROJ_FOLDER_TESTS: Services.Crud.Application.Tests
+      CSPROJ_NAME: Services.Crud.Application
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -42,4 +42,4 @@ jobs:
           SNTB_TOKEN: ${{ secrets.SNTB_NUGET_CI_TOKEN}}          
 defaults:
   run:
-    working-directory: 'Services/Crud/Application'
+    working-directory: 'Services/Crud/Services.Crud.Application'

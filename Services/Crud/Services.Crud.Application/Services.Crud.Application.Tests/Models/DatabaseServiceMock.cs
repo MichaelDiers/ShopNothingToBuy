@@ -1,4 +1,4 @@
-﻿namespace Application.Tests.Models
+﻿namespace Services.Crud.Application.Tests.Models
 {
 	using System;
 	using System.Collections.Generic;

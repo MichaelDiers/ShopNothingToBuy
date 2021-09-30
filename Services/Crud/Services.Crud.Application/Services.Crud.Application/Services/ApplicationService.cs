@@ -1,11 +1,11 @@
-﻿namespace Application.Services
+﻿namespace Services.Crud.Application.Services
 {
 	using System.Threading.Tasks;
-	using MongoDatabase.Services;
 	using Service.Sdk.Contracts.Business.Log;
 	using Service.Sdk.Contracts.Crud.Application;
 	using Service.Sdk.Contracts.Crud.Base;
 	using Service.Sdk.Contracts.Crud.Database;
+	using Service.Sdk.Database.MongoDatabase.Services;
 	using Service.Sdk.Services;
 
 	/// <summary>
@@ -27,7 +27,7 @@
 			: base(
 				logger,
 				new ApplicationServiceValidator(),
-				new MongoDbService<ApplicationEntry, string>(
+				new MongoDbCrudService<ApplicationEntry, string>(
 					logger,
 					new DefaultValidator<ApplicationEntry, ApplicationEntry, string>(),
 					mongoDbConfiguration))
