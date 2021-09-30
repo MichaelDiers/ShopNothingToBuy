@@ -5,8 +5,8 @@
 	using System.Linq;
 	using System.Threading.Tasks;
 	using Newtonsoft.Json;
-	using Service.Contracts.Business.Log;
-	using Service.Contracts.Crud.Base;
+	using Service.Sdk.Contracts.Business.Log;
+	using Service.Sdk.Contracts.Crud.Base;
 
 	/// <summary>
 	///   Base class for services.

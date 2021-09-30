@@ -1,7 +1,7 @@
 ﻿namespace Service.Sdk.Services
 {
 	using System.Collections.Generic;
-	using Service.Contracts.Crud.Base;
+	using Service.Sdk.Contracts.Crud.Base;
 
 	/// <summary>
 	///   Describes the result of a service list operation, e.g.:

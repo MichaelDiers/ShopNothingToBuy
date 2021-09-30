@@ -2,9 +2,9 @@
 {
 	using System;
 	using System.Threading.Tasks;
-	using Service.Contracts.Business.Log;
-	using Service.Contracts.Crud.Base;
-	using Service.Contracts.Crud.Database;
+	using Service.Sdk.Contracts.Business.Log;
+	using Service.Sdk.Contracts.Crud.Base;
+	using Service.Sdk.Contracts.Crud.Database;
 
 	/// <summary>
 	///   Base class for services using a database.

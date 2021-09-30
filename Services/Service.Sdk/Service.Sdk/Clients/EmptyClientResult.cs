@@ -2,7 +2,7 @@
 {
 	using System;
 	using System.Net;
-	using Service.Contracts.Client;
+	using Service.Sdk.Contracts.Client;
 
 	/// <summary>
 	///   The result of a service call that does not include body data.

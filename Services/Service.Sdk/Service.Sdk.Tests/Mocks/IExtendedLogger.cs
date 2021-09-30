@@ -1,7 +1,7 @@
 ﻿namespace Service.Sdk.Tests.Mocks
 {
 	using System;
-	using Service.Contracts.Business.Log;
+	using Service.Sdk.Contracts.Business.Log;
 
 	public interface IExtendedLogger : ILogger
 	{

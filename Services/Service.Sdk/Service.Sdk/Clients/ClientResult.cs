@@ -1,6 +1,6 @@
 ﻿namespace Service.Sdk.Clients
 {
-	using Service.Contracts.Client;
+	using Service.Sdk.Contracts.Client;
 
 	/// <summary>
 	///   A result of a service operation that includes response data.

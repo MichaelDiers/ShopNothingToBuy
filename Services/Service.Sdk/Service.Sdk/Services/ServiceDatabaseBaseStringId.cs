@@ -1,20 +1,21 @@
 ﻿namespace Application.Services
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Service.Contracts.Business.Log;
-    using Service.Contracts.Crud.Base;
-    using Service.Contracts.Crud.Database;
-    using Service.Sdk.Services;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Threading.Tasks;
+	using Service.Sdk.Contracts.Business.Log;
+	using Service.Sdk.Contracts.Crud.Base;
+	using Service.Sdk.Contracts.Crud.Database;
+	using Service.Sdk.Services;
 
-    /// <summary>
-    ///   Base class for services using a database with string ids.
-    /// </summary>
-    /// <typeparam name="TEntry">The type of the object to process.</typeparam>
-    /// <typeparam name="TCreateEntry">The type of an entry in create operation context.</typeparam>
-    /// <typeparam name="TUpdateEntry">The type of an entry in update operation context.</typeparam>
-    public abstract class ServiceDatabaseBaseStringId<TEntry, TCreateEntry, TUpdateEntry> : ServiceDatabaseBase<TEntry, string,
+	/// <summary>
+	///   Base class for services using a database with string ids.
+	/// </summary>
+	/// <typeparam name="TEntry">The type of the object to process.</typeparam>
+	/// <typeparam name="TCreateEntry">The type of an entry in create operation context.</typeparam>
+	/// <typeparam name="TUpdateEntry">The type of an entry in update operation context.</typeparam>
+	public abstract class ServiceDatabaseBaseStringId<TEntry, TCreateEntry, TUpdateEntry> : ServiceDatabaseBase<TEntry,
+		string,
 		TCreateEntry,
 		TUpdateEntry>
 		where TEntry : class, IEntry<string>
@@ -78,8 +79,7 @@
 		/// </summary>
 		/// <param name="entryIds">The ids to be read.</param>
 		/// <returns>A Task whose result contains the read results.</returns>
-		public override Task<IEnumerable<IOperationResult<TEntry, string, ReadResult>>> Read(
-			IEnumerable<string> entryIds)
+		public override Task<IEnumerable<IOperationResult<TEntry, string, ReadResult>>> Read(IEnumerable<string> entryIds)
 		{
 			var uppercaseEntryIds = entryIds?.Select(entryId => entryId?.ToUpper()).ToArray();
 			return base.Read(uppercaseEntryIds);

@@ -1,6 +1,6 @@
 ﻿namespace Service.Sdk.Tests.Mocks
 {
-	using Service.Contracts.Crud.Base;
+	using Service.Sdk.Contracts.Crud.Base;
 	using Service.Sdk.Tests.Models;
 
 	internal interface IExtendedEntryValidator : IEntryValidator<CreateEntry, UpdateEntry, string>
