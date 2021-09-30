@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - 'Services/Service.Sdk/**'
+      - 'Service.Sdk/Service.Sdk/**'
   workflow_dispatch:
 jobs:
   ServicesSdkNuget:
@@ -41,4 +41,4 @@ jobs:
           SNTB_TOKEN: ${{ secrets.SNTB_NUGET_CI_TOKEN}}          
 defaults:
   run:
-    working-directory: 'Services/Service.Sdk'
+    working-directory: 'Service.Sdk/Service.Sdk'
