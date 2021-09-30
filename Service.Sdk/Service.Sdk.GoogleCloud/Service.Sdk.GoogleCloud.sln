@@ -3,14 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31025.194
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.GoogleCloud.Functions", "Service.GoogleCloud.Functions\Service.GoogleCloud.Functions.csproj", "{843CE5BD-8428-4BF7-B7C3-2E99EC92067A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Sdk.GoogleCloud.Functions", "Service.Sdk.GoogleCloud.Functions\Service.Sdk.GoogleCloud.Functions.csproj", "{843CE5BD-8428-4BF7-B7C3-2E99EC92067A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{68C564A7-9D4E-441C-99D4-996238C1A16C}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\.github\workflows\Service.GoogleCloud.Functions.yml = ..\..\.github\workflows\Service.GoogleCloud.Functions.yml
+		..\..\.github\workflows\Service.Sdk.GoogleCloud.Functions-ci.yml = ..\..\.github\workflows\Service.Sdk.GoogleCloud.Functions-ci.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.GoogleCloud.Functions.Tests", "Service.GoogleCloud.Functions.Tests\Service.GoogleCloud.Functions.Tests.csproj", "{D1C8365A-D4F2-4424-8EFE-A17B0BDBB579}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Sdk.GoogleCloud.Functions.Tests", "Service.Sdk.GoogleCloud.Functions.Tests\Service.Sdk.GoogleCloud.Functions.Tests.csproj", "{D1C8365A-D4F2-4424-8EFE-A17B0BDBB579}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

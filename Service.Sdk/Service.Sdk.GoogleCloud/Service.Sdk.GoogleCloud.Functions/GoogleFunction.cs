@@ -1,4 +1,4 @@
-﻿namespace Service.GoogleCloud.Functions
+﻿namespace Service.Sdk.GoogleCloud.Functions
 {
 	using System;
 	using System.Collections.Generic;

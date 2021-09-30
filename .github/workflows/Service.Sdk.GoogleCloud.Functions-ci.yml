@@ -1,10 +1,10 @@
-name: Service.GoogleCloud.Functions CI
+name: Service.Sdk.GoogleCloud.Functions CI
 on:
   push:
     branches:
       - main
     paths:
-      - 'Api/Service.GoogleCloud/Service.GoogleCloud.Functions/**'
+      - 'Service.Sdk/Service.Sdk.GoogleCloud/Service.Sdk.GoogleCloud.Functions/**'
   workflow_dispatch:
 jobs:
   ServicesSdkNuget:
@@ -12,9 +12,9 @@ jobs:
     env:
       CONFIG: Release
       PACKAGE_VERSION: "1.1"
-      CSPROJ_FOLDER: Service.GoogleCloud.Functions
-      CSPROJ_FOLDER_TESTS: Service.GoogleCloud.Functions.Tests
-      CSPROJ_NAME: Service.GoogleCloud.Functions
+      CSPROJ_FOLDER: Service.Sdk.GoogleCloud.Functions
+      CSPROJ_FOLDER_TESTS: Service.Sdk.GoogleCloud.Functions.Tests
+      CSPROJ_NAME: Service.Sdk.GoogleCloud.Functions
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -41,4 +41,4 @@ jobs:
           SNTB_TOKEN: ${{ secrets.SNTB_NUGET_CI_TOKEN}}          
 defaults:
   run:
-    working-directory: 'Api/Service.GoogleCloud'
+    working-directory: 'Service.Sdk/Service.Sdk.GoogleCloud'
