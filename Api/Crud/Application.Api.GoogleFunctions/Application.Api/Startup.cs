@@ -5,10 +5,10 @@ namespace Application.Api
 	using Microsoft.AspNetCore.Hosting;
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
-	using Service.Contracts.Business.Log;
-	using Service.Contracts.Crud.Application;
-	using Service.Contracts.Crud.Database;
-	using Service.Models.Crud.Database;
+	using Service.Sdk.Contracts.Business.Log;
+	using Service.Sdk.Contracts.Crud.Application;
+	using Service.Sdk.Contracts.Crud.Database;
+	using Service.Sdk.Models.Crud.Database;
 
 	/// <summary>
 	///   Entry point of the google cloud function at startup.

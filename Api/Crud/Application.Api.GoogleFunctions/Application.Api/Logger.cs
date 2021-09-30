@@ -2,7 +2,7 @@
 {
 	using System;
 	using System.Threading.Tasks;
-	using Service.Contracts.Business.Log;
+	using Service.Sdk.Contracts.Business.Log;
 
 	/// <summary>
 	///   Todo replace with service.
