@@ -5,10 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ApplicationService" Version="1.1.18" />
     <PackageReference Include="Google.Cloud.Functions.Hosting" Version="1.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Service.GoogleCloud.Functions" Version="1.1.2" />
+    <PackageReference Include="Service.Sdk.GoogleCloud.Functions" Version="1.1.1" />
+    <PackageReference Include="Services.Crud.Application" Version="1.1.1" />
   </ItemGroup>
 
 

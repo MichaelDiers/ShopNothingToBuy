@@ -1,6 +1,5 @@
-namespace Application.Api
+namespace Api.Application
 {
-	using Application.Services;
 	using Google.Cloud.Functions.Hosting;
 	using Microsoft.AspNetCore.Hosting;
 	using Microsoft.Extensions.Configuration;
@@ -9,6 +8,7 @@ namespace Application.Api
 	using Service.Sdk.Contracts.Crud.Application;
 	using Service.Sdk.Contracts.Crud.Database;
 	using Service.Sdk.Models.Crud.Database;
+	using Services.Crud.Application.Services;
 
 	/// <summary>
 	///   Entry point of the google cloud function at startup.

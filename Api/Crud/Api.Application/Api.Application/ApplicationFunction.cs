@@ -1,9 +1,9 @@
-﻿namespace Application.Api
+﻿namespace Api.Application
 {
 	using Google.Cloud.Functions.Framework;
 	using Google.Cloud.Functions.Hosting;
-	using Service.GoogleCloud.Functions;
 	using Service.Sdk.Contracts.Crud.Application;
+	using Service.Sdk.GoogleCloud.Functions;
 
 	/// <summary>
 	///   API for CRUD operations on application entries. Uses google cloud functions.

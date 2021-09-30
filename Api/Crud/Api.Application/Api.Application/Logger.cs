@@ -1,4 +1,4 @@
-﻿namespace Application.Api
+﻿namespace Api.Application
 {
 	using System;
 	using System.Threading.Tasks;
