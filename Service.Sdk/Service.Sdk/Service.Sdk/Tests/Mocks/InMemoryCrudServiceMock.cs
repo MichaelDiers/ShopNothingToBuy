@@ -93,7 +93,7 @@ namespace Service.Sdk.Tests.Mocks
 		/// </returns>
 		protected override Task<IOperationListResult<TEntryId, ListResult>> ListEntries()
 		{
-			return Task.FromResult<IOperationListResult<TEntryId, ListResult>>(new OperationListResult<TEntryId, ListResult>(ListResult.Completed, this.database.Keys))
+			return Task.FromResult<IOperationListResult<TEntryId, ListResult>>(new OperationListResult<TEntryId, ListResult>(ListResult.Completed, this.database.Keys));
 		}
 
 		/// <summary>
