@@ -1,5 +1,4 @@
-﻿
-namespace Service.Sdk.Tests.Mocks
+﻿namespace Service.Sdk.Tests.Mocks
 {
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
@@ -16,9 +15,9 @@ namespace Service.Sdk.Tests.Mocks
 		where TEntry : class, IEntry<TEntryId>
 	{
 		/// <summary>
-		/// In-memory database.
+		///   In-memory database.
 		/// </summary>
-		private IDictionary<TEntryId, TEntry> database = new Dictionary<TEntryId, TEntry>();
+		private readonly IDictionary<TEntryId, TEntry> database = new Dictionary<TEntryId, TEntry>();
 
 		/// <summary>
 		///   Creates a new instance of <see cref="InMemoryCrudServiceMock{TEntry,TEntryId}" />.
@@ -29,6 +28,14 @@ namespace Service.Sdk.Tests.Mocks
 			ILogger logger,
 			IEntryValidator<TEntry, TEntry, TEntryId> validator)
 			: base(logger, validator)
+		{
+		}
+
+		/// <summary>
+		///   Creates a new instance of <see cref="InMemoryCrudServiceMock{TEntry,TEntryId}" />.
+		/// </summary>
+		public InMemoryCrudServiceMock()
+			: this(new LoggerMock(), new EntryValidatorMock<TEntry, TEntry, TEntryId>())
 		{
 		}
 
@@ -53,7 +60,8 @@ namespace Service.Sdk.Tests.Mocks
 		protected override Task<IOperationResult<TEntry, TEntryId, CreateResult>> CreateNewEntry(TEntry entry)
 		{
 			this.database.Add(entry.Id, entry);
-			return Task.FromResult< IOperationResult<TEntry, TEntryId, CreateResult>>(new OperationResult<TEntry, TEntryId, CreateResult>(CreateResult.Created, entry));
+			return Task.FromResult<IOperationResult<TEntry, TEntryId, CreateResult>>(
+				new OperationResult<TEntry, TEntryId, CreateResult>(CreateResult.Created, entry));
 		}
 
 		/// <summary>
@@ -63,13 +71,14 @@ namespace Service.Sdk.Tests.Mocks
 		/// <returns>
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />.
 		/// </returns>
-		protected override Task<IOperationResult<TEntry, TEntryId, DeleteResult>> DeleteExistingEntry(
-			TEntryId entryId)
+		protected override Task<IOperationResult<TEntry, TEntryId, DeleteResult>> DeleteExistingEntry(TEntryId entryId)
 		{
 			var deleted = this.database.Remove(entryId, out var entry);
 			return deleted
-				? Task.FromResult<IOperationResult<TEntry, TEntryId, DeleteResult>>(new OperationResult<TEntry, TEntryId, DeleteResult>(DeleteResult.Deleted, entry))
-				: Task.FromResult<IOperationResult<TEntry, TEntryId, DeleteResult>>(new OperationResult<TEntry, TEntryId, DeleteResult>(DeleteResult.Deleted));
+				? Task.FromResult<IOperationResult<TEntry, TEntryId, DeleteResult>>(
+					new OperationResult<TEntry, TEntryId, DeleteResult>(DeleteResult.Deleted, entry))
+				: Task.FromResult<IOperationResult<TEntry, TEntryId, DeleteResult>>(
+					new OperationResult<TEntry, TEntryId, DeleteResult>(DeleteResult.Deleted));
 		}
 
 		/// <summary>
@@ -81,7 +90,9 @@ namespace Service.Sdk.Tests.Mocks
 		/// </returns>
 		protected override Task<ExistsResult> ExistsEntry(TEntryId entryId)
 		{
-			return this.database.ContainsKey(entryId) ? Task.FromResult(ExistsResult.Exists) : Task.FromResult(ExistsResult.NotFound);
+			return this.database.ContainsKey(entryId)
+				? Task.FromResult(ExistsResult.Exists)
+				: Task.FromResult(ExistsResult.NotFound);
 		}
 
 		/// <summary>
@@ -93,7 +104,8 @@ namespace Service.Sdk.Tests.Mocks
 		/// </returns>
 		protected override Task<IOperationListResult<TEntryId, ListResult>> ListEntries()
 		{
-			return Task.FromResult<IOperationListResult<TEntryId, ListResult>>(new OperationListResult<TEntryId, ListResult>(ListResult.Completed, this.database.Keys));
+			return Task.FromResult<IOperationListResult<TEntryId, ListResult>>(
+				new OperationListResult<TEntryId, ListResult>(ListResult.Completed, this.database.Keys));
 		}
 
 		/// <summary>
@@ -108,7 +120,7 @@ namespace Service.Sdk.Tests.Mocks
 		{
 			await Task.CompletedTask;
 			if (this.database.ContainsKey(entryId))
-            {
+			{
 				return new OperationResult<TEntry, TEntryId, ReadResult>(ReadResult.Read, this.database[entryId]);
 			}
 
@@ -128,6 +140,6 @@ namespace Service.Sdk.Tests.Mocks
 			await Task.CompletedTask;
 			this.database[entry.Id] = entry;
 			return new OperationResult<TEntry, TEntryId, UpdateResult>(UpdateResult.Updated, entry);
-        }
+		}
 	}
 }

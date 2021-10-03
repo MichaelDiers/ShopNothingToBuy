@@ -1,8 +1,6 @@
-﻿
-namespace Service.Sdk.Tests.Mocks
+﻿namespace Service.Sdk.Tests.Mocks
 {
-    using System;
-    using System.Collections.Generic;
+	using System;
 	using System.Threading.Tasks;
 	using Service.Sdk.Contracts.Business.Log;
 	using Service.Sdk.Contracts.Crud.Base;
@@ -16,11 +14,6 @@ namespace Service.Sdk.Tests.Mocks
 		where TEntry : class, IEntry<string>
 	{
 		/// <summary>
-		/// In-memory database.
-		/// </summary>
-		private IDictionary<string, TEntry> database = new Dictionary<string, TEntry>();
-
-		/// <summary>
 		///   Creates a new instance of <see cref="InMemoryCrudServiceStringIdMock{TEntry}" />.
 		/// </summary>
 		/// <param name="logger">The logger used for error messages.</param>
@@ -29,6 +22,14 @@ namespace Service.Sdk.Tests.Mocks
 			ILogger logger,
 			IEntryValidator<TEntry, TEntry, string> validator)
 			: base(logger, validator)
+		{
+		}
+
+		/// <summary>
+		///   Creates a new instance of <see cref="InMemoryCrudServiceStringIdMock{TEntry}" />.
+		/// </summary>
+		public InMemoryCrudServiceStringIdMock()
+			: this(new LoggerMock(), new EntryValidatorStringIdMock<TEntry, TEntry>())
 		{
 		}
 
@@ -43,9 +44,9 @@ namespace Service.Sdk.Tests.Mocks
 		protected override async Task<IOperationResult<TEntry, string, CreateResult>> CreateNewEntry(TEntry entry)
 		{
 			if (entry == null || string.IsNullOrWhiteSpace(entry.Id) || entry.Id != entry.Id.ToUpper())
-            {
+			{
 				throw new NotImplementedException();
-            }
+			}
 
 			return await base.CreateNewEntry(entry);
 		}
@@ -57,8 +58,7 @@ namespace Service.Sdk.Tests.Mocks
 		/// <returns>
 		///   A <see cref="Task" /> whose result is an <see cref="IOperationResult{TEntry,TEntryId,TOperationResult}" />.
 		/// </returns>
-		protected override async Task<IOperationResult<TEntry, string, DeleteResult>> DeleteExistingEntry(
-			string entryId)
+		protected override async Task<IOperationResult<TEntry, string, DeleteResult>> DeleteExistingEntry(string entryId)
 		{
 			if (string.IsNullOrWhiteSpace(entryId) || entryId != entryId.ToUpper())
 			{
