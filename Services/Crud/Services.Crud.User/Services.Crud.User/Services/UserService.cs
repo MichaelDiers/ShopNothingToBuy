@@ -95,16 +95,17 @@
 		protected override async Task<IOperationResult<UserEntry, string, UpdateResult>> UpdateEntry(UpdateUserEntry entry)
 		{
 			var userEntry = new UserEntry(entry?.Id?.ToUpper(), entry?.OriginalId, entry?.Applications);
-			return await this.DatabaseService.Update(userEntry);
-			/*
-			var applcationReadResult = await this.applicationService.Read(entry.ApplicationId);
-			if (applcationReadResult.Result == ReadResult.Read
-			    && (applcationReadResult.Entry.Roles & entry.Roles) == entry.Roles)
+			var applicationReadResult = await this.applicationService.Read(
+				userEntry.Applications?.Select(application => application.ApplicationId).ToArray());
+			var valid = entry?.Applications.Zip(applicationReadResult).All(
+				data => data.Second.Result == ReadResult.Read
+				        && (data.First.Roles & data.Second.Entry.Roles) == data.First.Roles);
+			if (valid == true)
 			{
 				return await this.DatabaseService.Update(userEntry);
 			}
-			*/
-			//return new OperationResult<UserEntry, string, UpdateResult>(UpdateResult.InvalidData);
+
+			return new OperationResult<UserEntry, string, UpdateResult>(UpdateResult.InvalidData);
 		}
 	}
 }

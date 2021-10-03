@@ -533,7 +533,7 @@
 			var createResult = await service.Create(createEntry);
 			Assert.Equal(CreateResult.Created, createResult.Result);
 
-			var newRoles = Roles.Admin;
+			var newRoles = Roles.Reader;
 
 			var updateResult = await service.Update(
 				new UpdateUserEntry
@@ -583,7 +583,7 @@
 			IEnumerable<IOperationResult<ApplicationEntry, string, ReadResult>> applicationReadResult)
 		{
 			return new UserService(
-				new global::Service.Sdk.Tests.Mocks.LoggerMock(),
+				new LoggerMock(),
 				new UserServiceValidator(),
 				new InMemoryCrudServiceStringIdMock<UserEntry>(),
 				new ApplicationServiceMock(applicationReadResult));
